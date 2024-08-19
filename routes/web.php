@@ -7,12 +7,11 @@ Route::get('/', function () {
 });
 
 Route::get('/login', function () {
-    return view('login');
+    return view('auth.login');
 });
 Route::get('/index', function () {
     return view('index');
 });
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('layout.dashboard');
 });
-

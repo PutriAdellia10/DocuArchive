@@ -1,1 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
+body {
+    display: flex;
+    height: 100vh;
+    background-color: #e6f2f2;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #c7e7e4;
+    padding: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logo img {
+    width: 40px;
+    margin-right: 10px;
+}
+
+.logo h2 {
+    font-size: 20px;
+    color: #086756;
+}
+
+.nav-menu ul {
+    list-style-type: none;
+}
+
+.nav-menu ul li {
+    margin: 15px 0;
+}
+
+.nav-menu ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-menu ul li a img {
+    width: 24px;
+    margin-right: 10px;
+}
+
+.nav-menu ul li a:hover {
+    color: #086756;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f7fdfd;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #e6f7f5;
+    border-radius: 10px;
+}
+
+header .welcome {
+    display: flex;
+    align-items: center;
+}
+
+header .welcome-image img {
+    width: 200px;
+    margin-right: 20px;
+}
+
+header .welcome-text h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+header .welcome-text p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+header .welcome-text button {
+    background-color: #33a393;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+header .welcome-text button:hover {
+    background-color: #29877b;
+}
+
+header .profile img {
+    width: 30px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.card {
+    background-color: #c7e7e4;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.card img {
+    width: 40px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #086756;
+}
