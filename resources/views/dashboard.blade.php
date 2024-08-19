@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docu Archive</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -165,12 +166,12 @@ header .profile img {
             </div>
             <nav class="nav-menu">
                 <ul>
-                    <li><a href="#"><img src="dashboard-icon.png" alt="Dashboard Icon">Dashboard</a></li>
-                    <li><a href="#"><img src="surat-icon.png" alt="Surat Icon">Surat</a></li>
-                    <li><a href="#"><img src="laporan-icon.png" alt="Laporan Icon">Laporan</a></li>
-                    <li><a href="#"><img src="master-icon.png" alt="Master Icon">Master</a></li>
-                    <li><a href="#"><img src="instansi-icon.png" alt="Instansi Icon">Instansi</a></li>
-                    <li><a href="#"><img src="pengaturan-icon.png" alt="Pengaturan Icon">Pengaturan</a></li>
+                    <li><a href="#"><img src="{{ asset('img/dashboard.jpeg') }}" alt="Dashboard Icon">Dashboard</a></li>
+                    <li><a href="#"><img src="{{ asset('img/surat.png') }}" alt="Surat Icon">Surat</a></li>
+                    <li><a href="#"><img src="{{ asset('img/laporan.png') }}" alt="Laporan Icon">Laporan</a></li>
+                    <li><a href="#"><img src="{{ asset('img/master.png') }}" alt="Master Icon">Master</a></li>
+                    <li><a href="#"><img src="{{ asset('img/instansi.png') }}" alt="Instansi Icon">Instansi</a></li>
+                    <li><a href="#"><img src="{{ asset('img/pengaturan.png') }}" alt="Pengaturan Icon">Pengaturan</a></li>
                 </ul>
             </nav>
         </aside>
@@ -189,43 +190,45 @@ header .profile img {
                     </div>
                 </div>
                 <div class="profile">
-                    <img src="profile-icon.png" alt="User Profile">
+                    <img src="{{ asset('img/user profile.png') }}" alt="User Profile">
                 </div>
             </header>
 
             <section class="cards">
                 <div class="card">
-                    <img src="surat-masuk-icon.png" alt="Surat Masuk Icon">
+                    <img src="{{ asset('img/surat masuk.png') }}" alt="Surat Masuk Icon">
                     <h3>Surat Masuk</h3>
                     <p>0</p>
                 </div>
                 <div class="card">
-                    <img src="surat-keluar-icon.png" alt="Surat Keluar Icon">
+                    <img src="{{ asset('img/surat keluar.png') }}" alt="Surat Keluar Icon">
                     <h3>Surat Keluar</h3>
                     <p>0</p>
                 </div>
                 <div class="card">
-                    <img src="surat-masuk-pertahun-icon.png" alt="Surat Masuk Pertahun Icon">
+                    <img src="{{ asset('img/surat masuk th.png') }}" alt="Surat Masuk Pertahun Icon">
                     <h3>Surat Masuk Pertahun</h3>
                     <p>0</p>
                 </div>
                 <div class="card">
-                    <img src="surat-keluar-pertahun-icon.png" alt="Surat Keluar Pertahun Icon">
+                    <img src="{{ asset('img/surat keluar th.png') }}" alt="Surat Keluar Pertahun Icon">
                     <h3>Surat Keluar Pertahun</h3>
                     <p>0</p>
                 </div>
                 <div class="card">
-                    <img src="total-surat-icon.png" alt="Total Surat Icon">
+                    <img src="{{ asset('img/total surat.png') }}" alt="Total Surat Icon">
                     <h3>Total Surat</h3>
                     <p>0</p>
                 </div>
                 <div class="card">
-                    <img src="instansi-icon.png" alt="Instansi Icon">
+                    <img src="{{ asset('img/instansi surat.png') }}" alt="Instansi Icon">
                     <h3>Instansi</h3>
                     <p>0</p>
                 </div>
             </section>
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
