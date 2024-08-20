@@ -15,3 +15,6 @@ Route::get('/index', function () {
 Route::get('/dashboard', function () {
     return view('layout.dashboard');
 });
+Route::get('/suratmasuk', function () {
+    return view('layout.suratmasuk');
+});

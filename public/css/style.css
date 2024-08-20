@@ -1,3 +1,4 @@
+/*dashboard*/
 * {
     margin: 0;
     padding: 0;
@@ -144,4 +145,199 @@ header .profile img {
     font-size: 24px;
     font-weight: bold;
     color: #086756;
+}
+
+/*halaman surat masuk */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background-color: #f0f8f7;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #b3ded6;
+    padding: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logo img {
+    width: 40px;
+    margin-right: 10px;
+}
+
+.logo h2 {
+    font-size: 20px;
+    color: #064e3b;
+}
+
+.nav-menu ul {
+    list-style-type: none;
+}
+
+.nav-menu ul li {
+    margin: 15px 0;
+}
+
+.nav-menu ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.nav-menu ul li a img {
+    width: 24px;
+    margin-right: 10px;
+}
+
+.nav-menu ul li a:hover {
+    color: #064e3b;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #ffffff;
+    overflow-y: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #e6f7f5;
+    border-radius: 10px;
+}
+
+header h1 {
+    font-size: 24px;
+    color: #064e3b;
+}
+
+header .profile img {
+    width: 30px;
+}
+
+.content .card {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header img {
+    width: 40px;
+    margin-right: 10px;
+}
+
+.card-header h3 {
+    font-size: 20px;
+    color: #064e3b;
+    margin-right: auto;
+}
+
+.card-header button {
+    background-color: #33a393;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card-header button:hover {
+    background-color: #29877b;
+}
+
+.table-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.table-controls input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+table th {
+    background-color: #e6f7f5;
+    color: #064e3b;
+}
+
+table td button {
+    background-color: #33a393;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+table td button:hover {
+    background-color: #29877b;
+}
+
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination button {
+    background-color: #e6f7f5;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination span {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
