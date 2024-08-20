@@ -18,3 +18,6 @@ Route::get('/dashboard', function () {
 Route::get('/suratmasuk', function () {
     return view('layout.suratmasuk');
 });
+Route::get('/tambahsuratmasuk', function () {
+    return view('layout.tambahsuratmasuk');
+});
