@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Surat Masuk</title>
+    <title>Surat Keluar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -364,7 +364,7 @@
     <div class="navbar-top">
         <div class="logo">
             <img src="https://via.placeholder.com/40" alt="Logo">
-            <span>Surat Masuk</span>
+            <span>Surat Keluar</span>
         </div>
         <div class="people-icon" onclick="toggleDropdown()">
             <i class="fa fa-user"></i>
@@ -406,8 +406,8 @@
     <!-- Main Content -->
     <div class="content">
         <div class="header">
-            <h2>Data Surat Masuk</h2>
-            <button class="add-button" onclick="openModal()">Tambah Surat Masuk</button>
+            <h2>Data Surat Keluar</h2>
+            <button class="add-button" onclick="openModal()">Tambah Surat Keluar</button>
         </div>
         <div class="card-body">
             <div class="table-controls">
@@ -420,7 +420,7 @@
                 </label>
             </div>
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Cari Surat Masuk">
+            <input type="text" id="searchInput" placeholder="Cari Surat Keluar">
         </div>
         <div class="table-container">
             <table>
@@ -428,7 +428,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nomor Agenda</th>
-                        <th>Tanggal Masuk</th>
+                        <th>Tanggal Keluar</th>
                         <th>Asal Surat</th>
                         <th>Nomor Surat</th>
                         <th>Tanggal Surat</th>
@@ -438,7 +438,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($suratMasuk as $surat)
+                    @foreach($suratKeluar as $surat)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $surat->no_agenda }}</td>
@@ -449,13 +449,13 @@
                         <td>{{ $surat->perihal }}</td>
                         <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
                         <td>
-                            <a href="{{ route('surat.show', $surat->id) }}" title="Lihat">
+                            <a href="{{ route('surat.keluar.show', $surat->id) }}" title="Lihat">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('surat.edit', $surat->id) }}" title="Edit">
+                            <a href="{{ route('surat.keluar.edit', $surat->id) }}" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                            <form action="{{ route('surat.keluar.destroy', $surat->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" style="border:none; background:none; color:#007bff; cursor:pointer;" title="Hapus">
@@ -475,12 +475,11 @@
             <a href="#" class="pagination-button">Next</a>
         </div>
     </div>
-
- <!-- Modal -->
+<!-- The Modal -->
 <div class="modal" id="modal">
     <div class="modal-content">
-        <h3 id="modalTitle">Tambah Surat Masuk</h3>
-        <form id="modalForm" action="{{ route('surat.store') }}" method="POST" enctype="multipart/form-data">
+        <h3 id="modalTitle">Tambah Surat Keluar</h3>
+        <form id="modalForm" action="{{ route('surat.keluar.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="no_agenda">No Agenda *</label>
@@ -558,7 +557,7 @@
         </form>
     </div>
 </div>
-@include('crudsurat.editmasuk')
+
 <script>
     function toggleDropdown() {
         document.getElementById('dropdownMenu').classList.toggle('show');
@@ -608,6 +607,7 @@
         });
     });
 </script>
+
 
 </body>
 </html>
