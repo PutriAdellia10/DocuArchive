@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\InstansiController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -11,7 +12,6 @@ use App\Http\Controllers\SekretariatController;
 
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\JenisSuratController;
-use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\RekapitulasiSuratController;
 
 
@@ -42,6 +42,7 @@ Route::middleware(['guest'])->group(function(){
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
 
 Route::middleware(['auth'])->group(function(){
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -87,8 +88,6 @@ Route::get('/surat-keluar/{id}', [SuratController::class, 'keluarshow'])->name('
 //Route::get('/surat/{id}/disposisi', [SuratController::class, 'showDisposisi'])->name('surat.disposisi');
 
 Route::resource('jenis_surat', JenisSuratController::class);
-Route::resource('instansi', InstansiController::class);
-
 
 Route::get('/rekapitulasi', [RekapitulasiSuratController::class, 'index'])->name('rekapitulasi.index');
 
@@ -103,4 +102,49 @@ Route::get('/laporan-keluar', [LaporanController::class, 'laporanKeluar'])->name
 
 
 
+
+
+// Route::get('/instansi', function () {
+//     return view('layout.instansi');
+// })->name('instansi');
+// Route::get('/tambahinstansi', function () {
+//     return view('layout.tambahinstansi');
+// })->name('tambahinstansi');
+// use App\Http\Controllers\InstansiController;
+
+// Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi');
+// Route::get('/instansi/tambah', [InstansiController::class, 'create'])->name('instansi.create');
+// Route::post('/instansi', [InstansiController::class, 'store'])->name('instansi.store');
+
+
+// Route::resource('instansi', InstansiController::class);
+// Route::get('instansi/{id}', [InstansiController::class, 'show']);
+// Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi.index');
+// Route::post('/instansi', [InstansiController::class, 'store']);
+// Route::delete('/instansi/{id}', [InstansiController::class, 'destroy']);
+// Route::put('/instansi/{id}', [InstansiController::class, 'update'])->name('instansi.update');
+
+
+
+Route::get('instansi', [InstansiController::class, 'index'])->name('instansi.index');
+Route::post('instansi', [InstansiController::class, 'store'])->name('instansi.store');
+Route::get('instansi/{id}', [InstansiController::class, 'show'])->name('instansi.show');
+Route::delete('instansi/{id}', [InstansiController::class, 'destroy'])->name('instansi.destroy');
+
+// Route::get('/templatesurat', function () {
+//     return view('layout.templatesurat');
+// });
+// use App\Http\Controllers\TemplateSuratController;
+
+// Route::resource('template_surat', TemplateSuratController::class);
+use App\Http\Controllers\TemplateSuratController;
+
+Route::get('template_surat', [TemplateSuratController::class, 'index'])->name('template_surat.index');
+Route::post('/template_surat', [TemplateSuratController::class, 'store'])->name('template_surat.store');
+Route::put('template_surat/{id}', [TemplateSuratController::class, 'update']);
+Route::delete('template_surat/{id}', [TemplateSuratController::class, 'destroy']);
+
+Route::get('/generete', function () {
+    return view('layout.generete');
+});
 

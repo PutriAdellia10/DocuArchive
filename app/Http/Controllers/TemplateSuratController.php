@@ -7,87 +7,92 @@ use Illuminate\Http\Request;
 
 class TemplateSuratController extends Controller
 {
-    // Menampilkan daftar template surat
+
+    // Display all templates
     public function index()
     {
-        $templateSurat = TemplateSurat::all();
-        return view('template_surat.index', compact('templateSurat'));
+        $templates = TemplateSurat::all();
+        return view('layout.templatesurat', compact('templates'));
     }
 
-    // Menampilkan form untuk menambah template surat baru
+    // Show form to create a new template
+
     public function create()
     {
         return view('template_surat.create');
     }
 
-    // Menyimpan template surat baru ke database
+
+    // Store new template
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'nama_template' => 'required|string|max:100',
-            'konten' => 'required|string',
-            'ttd_pimpinan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'stempel' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        $request->validate([
+            'nama_template' => 'required|max:100',
+            'konten' => 'required',
+            'ttd_pimpinan' => 'nullable|file|mimes:jpg,png',
+            'stempel' => 'nullable|file|mimes:jpg,png',
         ]);
 
+        $data = $request->only(['nama_template', 'konten']);
+
+        // Handle file uploads
         if ($request->hasFile('ttd_pimpinan')) {
-            $validatedData['ttd_pimpinan'] = $request->file('ttd_pimpinan')->store('ttd_pimpinan', 'public');
+            $data['ttd_pimpinan'] = $request->file('ttd_pimpinan')->store('ttd', 'public');
         }
 
         if ($request->hasFile('stempel')) {
-            $validatedData['stempel'] = $request->file('stempel')->store('stempel', 'public');
+            $data['stempel'] = $request->file('stempel')->store('stempel', 'public');
         }
 
-        TemplateSurat::create($validatedData);
+        // Create the template
+        TemplateSurat::create($data);
 
-        return redirect()->route('template_surat.index')->with('success', 'Template surat berhasil ditambahkan.');
+        return redirect()->route('template_surat.index')->with('success', 'Template Surat created successfully');
     }
 
-    // Menampilkan form untuk mengedit template surat
+    // Show form to edit an existing template
     public function edit($id)
     {
-        $templateSurat = TemplateSurat::findOrFail($id);
-        return view('template_surat.edit', compact('templateSurat'));
+        $template = TemplateSurat::findOrFail($id);
+        return view('template_surat.edit', compact('template'));
     }
 
-    // Memperbarui template surat di database
+    // Update an existing template
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'nama_template' => 'required|string|max:100',
-            'konten' => 'required|string',
-            'ttd_pimpinan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'stempel' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        $request->validate([
+            'nama_template' => 'required|max:100',
+            'konten' => 'required',
+            'ttd_pimpinan' => 'nullable|file|mimes:jpg,png',
+            'stempel' => 'nullable|file|mimes:jpg,png',
         ]);
 
-        $templateSurat = TemplateSurat::findOrFail($id);
+        $template = TemplateSurat::findOrFail($id);
 
+        $data = $request->only(['nama_template', 'konten']);
+
+        // Handle file uploads
         if ($request->hasFile('ttd_pimpinan')) {
-            $validatedData['ttd_pimpinan'] = $request->file('ttd_pimpinan')->store('ttd_pimpinan', 'public');
+            $data['ttd_pimpinan'] = $request->file('ttd_pimpinan')->store('ttd', 'public');
         }
 
         if ($request->hasFile('stempel')) {
-            $validatedData['stempel'] = $request->file('stempel')->store('stempel', 'public');
+            $data['stempel'] = $request->file('stempel')->store('stempel', 'public');
         }
 
-        $templateSurat->update($validatedData);
+        // Update the template
+        $template->update($data);
 
-        return redirect()->route('template_surat.index')->with('success', 'Template surat berhasil diperbarui.');
+        return redirect()->route('template_surat.index')->with('success', 'Template Surat updated successfully');
     }
 
-    // Menghapus template surat dari database
+    // Delete an existing template
     public function destroy($id)
     {
-        $templateSurat = TemplateSurat::findOrFail($id);
-        $templateSurat->delete();
+        $template = TemplateSurat::findOrFail($id);
+        $template->delete();
 
-        return redirect()->route('template_surat.index')->with('success', 'Template surat berhasil dihapus.');
-    }
+        return redirect()->route('template_surat.index')->with('success', 'Template Surat deleted successfully');
 
-    // Menampilkan detail template surat (opsional)
-    public function show($id)
-    {
-        $templateSurat = TemplateSurat::findOrFail($id);
-        return view('template_surat.show', compact('templateSurat'));
     }
 }

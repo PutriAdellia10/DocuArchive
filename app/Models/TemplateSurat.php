@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class TemplateSurat extends Model
 {
+
+    use HasFactory;
+
     protected $table = 'template_surat';
 
     protected $fillable = [
@@ -16,8 +19,12 @@ class TemplateSurat extends Model
         'stempel',
     ];
 
-    public function surat()
-    {
-        return $this->hasMany(Surat::class, 'id_template');
-    }
+
+    public $timestamps = true;
+
+    protected $dates = [
+        'dibuat_pada',
+        'diperbarui_pada'
+    ];
+
 }

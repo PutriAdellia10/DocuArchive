@@ -7,58 +7,70 @@ use Illuminate\Http\Request;
 
 class InstansiController extends Controller
 {
-    // Menampilkan daftar instansi
-    public function index()
+
+    public function index(Request $request)
     {
-        $instansi = Instansi::all();
-        return view('instansi.index', compact('instansi'));
+        $search = $request->get('search');
+        $instansi = Instansi::where('nama_instansi', 'LIKE', "%$search%")
+            ->paginate(10);
+
+        return view('layout.instansi', compact('instansi'));
     }
 
-    // Menampilkan formulir untuk menambahkan instansi baru
-    public function create()
-    {
-        return view('instansi.create');
-    }
-
-    // Menyimpan instansi baru ke database
     public function store(Request $request)
     {
         $request->validate([
-            'nama_instansi' => 'required|string|max:100',
-            'kontak' => 'nullable|string|max:100',
-            'jenis_kerja_sama' => 'nullable|string',
+            'nama_instansi' => 'required|string|max:255',
+            'kontak' => 'required|string|max:255',
+            'jenis_kerja_sama' => 'required|string|max:255',
+            'dibuat_pada' => 'required|date',
+            'diperbarui_pada' => 'required|date',
         ]);
 
-        Instansi::create($request->all());
+        Instansi::create([
+            'nama_instansi' => $request->nama_instansi,
+            'kontak' => $request->kontak,
+            'jenis_kerja_sama' => $request->jenis_kerja_sama,
+            'dibuat_pada' => $request->dibuat_pada,
+            'diperbarui_pada' => $request->diperbarui_pada,
+        ]);
 
-        return redirect()->route('instansi.index')->with('success', 'Instansi berhasil ditambahkan.');
+        return redirect()->route('instansi.index');
     }
 
-    // Menampilkan formulir untuk mengedit instansi yang ada
-    public function edit(Instansi $instansi)
+    public function edit($id)
     {
-        return view('instansi.edit', compact('instansi'));
+        $instansi = Instansi::findOrFail($id);
+        return response()->json($instansi);
     }
-
-    // Memperbarui instansi yang ada di database
-    public function update(Request $request, Instansi $instansi)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_instansi' => 'required|string|max:100',
-            'kontak' => 'nullable|string|max:100',
-            'jenis_kerja_sama' => 'nullable|string',
+            'nama_instansi' => 'required|string|max:255',
+            'kontak' => 'required|string|max:255',
+            'jenis_kerja_sama' => 'required|string|max:255',
+            'dibuat_pada' => 'required|date',
+            'diperbarui_pada' => 'required|date',
         ]);
 
-        $instansi->update($request->all());
+        $instansi = Instansi::findOrFail($id);
+        $instansi->update([
+            'nama_instansi' => $request->nama_instansi,
+            'kontak' => $request->kontak,
+            'jenis_kerja_sama' => $request->jenis_kerja_sama,
+            'dibuat_pada' => $request->dibuat_pada,
+            'diperbarui_pada' => $request->diperbarui_pada,
+        ]);
 
-        return redirect()->route('instansi.index')->with('success', 'Instansi berhasil diperbarui.');
+        return redirect()->route('instansi.index');
     }
 
-    // Menghapus instansi dari database
-    public function destroy(Instansi $instansi)
+    public function destroy($id)
     {
+        $instansi = Instansi::findOrFail($id);
         $instansi->delete();
 
-        return redirect()->route('instansi.index')->with('success', 'Instansi berhasil dihapus.');
+        return redirect()->route('instansi.index');
+
     }
 }
