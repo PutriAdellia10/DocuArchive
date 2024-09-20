@@ -386,8 +386,8 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <a href="#">
-            <i class="fa fa-home"></i> Home
+        <a href="{{ route('dashboard_admin') }}">
+            <i class="fa fa-home"></i> Dashboard
         </a>
         <a href="#">
             <i class="fa fa-envelope"></i> Surat Masuk

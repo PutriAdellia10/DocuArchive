@@ -326,7 +326,7 @@
     </div>
 
     <div class="sidebar">
-        <a href="{{ url('/dashboard') }}"><i class="bi bi-house-door"></i> Dashboard</a>
+        <a href="{{ url('/dashboard_admin') }}"><i class="bi bi-house-door"></i> Dashboard</a>
         <a href="{{ url('/surat-masuk') }}"><i class="bi bi-envelope-in"></i> Surat Masuk</a>
         <a href="{{ url('/surat-keluar') }}"><i class="bi bi-envelope-out"></i> Surat Keluar</a>
         <a href="{{ url('/laporan') }}"><i class="bi bi-file-earmark-text"></i> Laporan</a>

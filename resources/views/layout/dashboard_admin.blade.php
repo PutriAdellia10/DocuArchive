@@ -99,6 +99,10 @@
             align-items: center;
         }
 
+        .active-card {
+            background-color: #1f4068 !important; /* Warna lebih gelap saat diklik */
+        }
+
         .sidebar a i {
             margin-right: 10px;
         }
@@ -221,14 +225,20 @@
                             <img src="img/surat.png" alt="Ikon Surat" width="24" height="24"> Surat
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarSuratDropdown">
-                            <li><a class="dropdown-item" href="#">Surat Masuk</a></li>
-                            <li><a class="dropdown-item" href="#">Surat Keluar</a></li>
+                            <li><a class="dropdown-item" href="{{ route('surat.index') }}">Surat Masuk</a></li>
+                            <li><a class="dropdown-item" href="{{ route('surat.keluar.index') }}">Surat Keluar</a></li>
+
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarSuratDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="img/laporan.png" alt="Ikon Laporan" width="24" height="24"> Laporan
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarLaporanDropdown">
+                            <li><a class="dropdown-item" href="{{ route('laporan.masuk') }}">Laporan Surat Masuk</a></li>
+                            <li><a class="dropdown-item" href="{{ route('laporan.keluar') }}">Laporan Surat Keluar</a></li>
+
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
