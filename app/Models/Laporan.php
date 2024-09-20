@@ -44,5 +44,8 @@ class Laporan extends Model
         return $this->belongsTo(SifatSurat::class, 'sifat_surat_id');
     }
 
-    // Tambahan fungsi atau logika lain bisa ditambahkan di sini
+    public function surat()
+    {
+        return $this->belongsTo(Surat::class, 'surat_id');
+    }
 }

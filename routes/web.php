@@ -5,6 +5,7 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\RekapitulasiSuratController;
+use App\Http\Controllers\LaporanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,7 +45,7 @@ Route::resource('instansi', InstansiController::class);
 
 Route::get('/rekapitulasi', [RekapitulasiSuratController::class, 'index'])->name('rekapitulasi.index');
 
-use App\Http\Controllers\LaporanController;
+
 
 // Rute untuk menampilkan laporan masuk
 Route::get('/laporan-masuk', [LaporanController::class, 'laporanMasuk'])->name('laporan.masuk');

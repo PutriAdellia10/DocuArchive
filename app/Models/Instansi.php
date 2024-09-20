@@ -25,7 +25,7 @@ class Instansi extends Model
     }
     public function laporan()
     {
-        return $this->hasMany(Laporan::class, 'asal_surat');
+        return $this->hasMany(Laporan::class, 'sifat_surat_id');
     }
 }
 

@@ -307,7 +307,7 @@
         }
     </style>
 </head>
-   <body>
+<body>
     <div class="navbar-top">
         <div class="logo">
             <img src="{{ asset('img/logo.png') }}" alt="Logo">
@@ -335,11 +335,11 @@
 
     <div class="container">
         <div class="header">
-            <h2><i class="bi bi-file-earmark-text"></i>Laporan Surat Masuk</h2>
+            <h2><i class="bi bi-file-earmark-text"></i>Laporan Surat Keluar</h2>
         </div>
 
         <div class="content">
-            <form method="GET" action="{{ route('laporan.masuk') }}" id="filterForm">
+            <form method="GET" action="{{ route('laporan.keluar') }}" id="filterForm">
                 <div class="form-group-inline">
                     <div class="form-group">
                         <label for="tanggal_awal">Tanggal Awal:</label>
@@ -364,7 +364,7 @@
                         <tr>
                             <th>No Agenda</th>
                             <th>Tanggal</th>
-                            <th>Asal Surat</th>
+                            <th>Tujuan Surat</th>
                             <th>No Surat</th>
                             <th>Tanggal Surat</th>
                             <th>Perihal</th>
@@ -377,7 +377,7 @@
                             <tr>
                                 <td>{{ $surat->no_agenda }}</td>
                                 <td>{{ $surat->tanggal }}</td>
-                                <td>{{ $surat->instansi->nama_instansi }}</td> <!-- Asal Surat dari relasi instansi -->
+                                <td>{{ $surat->instansi->nama_instansi }}</td> <!-- Tujuan Surat dari relasi instansi -->
                                 <td>{{ $surat->no_surat }}</td>
                                 <td>{{ $surat->tanggal_surat }}</td>
                                 <td>{{ $surat->perihal }}</td>
@@ -387,13 +387,12 @@
                         @endforeach
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+         document.addEventListener('DOMContentLoaded', function() {
     // Handle print button
     const cetakBtn = document.getElementById('cetakBtn');
     if (cetakBtn) {
@@ -402,7 +401,6 @@
         });
     }
 });
-
     </script>
 </body>
 </html>
