@@ -203,18 +203,24 @@
         }
 
         .form-container button {
-            padding: 10px;
-            background-color: #0077b6;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
+    padding: 8px 16px; /* Smaller padding */
+    background-color: #f4d35e; /* Yellow Button */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto; /* Adjust the width to fit the content */
+    font-size: 14px; /* Slightly smaller font size */
+    display: block; /* Make the button a block element */
+    margin: 20px auto; /* Center the button with auto margins */
+}
 
-        .form-container button:hover {
-            background-color: #005f73;
-        }
+.form-container button:hover {
+    background-color: #e09c36; /* Darker Yellow on Hover */
+}
+
+
+
     </style>
 </head>
 <body>
@@ -239,7 +245,7 @@
         <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="/surat"><i class="fas fa-envelope"></i> Surat</a>
         <a href="/laporan"><i class="fas fa-chart-line"></i> Laporan</a>
-        <a href="/master"><i class="fas fa-cogs"></i> Template Surat</a>
+        <a href="/template_surat"><i class="fas fa-cogs"></i> Template Surat</a>
         <a href="/instansi"><i class="fas fa-building"></i> Instansi</a>
         <a href="/disposisi"><i class="fas fa-user-cog"></i> Disposisi</a>
         <a href="/pengaturan"><i class="fas fa-user-cog"></i> Pengaturan</a>

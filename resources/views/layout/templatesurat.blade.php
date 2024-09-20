@@ -384,12 +384,99 @@
         #modal button[type="button"]:hover {
             background-color: #d62839;
         }
+        .generate-button {
+            padding: 8px 16px;
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .generate-button:hover {
+            background-color: #005f87;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Ensure it's above other elements */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh; /* Limit modal height */
+            overflow-y: auto; /* Enable scrolling inside the modal */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #0077b6;
+            text-align: center;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .modal-content select,
+        .modal-content input[type="text"],
+        .modal-content textarea,
+        .modal-content input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: #f4d35e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .modal-content button:hover {
+            background-color: #e09c36;
+        }
+        body.modal-open {
+    overflow: hidden;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
     </style>
 </head>
 <body>
     <div class="navbar-top">
         <div class="logo">
-            <img src="your-logo.png" alt="Logo">
+            <img src="{{asset('img/logo.jpg')}}" alt="Logo">
             <span>Docu Archive</span>
         </div>
         <div class="people-icon" id="peopleIcon">
@@ -408,7 +495,7 @@
         <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="/surat"><i class="fas fa-envelope"></i> Surat</a>
         <a href="/laporan"><i class="fas fa-chart-line"></i> Laporan</a>
-        <a href="/master"><i class="fas fa-cogs"></i> Template Surat</a>
+        <a href="/template_surat"><i class="fas fa-cogs"></i> Template Surat</a>
         <a href="/instansi"><i class="fas fa-building"></i> Instansi</a>
         <a href="/pengaturan"><i class="fas fa-user-cog"></i> Disposisi</a>
         <a href="/pengaturan"><i class="fas fa-user-cog"></i> Pengaturan</a>
@@ -417,7 +504,7 @@
     <div class="content">
         <div class="header">
             <div class="header-content">
-                <img src="your-logo.png" alt="Logo">
+                <img src="{{asset('img/template surat.png')}}" alt="Logo">
                 <h2>Template Surat</h2>
             </div>
             <button class="add-button" onclick="openAddModal()">Tambah Template</button>
@@ -445,7 +532,7 @@
                         <td class="actions">
                             <i class="fas fa-edit" onclick="openEditModal(<?php echo $template->id; ?>)"></i>
                             <i class="fas fa-trash" onclick="deleteTemplate(<?php echo $template->id; ?>)"></i>
-                            <button class="generate-button" onclick="generateTemplate(<?php echo $template->id; ?>)">Generate</button>
+                            <button class="generate-button" onclick="generateTemplate(1)">Generate</button>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -480,6 +567,56 @@
                         <button type="submit">Simpan</button>
                         <button type="button" onclick="closeModal()">Batal</button>
                     </div>
+                </form>
+            </div>
+        </div>
+        <div id="formModal" class="modal">
+            <div class="modal-content">
+                <h2>Form Pembuatan Surat</h2>
+                <form id="suratForm" action="/submit_surat" method="POST">
+                    <div class="form-group">
+                        <label for="template_surat">Pilih Template Surat:</label>
+                        <select id="template_surat" name="template_surat" required>
+                            <option value="">-- Pilih Template Surat --</option>
+                            <!-- Options will be populated dynamically based on template_id -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kop_surat">Pilih Template Kop Surat:</label>
+                        <select id="kop_surat" name="kop_surat" required>
+                            <option value="">-- Pilih Template Kop Surat --</option>
+                            <!-- Populate with options -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="penerima">Nama dan Jabatan Penerima:</label>
+                        <input type="text" id="penerima" name="penerima" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alamat_penerima">Alamat Penerima:</label>
+                        <input type="text" id="alamat_penerima" name="alamat_penerima" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tanggal_surat">Tanggal Surat:</label>
+                        <input type="date" id="tanggal_surat" name="tanggal_surat" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="isi_surat">Isi Surat:</label>
+                        <textarea id="isi_surat" name="isi_surat" rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pengirim">Nama Pengirim:</label>
+                        <input type="text" id="pengirim" name="pengirim" required>
+                    </div>
+
+                    <button type="submit">Generate</button>
+                    <button type="button" onclick="closeFormModal()">Batal</button>
                 </form>
             </div>
         </div>
@@ -529,6 +666,34 @@
                 tr[i].style.display = "none";
             }
         }
+    }
+}
+function generateTemplate(id) {
+    // Open the modal
+    document.getElementById('formModal').style.display = 'flex';
+    document.body.classList.add('modal-open'); // Disable body scroll
+
+    // Optionally, fetch template details using the template ID
+    fetch(`/api/get_template/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('template_surat').innerHTML = `
+                <option value="${data.id}" selected>${data.nama_template}</option>
+            `;
+        })
+        .catch(error => console.error('Error fetching template:', error));
+}
+function closeFormModal() {
+    document.getElementById('formModal').style.display = 'none';
+    document.body.classList.remove('modal-open'); // Enable body scroll again
+}
+
+// Close modal when clicking outside the modal content
+window.onclick = function(event) {
+    var modal = document.getElementById('formModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Enable body scroll again
     }
 }
 

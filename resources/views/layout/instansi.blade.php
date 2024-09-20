@@ -367,11 +367,13 @@ body {
         </div>
     </div>
     <div class="sidebar">
-        <a href="#"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="#"><i class="fas fa-envelope"></i> Surat</a>
-        <a href="#"><i class="fas fa-file-alt"></i> Laporan</a>
-        <a href="#"><i class="fas fa-building"></i> Instansi</a>
-        <a href="#"><i class="fas fa-cogs"></i> Pengaturan</a>
+        <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/surat"><i class="fas fa-envelope"></i> Surat</a>
+        <a href="/laporan"><i class="fas fa-chart-line"></i> Laporan</a>
+        <a href="/template_surat"><i class="fas fa-cogs"></i> Template Surat</a>
+        <a href="/instansi"><i class="fas fa-building"></i> Instansi</a>
+        <a href="/disposisi"><i class="fas fa-user-cog"></i> Disposisi</a>
+        <a href="/pengaturan"><i class="fas fa-user-cog"></i> Pengaturan</a>
     </div>
     <div class="content">
         <div class="header">
