@@ -65,3 +65,4 @@ Route::delete('template_surat/{id}', [TemplateSuratController::class, 'destroy']
 Route::get('/generete', function () {
     return view('layout.generete');
 });
+Route::get('/generate/{id}', [YourController::class, 'generate'])->name('generate');
