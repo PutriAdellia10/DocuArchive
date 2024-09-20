@@ -50,6 +50,10 @@ class Surat extends Model
     {
         return $this->hasOne(RekapitulasiSurat::class, 'id_surat');
     }
+    public function laporan()
+    {
+        return $this->hasMany(Laporan::class, 'surat_id');
+    }
     // Accessor untuk status
     public function getStatusAttribute($value)
     {

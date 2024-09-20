@@ -25,7 +25,17 @@ class Instansi extends Model
         'diperbarui_pada',
     ];
 
-    // Format tanggal
-    protected $dates = ['dibuat_pada', 'diperbarui_pada'];
+
+    public $timestamps = true; // Mengaktifkan fitur timestamp
+
+    public function surat()
+    {
+        return $this->hasMany(Surat::class, 'id_instansi','id');
+    }
+    public function laporan()
+    {
+        return $this->hasMany(Laporan::class, 'sifat_surat_id');
+    }
+
 }
 
