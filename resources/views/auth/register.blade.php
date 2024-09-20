@@ -156,7 +156,7 @@
             <h2 class="form-title">Daftar</h2>
         </div>
         <div class="form-container">
-            <form action="{{ route('register') }}" method="post">
+            <form action="{{ route('register') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="nama_pengguna">Nama Pengguna <span class="required">*</span></label>

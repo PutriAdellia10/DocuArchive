@@ -23,37 +23,48 @@ class AuthController extends Controller
     {
         // Validasi input
         $validator = Validator::make($request->all(), [
-            'nama_pengguna' => 'required|string|max:255|unique:pengguna',
-            'nama_lengkap' => 'required|string|max:255',
+            'nama_pengguna' => 'required|string|max:255|unique:pengguna', // tabel "pengguna"
             'kata_sandi' => 'required|string|confirmed|min:8',
             'peran' => 'required|string|in:Admin,Karyawan,Sekretariat,Pimpinan',
         ]);
 
+        // Jika validasi gagal
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        Log::info('Pendaftaran pengguna baru:', $request->all());
-
         // Buat pengguna baru dengan password yang di-hash
         $pengguna = User::create([
             'nama_pengguna' => $request->input('nama_pengguna'),
-            'nama_lengkap' => $request->input('nama_lengkap'),
             'kata_sandi' => Hash::make($request->input('kata_sandi')), // Hash password
             'peran' => $request->input('peran'),
         ]);
 
         // Login pengguna setelah pendaftaran
-        Auth::login($pengguna);
+       // Auth::login($pengguna);
 
-        // Redirect ke halaman login setelah pendaftaran
-        return redirect()->route('login');
+       // Redirect ke halaman login setelah pendaftaran berhasil
+     return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
+
+        // Redirect ke halaman sesuai dengan peran (role)
+        switch ($pengguna->peran) {
+            case 'Admin':
+                return redirect()->intended('/dashboard_admin');
+            case 'Sekretariat':
+                return redirect()->intended('/dashboard_sekretariat');
+            case 'Karyawan':
+                return redirect()->intended('/dashboard_karyawan');
+            case 'Pimpinan':
+                return redirect()->intended('/dashboard_pimpinan');
+            default:
+                return redirect()->route('home');
+        }
     }
 
     // Menampilkan formulir login
     public function showLoginForm()
     {
-        return view('auth.login'); // Pastikan file `login.blade.php` ada di `resources/views/auth/`
+        return view('auth.login');
     }
 
     // Menangani login
@@ -86,7 +97,7 @@ class AuthController extends Controller
                 case 'Pimpinan':
                     return redirect()->intended('/dashboard_pimpinan');
                 default:
-                    return redirect()->route('home'); // Redirect default jika role tidak ditemukan
+                    return redirect()->route('home');
             }
         } else {
             // Jika login gagal
@@ -100,7 +111,6 @@ class AuthController extends Controller
         Auth::logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect()->route('login');

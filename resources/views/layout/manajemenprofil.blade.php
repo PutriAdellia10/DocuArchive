@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -131,9 +132,9 @@
         .pagination button:disabled {
             background-color: #33a393;
         }
-
     </style>
 </head>
+
 <body>
     <div class="navbar">
         <img src="{{ asset('img/logo.jpg') }}" alt="logo" class="logo">
@@ -148,13 +149,17 @@
         <a href="#">Instansi</a>
         <a href="#">Pengaturan</a>
     </div>
+
     <div class="content">
+        <!-- Tombol Kembali -->
+        <a href="{{ url('/dashboard_admin') }}" class="btn btn-secondary mb-3">Kembali</a>
         <!-- Menampilkan pesan sukses -->
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
+
         <div class="card">
             <div class="card-header">
                 <span>Manajemen User</span>
@@ -202,8 +207,6 @@
                                     </script>
                                 </form>
                             </td>
-
-
                         </tr>
                         @endforeach
                     </tbody>
@@ -228,15 +231,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-    @if ($errors->any())
-        <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-        </div>
-    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <form action="{{ route('user.store') }}" method="POST">
                         @csrf
@@ -265,62 +268,60 @@
         </div>
     </div>
 
-<!-- Modal Edit User -->
-<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="editUserForm" action="" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="edit_nama_pengguna" class="form-label">Nama Pengguna</label>
-                        <input type="text" class="form-control" id="edit_nama_pengguna" name="nama_pengguna" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_kata_sandi" class="form-label">Kata Sandi</label>
-                        <input type="text" class="form-control" id="edit_kata_sandi" name="kata_sandi" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_peran" class="form-label">Peran</label>
-                        <select class="form-select" id="edit_peran" name="peran" required>
-                            <option value="admin">Admin</option>
-                            <option value="karyawan">Karyawan</option>
-                            <option value="sekretariat">Sekretariat</option>
-                            <option value="pimpinan">Pimpinan</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+    <!-- Modal Edit User -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </form>
+                <form id="editUserForm" action="" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="edit_nama_pengguna" class="form-label">Nama Pengguna</label>
+                            <input type="text" class="form-control" id="edit_nama_pengguna" name="nama_pengguna" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_kata_sandi" class="form-label">Kata Sandi</label>
+                            <input type="text" class="form-control" id="edit_kata_sandi" name="kata_sandi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_peran" class="form-label">Peran</label>
+                            <select class="form-select" id="edit_peran" name="peran" required>
+                                <option value="admin">Admin</option>
+                                <option value="karyawan">Karyawan</option>
+                                <option value="sekretariat">Sekretariat</option>
+                                <option value="pimpinan">Pimpinan</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var editButtons = document.querySelectorAll('.edit-btn');
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var editButtons = document.querySelectorAll('.edit-btn');
+            editButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var userId = this.getAttribute('data-id');
+                    var userName = this.getAttribute('data-nama');
+                    var userRole = this.getAttribute('data-peran');
 
-        editButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                var userId = this.getAttribute('data-id');
-                var userName = this.getAttribute('data-nama');
-                var userRole = this.getAttribute('data-peran');
-
-                var form = document.getElementById('editUserForm');
-                form.action = '{{ route('user.update', '') }}/' + userId;
-                document.getElementById('edit_nama_pengguna').value = userName;
-                document.getElementById('edit_peran').value = userRole;
+                    var form = document.getElementById('editUserForm');
+                    form.action = '{{ route('user.update', '') }}/' + userId;
+                    document.getElementById('edit_nama_pengguna').value = userName;
+                    document.getElementById('edit_peran').value = userRole;
+                });
             });
         });
-    });
-</script>
-
-
+    </script>
 </body>
+
 </html>

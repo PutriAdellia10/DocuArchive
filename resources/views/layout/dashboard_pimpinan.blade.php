@@ -16,15 +16,19 @@
                 <img src="logo.png" alt="Logo" width="30" height="24">
                 DocuArchive
             </a>
-            <div class="d-flex">
+            <div class="d-flex align-items-center">
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Profil
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Pengaturan Profil</a></li>
-                        <li><a class="dropdown-item" href="#">Keluar</a></li>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ asset('img/user profile.png') }}" alt="Ikon User" class="rounded-circle" width="30" height="30">
+                        <span class="ms-2">User</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item logout-btn">Logout</button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -36,11 +40,6 @@
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">
-                                Dashboard
-                            </a>
-                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarSuratDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Surat
@@ -109,26 +108,6 @@
                     </div>
                 </div>
 
-                <!-- Grafik dan Chart -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card mb-4">
-                            <div class="card-header">Grafik Surat Masuk vs Surat Keluar</div>
-                            <div class="card-body">
-                                <canvas id="pimpinanChart" width="400" height="200"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card mb-4">
-                            <div class="card-header">Distribusi Jenis Surat</div>
-                            <div class="card-body">
-                                <canvas id="pimpinanPieChart" width="400" height="200"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Aktivitas Terbaru -->
                 <div class="card mb-4">
                     <div class="card-header">Aktivitas Terbaru</div>
@@ -139,11 +118,6 @@
                         </ul>
                     </div>
                 </div>
-
-                <!-- Footer -->
-                <footer class="pt-3 mt-4 text-muted text-center">
-                    © 2024 Nama Perusahaan - Hak Cipta Dilindungi
-                </footer>
             </main>
         </div>
     </div>
@@ -151,44 +125,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('pimpinanChart').getContext('2d');
-        const pimpinanChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Surat Masuk',
-                    data: [20, 15, 17, 18, 21, 22, 20],
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }, {
-                    label: 'Surat Keluar',
-                    data: [10, 8, 9, 11, 12, 14, 10],
-                    borderColor: 'rgb(255, 99, 132)',
-                    tension: 0.1
-                }]
-            }
-        });
-
-        const ctxPie = document.getElementById('pimpinanPieChart').getContext('2d');
-        const pimpinanPieChart = new Chart(ctxPie, {
-            type: 'pie',
-            data: {
-                labels: ['Jenis A', 'Jenis B', 'Jenis C', 'Jenis D'],
-                datasets: [{
-                    label: 'Distribusi Jenis Surat',
-                    data: [15, 25, 30, 30],
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 206, 86)',
-                        'rgb(75, 192, 192)'
-                    ]
-                }]
-            }
-        });
-    </script>
 </body>
 
 </html>

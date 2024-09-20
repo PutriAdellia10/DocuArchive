@@ -16,6 +16,6 @@ class AdminController extends Controller
         ];
 
         // Return ke view dashboard_admin dengan data yang diambil
-        return view('dashboard_admin', $data);
+        return view('layout.dashboard_admin', $data);
     }
 }

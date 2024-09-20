@@ -9,12 +9,15 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DisposisiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SekretariatController;
-
+use App\Http\Controllers\PimpinanController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\RekapitulasiSuratController;
 
-
+Route::get('/', function () {
+    return view('welcome');
+});
 Route::get('/login', function () {
     return view('auth.login');
 });
@@ -35,13 +38,23 @@ Route::get('/disposisi', function () {
 
 
 //login
-Route::middleware(['guest'])->group(function(){
+// Routes untuk pengguna yang belum login (guest)
+Route::middleware(['guest'])->group(function() {
+    // Route untuk menampilkan formulir pendaftaran
     Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+
+    // Route untuk menangani pengiriman formulir pendaftaran
     Route::post('/register', [AuthController::class, 'register']);
+
+    // Route untuk menampilkan formulir login
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+
+    // Route untuk menangani login
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+// Route untuk menangani logout (hanya untuk pengguna yang sudah login)
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::middleware(['auth'])->group(function(){

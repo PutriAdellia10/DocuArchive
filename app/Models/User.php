@@ -9,23 +9,21 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    protected $table = 'pengguna';
-
-    protected $primaryKey = 'id';
+    protected $table = 'pengguna'; // Pastikan tabel 'pengguna'
 
     protected $fillable = [
         'nama_pengguna',
+        'nama_lengkap',
         'kata_sandi',
         'peran',
     ];
-
-    const CREATED_AT = 'dibuat_pada';
-    const UPDATED_AT = 'diperbarui_pada';
 
     protected $hidden = [
         'kata_sandi',
     ];
 
+    const CREATED_AT = 'dibuat_pada';
+    const UPDATED_AT = 'diperbarui_pada';
 }
