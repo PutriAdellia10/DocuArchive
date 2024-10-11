@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Surat;
 class PimpinanController extends Controller
 {
     public function index()
     {
-        return view('layout.dashboard_pimpinan');
+        $data = [
+            'totalSuratMasuk' => Surat::where('status', 'Masuk')->count(),
+            'totalSuratKeluar' => Surat::where('status', 'Keluar')->count(),
+        ];
+        return view('layout.dashboard_pimpinan',$data);
     }
 }

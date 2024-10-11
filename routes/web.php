@@ -15,6 +15,7 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\RekapitulasiSuratController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\SifatSuratController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -99,67 +100,29 @@ Route::delete('/surat-keluar/{id}', [SuratController::class, 'keluardestroy'])->
 Route::get('/surat-keluar/{id}', [SuratController::class, 'keluarshow'])->name('surat.keluar.show');
 
 
-//Route::get('/surat/{id}/disposisi', [SuratController::class, 'showDisposisi'])->name('surat.disposisi');
-
-Route::resource('jenis_surat', JenisSuratController::class);
-
 Route::get('/rekapitulasi', [RekapitulasiSuratController::class, 'index'])->name('rekapitulasi.index');
-
 
 
 // Rute untuk menampilkan laporan masuk
 Route::get('/laporan-masuk', [LaporanController::class, 'laporanMasuk'])->name('laporan.masuk');
-
 // Rute untuk menampilkan laporan keluar
 Route::get('/laporan-keluar', [LaporanController::class, 'laporanKeluar'])->name('laporan.keluar');
-
-
-
-
-
-
-// Route::get('/instansi', function () {
-//     return view('layout.instansi');
-// })->name('instansi');
-// Route::get('/tambahinstansi', function () {
-//     return view('layout.tambahinstansi');
-// })->name('tambahinstansi');
-// use App\Http\Controllers\InstansiController;
-
-// Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi');
-// Route::get('/instansi/tambah', [InstansiController::class, 'create'])->name('instansi.create');
-// Route::post('/instansi', [InstansiController::class, 'store'])->name('instansi.store');
-
-
-// Route::resource('instansi', InstansiController::class);
-// Route::get('instansi/{id}', [InstansiController::class, 'show']);
-// Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi.index');
-// Route::post('/instansi', [InstansiController::class, 'store']);
-// Route::delete('/instansi/{id}', [InstansiController::class, 'destroy']);
-// Route::put('/instansi/{id}', [InstansiController::class, 'update'])->name('instansi.update');
 
 
 
 Route::get('instansi', [InstansiController::class, 'index'])->name('instansi.index');
 Route::post('instansi', [InstansiController::class, 'store'])->name('instansi.store');
 Route::get('instansi/{id}', [InstansiController::class, 'show'])->name('instansi.show');
+Route::put('/instansi/{id}', [InstansiController::class, 'update'])->name('instansi.update');
 Route::delete('instansi/{id}', [InstansiController::class, 'destroy'])->name('instansi.destroy');
 
-// Route::get('/templatesurat', function () {
-//     return view('layout.templatesurat');
-// });
-// use App\Http\Controllers\TemplateSuratController;
 
-// Route::resource('template_surat', TemplateSuratController::class);
-use App\Http\Controllers\TemplateSuratController;
+// Menampilkan daftar sifat surat
+Route::get('sifat_surat', [SifatSuratController::class, 'index'])->name('sifat_surat.index');
+Route::get('sifat_surat/create', [SifatSuratController::class, 'create'])->name('sifat_surat.create');
+Route::post('sifat_surat', [SifatSuratController::class, 'store'])->name('sifat_surat.store');
+Route::get('sifat_surat/{id}/edit', [SifatSuratController::class, 'edit'])->name('sifat_surat.edit');
+Route::put('sifat_surat/{id}', [SifatSuratController::class, 'update'])->name('sifat_surat.update');
+Route::delete('sifat_surat/{id}', [SifatSuratController::class, 'destroy'])->name('sifat_surat.destroy');
+Route::get('sifat_surat/{id}', [SifatSuratController::class, 'show'])->name('sifat_surat.show');
 
-Route::get('template_surat', [TemplateSuratController::class, 'index'])->name('template_surat.index');
-Route::post('/template_surat', [TemplateSuratController::class, 'store'])->name('template_surat.store');
-Route::put('template_surat/{id}', [TemplateSuratController::class, 'update']);
-Route::delete('template_surat/{id}', [TemplateSuratController::class, 'destroy']);
-
-Route::get('/generete', function () {
-    return view('layout.generete');
-});
-
-Route::get('/generate/{id}', [YourController::class, 'generate'])->name('generate');

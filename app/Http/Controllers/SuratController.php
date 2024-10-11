@@ -16,9 +16,11 @@ class SuratController extends Controller
     public function indexMasuk()
     {
         $suratMasuk = Surat::where('status', 'Masuk')->get();
+        $totalSuratMasuk = Surat::where('status', 'Masuk')->count(); // Menghitung total surat masuk
         $instansi = Instansi::all();
         $sifatSurat = SifatSurat::all();
-        return view('layout.suratmasuk', compact('suratMasuk', 'instansi', 'sifatSurat'));
+
+        return view('layout.suratmasuk', compact('suratMasuk', 'instansi', 'sifatSurat', 'totalSuratMasuk')); // Mengirim total surat masuk ke view
     }
 
     public function create()
@@ -30,7 +32,8 @@ class SuratController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+         // Validasi input
+         $request->validate([
             'no_agenda' => 'required|string',
             'tanggal' => 'required|date',
             'no_surat' => 'required|string|max:255|unique:surat,no_surat',
@@ -43,29 +46,30 @@ class SuratController extends Controller
             'status' => 'required|string|in:Masuk,Keluar',
         ]);
 
-        $surat = new Surat($validatedData);
+        // Simpan file dokumen
+        $path = $request->file('dokumen')->store('dokumen_masuk', 'public');
 
-        if ($request->hasFile('dokumen')) {
-            $filePath = $request->file('dokumen')->store('dokumen_masuk', 'public');
-            $surat->dokumen = $filePath;
-        }
+        // Simpan data surat
+        Surat::create([
+            'no_agenda' => $request->no_agenda,
+            'tanggal' => $request->tanggal,
+            'id_asal_surat' => $request->id_asal_surat,
+            'no_surat' => $request->no_surat,
+            'tanggal_surat' => $request->tanggal_surat,
+            'perihal' => $request->perihal,
+            'konten' => $request->konten,
+            'id_sifat_surat' => $request->id_sifat_surat,
+            'status' => $request->status,
+            'dokumen' => $path,
+        ]);
 
-        $surat->save();
-
-        return redirect()->route('surat.index');
-    }
-
-    public function edit($id)
-    {
-        $surat = Surat::findOrFail($id);
-        $instansi = Instansi::all();
-        $sifatSurat = SifatSurat::all();
-        return view('crudsurat.editmasuk', compact('surat', 'instansi', 'sifatSurat'));
+        return redirect()->route('surat.index')->with('success', 'Data berhasil disimpan');
     }
 
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
+        // Validasi input
+        $request->validate([
             'no_agenda' => 'required|string',
             'tanggal' => 'required|date',
             'no_surat' => 'required|string|max:255|unique:surat,no_surat',
@@ -78,19 +82,36 @@ class SuratController extends Controller
             'status' => 'required|string|in:Masuk,Keluar',
         ]);
 
+        // Temukan data yang akan diperbarui
         $surat = Surat::findOrFail($id);
 
+        // Perbarui data
+        $surat->no_agenda = $request->no_agenda;
+        $surat->tanggal = $request->tanggal;
+        $surat->id_asal_surat = $request->id_asal_surat;
+        $surat->no_surat = $request->no_surat;
+        $surat->tanggal_surat = $request->tanggal_surat;
+        $surat->perihal = $request->perihal;
+        $surat->konten = $request->konten;
+        $surat->id_sifat_surat = $request->id_sifat_surat;
+        $surat->status = $request->status;
+
+        // Periksa jika ada file dokumen baru
         if ($request->hasFile('dokumen')) {
+            // Hapus file lama jika ada
             if ($surat->dokumen) {
-                Storage::disk('public')->delete($surat->dokumen);
+                Storage::delete($surat->dokumen);
             }
-            $filePath = $request->file('dokumen')->store('dokumen_masuk', 'public');
-            $surat->dokumen = $filePath;
+
+            // Simpan file baru
+            $path = $request->file('dokumen')->store('dokumen_masuk', 'public');
+            $surat->dokumen = $path;
         }
 
-        $surat->update($validatedData);
+        // Simpan perubahan ke database
+        $surat->save();
 
-        return redirect()->route('surat.index');
+        return redirect()->route('surat.index')->with('success', 'Data berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -114,6 +135,7 @@ class SuratController extends Controller
     public function indexKeluar()
     {
         $suratKeluar = Surat::where('status', 'Keluar')->get();
+        $totalSuratKeluar = Surat::where('status', 'Keluar')->count(); // Menghitung total surat keluar
         $instansi = Instansi::all();
         $sifatSurat = SifatSurat::all();
         return view('layout.suratkeluar', compact('suratKeluar', 'instansi', 'sifatSurat'));
@@ -130,16 +152,16 @@ class SuratController extends Controller
     {
         // Validasi input
         $request->validate([
-            'no_agenda' => 'required',
+            'no_agenda' => 'required|string',
             'tanggal' => 'required|date',
-            'id_asal_surat' => 'required|exists:instansi,id',
-            'no_surat' => 'required|unique:surat,no_surat',
+            'no_surat' => 'required|string|max:255|unique:surat,no_surat',
             'tanggal_surat' => 'required|date',
-            'perihal' => 'required',
-            'konten' => 'nullable',
-            'id_sifat_surat' => 'required|exists:sifat_surat,id',
-            'status' => 'required',
-            'dokumen' => 'required|mimes:pdf|max:10000',
+            'perihal' => 'required|string',
+            'konten' => 'required|string',
+            'id_sifat_surat' => 'required|integer',
+            'id_asal_surat' => 'required|integer',
+            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'status' => 'required|string|in:Masuk,Keluar',
         ]);
 
         // Simpan file dokumen
@@ -166,16 +188,16 @@ class SuratController extends Controller
     {
         // Validasi input
         $request->validate([
-            'no_agenda' => 'required',
+            'no_agenda' => 'required|string',
             'tanggal' => 'required|date',
-            'id_asal_surat' => 'required|exists:instansi,id',
-            'no_surat' => 'required|unique:surat,no_surat,' . $id,
+            'no_surat' => 'required|string|max:255|unique:surat,no_surat',
             'tanggal_surat' => 'required|date',
-            'perihal' => 'required',
-            'konten' => 'nullable',
-            'id_sifat_surat' => 'required|exists:sifat_surat,id',
-            'status' => 'required',
-            'dokumen' => 'nullable|mimes:pdf|max:10000',
+            'perihal' => 'required|string',
+            'konten' => 'required|string',
+            'id_sifat_surat' => 'required|integer',
+            'id_asal_surat' => 'required|integer',
+            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'status' => 'required|string|in:Masuk,Keluar',
         ]);
 
         // Temukan data yang akan diperbarui
@@ -208,14 +230,6 @@ class SuratController extends Controller
         $surat->save();
 
         return redirect()->route('surat.keluar.index')->with('success', 'Data berhasil diperbarui');
-    }
-
-    public function keluaredit($id)
-    {
-        $surat = Surat::findOrFail($id);
-        $instansi = Instansi::all();
-        $sifatSurat = SifatSurat::all();
-        return view('suratkeluar.edit', compact('surat', 'instansi', 'sifatSurat'));
     }
 
     public function keluardestroy($id)

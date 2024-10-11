@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docu Archive - Instansi</title>
+    <link href="{{ asset('css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
 body {
     font-family: Arial, sans-serif;
@@ -13,140 +19,10 @@ body {
     padding: 0;
 }
 
-.navbar-top {
-    width: 100%;
-    background: linear-gradient(90deg, #0077b6, #00b4d8); /* Gradient Navbar */
-    padding: 10px 20px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-    height: 60px;
-    border-bottom: 2px solid #005f73; /* Darker Blue Border */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle Shadow */
-}
-
-.navbar-top .logo {
-    display: flex;
-    align-items: center;
-    color: #ffffff; /* White Text */
-    font-weight: bold;
-}
-
-.navbar-top .logo img {
-    width: 40px;
-    margin-right: 10px;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Logo Shadow */
-}
-
-.navbar-top .logo span {
-    font-size: 20px;
-}
-
-.navbar-top .people-icon {
-    position: relative;
-    display: flex;
-    align-items: center;
-    font-size: 24px;
-    color: #ffffff; /* White Icon Color */
-    cursor: pointer;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Background */
-    border: 1px solid #005f73; /* Darker Blue Border */
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Shadow */
-    padding: 10px;
-    width: 250px;
-    z-index: 1000;
-    color: #ffffff; /* White Text */
-}
-
-.dropdown-menu.show {
-    display: block;
-}
-
-.dropdown-menu .user-info {
-    margin-bottom: 10px;
-}
-
-.dropdown-menu .user-info span {
-    font-weight: bold;
-}
-
-.dropdown-menu .dropdown-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    text-decoration: none;
-    color: #ffffff; /* White Text */
-    font-weight: bold;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.dropdown-menu .dropdown-item i {
-    margin-right: 10px;
-}
-
-.dropdown-menu .dropdown-item:hover {
-    background-color: #005f73; /* Darker Blue Hover */
-}
-
-.sidebar {
-    width: 200px;
-    background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Sidebar */
-    height: 100vh;
-    padding: 70px 10px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 60px;
-    border-right: 2px solid #005f73; /* Darker Blue Border */
-    box-shadow: 4px 0 6px rgba(0,0,0,0.1); /* Sidebar Shadow */
-}
-
-.sidebar a {
-    text-decoration: none;
-    color: #ffffff; /* White Text */
-    margin: 10px 0;
-    text-align: left;
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-    font-weight: bold;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar a i {
-    margin-right: 10px;
-}
-
-.sidebar a:hover {
-    background-color: #005f73; /* Darker Blue Hover */
-    color: #ffffff; /* White Text */
-}
-
 .content {
-    margin-left: 220px;
-    padding: 80px 20px 20px;
-}
+margin-left: 240px;
+padding: 80px 20px 20px;
+        }
 
 .header {
     background: linear-gradient(180deg, #90e0ef, #caf0f8); /* Gradient Header */
@@ -343,41 +219,29 @@ body {
     cursor: pointer;
 }
 
-
-
     </style>
 </head>
 <body>
-    <div class="navbar-top">
-        <div class="logo">
-            <img src="{{ asset('img/logo.jpg') }}" alt="logo">
-            <span>Docu Archive</span>
-        </div>
-        <div class="people-icon" onclick="toggleDropdown()">
-            <i class="fa fa-user"></i>
-        </div>
-        <div class="dropdown-menu" id="dropdownMenu">
-            <div class="user-info">
-                <span>Admin</span>
-                <p>admin@docuarchive.com</p>
-            </div>
-            <a href="#" class="dropdown-item">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </div>
-    </div>
-    <div class="sidebar">
-        <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="/surat"><i class="fas fa-envelope"></i> Surat</a>
-        <a href="/laporan"><i class="fas fa-chart-line"></i> Laporan</a>
-        <a href="/template_surat"><i class="fas fa-cogs"></i> Template Surat</a>
-        <a href="/instansi"><i class="fas fa-building"></i> Instansi</a>
-        <a href="/disposisi"><i class="fas fa-user-cog"></i> Disposisi</a>
-        <a href="/pengaturan"><i class="fas fa-user-cog"></i> Pengaturan</a>
-    </div>
+    @include('components.navbar')
+
+    @if(auth()->check())
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.sidebaradmin')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.sidebarpimdansekre')
+    @elseif(auth()->user()->peran == 'Karyawan')
+        @include('components.sidebarkaryawan')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.sidebarpimdansekre')
+    @else
+        <p>Peran tidak dikenali.</p>
+    @endif
+@else
+    <p>Anda belum login. Silakan login untuk melanjutkan.</p>
+@endif
     <div class="content">
         <div class="header">
-            <h2><i class="fas fa-arrow-left"></i> Instansi</h2>
+            <h2></i> Instansi</h2>
             <button class="add-button" onclick="openModal()">Tambah Instansi</button>
         </div>
         <div class="table-container">
@@ -393,26 +257,22 @@ body {
                         <th>Nama Instansi</th>
                         <th>Kontak</th>
                         <th>Jenis Kerja Sama</th>
-                        <th>Dibuat Pada</th>
-                        <th>Diperbarui Pada</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($instansi as $i)
-                        <tr>
-                            <td>{{ $i->id }}</td>
-                            <td>{{ $i->nama_instansi }}</td>
-                            <td>{{ $i->kontak }}</td>
-                            <td>{{ $i->jenis_kerja_sama }}</td>
-                            <td>{{ $i->dibuat_pada }}</td>
-                            <td>{{ $i->diperbarui_pada }}</td>
-                            <td class="actions">
-                                <i class="fas fa-edit" onclick="openEditModal({{ $i->id }})"></i>
-                                <i class="fas fa-trash" onclick="deleteInstansi({{ $i->id }})"></i>
-                            </td>
-                        </tr>
-                    @endforeach
+                    <tr>
+                        <td>{{ $i->id }}</td>
+                        <td>{{ $i->nama_instansi }}</td>
+                        <td>{{ $i->kontak }}</td>
+                        <td>{{ $i->jenis_kerja_sama }}</td>
+                        <td class="actions">
+                            <i class="fas fa-edit" onclick="openEditModal({{ json_encode($i) }})"></i>
+                            <i class="fas fa-trash" onclick="deleteInstansi({{ $i->id }})"></i>
+                        </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
             <div class="pagination">
@@ -444,14 +304,34 @@ body {
                 <input type="text" id="kontak" name="kontak" required>
                 <label for="jenis_kerja_sama">Jenis Kerja Sama:</label>
                 <input type="text" id="jenis_kerja_sama" name="jenis_kerja_sama" required>
-                <label for="dibuat_pada">Dibuat Pada:</label>
-                <input type="date" id="dibuat_pada" name="dibuat_pada" required>
-                <label for="diperbarui_pada">Diperbarui Pada:</label>
-                <input type="date" id="diperbarui_pada" name="diperbarui_pada" required>
                 <button type="submit" id="submitButton">Simpan</button>
             </form>
         </div>
     </div>
+ <!-- Modal for Edit Instansi -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Edit Instansi</h2>
+        <form id="editInstansiForm" action="{{ route('instansi.update', ['id' => $i->id ?? '']) }}" method="POST">
+            @csrf
+            @method('PUT') <!-- Menggunakan PUT untuk update -->
+            <input type="hidden" id="id" name="id" value="{{ $instansi->id ?? '' }}">
+
+            <label for="nama_instansi">Nama Instansi:</label>
+            <input type="text" id="nama_instansi" name="nama_instansi" value="{{ $instansi->nama_instansi ?? '' }}" required>
+
+            <label for="kontak">Kontak:</label>
+            <input type="text" id="kontak" name="kontak" value="{{ $instansi->kontak ?? '' }}" required>
+
+            <label for="jenis_kerja_sama">Jenis Kerja Sama:</label>
+            <input type="text" id="jenis_kerja_sama" name="jenis_kerja_sama" value="{{ $instansi->jenis_kerja_sama ?? '' }}" required>
+
+            <button type="submit">Simpan Perubahan</button>
+        </form>
+
+    </div>
+</div>
 
     <script>
         function toggleDropdown() {
@@ -460,55 +340,57 @@ body {
         }
 
         function openModal() {
-            document.getElementById('modal').style.display = 'flex';
-            document.getElementById('modalTitle').textContent = 'Tambah Instansi';
-            document.getElementById('instansiForm').action = '{{ route('instansi.store') }}';
-            document.getElementById('instansiForm').reset();
+            document.getElementById("modal").style.display = "flex";
         }
 
         function closeModal() {
-            document.getElementById('modal').style.display = 'none';
+            document.getElementById("modal").style.display = "none";
+            document.getElementById("instansiForm").reset(); // Reset form fields
         }
 
-        function openEditModal(id) {
-    fetch(`/instansi/${id}/edit`)
-        .then(response => response.json())
-        .then(data => {
-            // Tampilkan modal
-            document.getElementById('modal').style.display = 'flex';
-
-            // Isi data ke dalam form
-            document.getElementById('modalTitle').textContent = 'Edit Instansi';
-            const form = document.getElementById('instansiForm');
-            form.action = `/instansi/${id}`; // URL untuk update data
-            form.querySelector('input[name="id"]').value = data.id;
-            form.querySelector('input[name="nama_instansi"]').value = data.nama_instansi;
-            form.querySelector('input[name="kontak"]').value = data.kontak;
-            form.querySelector('input[name="jenis_kerja_sama"]').value = data.jenis_kerja_sama;
-            form.querySelector('input[name="dibuat_pada"]').value = data.dibuat_pada;
-            form.querySelector('input[name="diperbarui_pada"]').value = data.diperbarui_pada;
-        })
-        .catch(error => console.error('Error:', error));
+        function openEditModal(instansi) {
+    console.log(instansi); // Periksa apakah data instansi benar
+    document.getElementById("modalTitle").innerText = "Edit Instansi";
+    document.getElementById("id").value = instansi.id;
+    document.getElementById("nama_instansi").value = instansi.nama_instansi;
+    document.getElementById("kontak").value = instansi.kontak;
+    document.getElementById("jenis_kerja_sama").value = instansi.jenis_kerja_sama;
+    document.getElementById("modal").style.display = "flex"; // Tampilkan modal
 }
-
+        function closeEditModal() {
+            document.getElementById("modal").style.display = "none";
+            document.getElementById("instansiForm").reset(); // Reset form fields
+        }
 
         function deleteInstansi(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus instansi ini?')) {
+            if (confirm("Apakah Anda yakin ingin menghapus instansi ini?")) {
+                // Call your delete route here
                 fetch(`/instansi/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
                     }
                 })
                 .then(response => {
                     if (response.ok) {
+                        // Reload the page or update the UI
                         location.reload();
                     } else {
-                        alert('Gagal menghapus instansi.');
+                        alert("Gagal menghapus instansi.");
                     }
-                });
+                })
+                .catch(error => console.error('Error:', error));
             }
         }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById("modal");
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
     </script>
 </body>
 </html>

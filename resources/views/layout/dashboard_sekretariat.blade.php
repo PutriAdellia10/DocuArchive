@@ -3,268 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dashboard Sekretariat</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"> <!-- Link ke file CSS Anda -->
+    <link href="{{ asset('css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Navbar Top */
-        .navbar-top {
-            width: 100%;
-            background: linear-gradient(90deg, #005f73, #0096c7); /* Gradient Navbar */
-            padding: 10px 20px;
-            box-sizing: border-box;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8; /* Light background */
+            margin: 0;
+            padding: 0;
+        }
+        .content {
+            margin-left: 240px;
+            padding: 80px 20px 20px;
+        }
+
+        .header {
+            background: linear-gradient(180deg, #90e0ef, #caf0f8);
+            padding: 20px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            height: 60px;
-            border-bottom: 2px solid #003f4c; /* Darker Blue Border */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle Shadow */
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0077b6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .navbar-top .logo {
-            display: flex;
-            align-items: center;
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-        }
-
-        .navbar-top .logo img {
-            width: 40px;
-            margin-right: 10px;
+        .header img {
+            width: 50px;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Logo Shadow */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .navbar-top .logo span {
-            font-size: 20px;
-        }
-
-        .navbar-top .people-icon {
-            position: relative;
-            display: flex;
-            align-items: center;
+        .header h2 {
+            margin: 0;
+            padding-left: 10px;
             font-size: 24px;
-            color: #ffffff; /* White Icon Color */
-            cursor: pointer;
-        }
-
-        .dropdown-menu .logout-btn {
-            background-color: #e63946; /* Warna latar belakang merah gelap */
-            color: #fff; /* Warna teks putih */
-            border: none; /* Hapus border */
-            font-weight: bold; /* Bold font */
-            text-align: center; /* Center align text */
-            border-radius: 5px; /* Rounded corners */
-            padding: 10px; /* Padding for better appearance */
-            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
-        }
-
-        .dropdown-menu .logout-btn:hover {
-            background-color: #d62839; /* Warna latar belakang merah lebih gelap saat hover */
-            color: #fff; /* Tetap putih saat hover */
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 200px;
-            background: linear-gradient(90deg, #005f73, #0096c7); /* Gradient Sidebar Sesuai Navbar Top */
-            height: 100vh;
-            padding: 70px 10px 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-top: 60px;
-            border-right: 2px solid #003f4c; /* Darker Blue Border */
-            box-shadow: 4px 0 6px rgba(0,0,0,0.1); /* Sidebar Shadow */
-        }
-
-        .sidebar a {
-            text-decoration: none;
-            color: #ffffff; /* White Text */
-            margin: 10px 0;
-            text-align: left;
-            width: 100%;
-            padding: 12px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
             font-weight: bold;
-            font-size: 16px;
             display: flex;
             align-items: center;
         }
 
-        .sidebar a i {
-            margin-right: 10px;
+        /* Enhanced Statistic Cards */
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .sidebar a:hover {
-            background-color: #003f4c; /* Darker Blue Hover */
-            color: #ffffff; /* White Text */
-        }
-
-        /* Card Counter */
-        .card-counter {
-            box-shadow: 2px 2px 10px #DADADA;
-            margin: 5px;
-            padding: 20px;
-            border-radius: 5px;
-            transition: 0.3s ease;
-            color: #ffffff;
-        }
-
-        .card-counter:hover {
-            box-shadow: 2px 2px 15px #B0B0B0;
-            transform: scale(1.05);
-        }
-
-        .card-counter.primary {
-            background-color: #007bff;
-        }
-
-        .card-counter.success {
-            background-color: #086756;
-        }
-
-        .card-counter.warning {
-            background-color: #c49407fa;
-        }
-
-        /* Custom Styles */
-        .navbar-brand img {
-            width: 30px;
-            height: 30px;
-        }
-
-        .dropdown-item.logout-btn {
-            background-color: #28adc5;
-            color: #fff;
-            border: none;
+        .card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    padding-top: 60px; /* Ruang untuk icon */
+}
+       .card h5 {
+            font-size: 18px;
+            color: #0077b6;
+            margin-bottom: 10px;
             font-weight: bold;
-            text-align: center;
-            border-radius: 5px;
-            padding: 10px;
-            transition: background-color 0.3s, color 0.3s;
         }
 
-        .dropdown-item.logout-btn:hover {
-            background-color: #2ad4f1;
-            color: #fff;
+        .card p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
         }
 
-        .sidebar {
-            background-color: #c0edf8;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
+/* Icon centered on top */
+.card-icon {
+    font-size: 50px;
+    color: #00b4d8;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%); /* Menggeser icon ke tengah */
+}
+    /* Container for Recent Activities and Notifications */
+.card-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
 
-        /* Card Biru Toska untuk Konten Main */
-        .card-main {
-            background-color: #8ad1ce; /* Warna Biru Toska */
+/* Container for Recent Activities and Notifications */
+.card-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Recent Activities and Notifications */
+.recent-activities, .notifications {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 48%; /* Adjust width to fit side by side */
+    margin-right: 20px; /* Add right margin to the first card */
+}
+
+.notifications {
+    margin-right: 0; /* No margin on the rightmost card */
+}
+
+.recent-activities h5, .notifications h5 {
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+
+.activity-list, .notification-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-list li, .notification-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+        /* Chart */
+        .chart-container {
+            background: #ffffff;
+            border-radius: 10px;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle Shadow */
-            color: #ffffff; /* Warna Teks Putih */
-            width: 100%; /* Mengisi lebar kontainer */
-            min-height: 500px; /* Menjaga tinggi minimal card */
-            box-sizing: border-box; /* Agar padding dan border tidak mempengaruhi lebar total */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
         }
 
-        /* Tambahkan jarak antara navbar dan konten utama */
-        .main-content {
-            padding-top: 70px; /* Sesuaikan dengan tinggi navbar Anda */
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .statistics {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                margin-left: 0;
+                padding: 80px 10px 20px;
+            }
         }
     </style>
 </head>
 <body>
+ @include('components.navbar')
+ @include('components.sidebarsekre')
+    <div class="content">
+        <div class="header" style="display: flex; flex-direction: column; align-items: flex-start;">
+            <h1 class="h2" style="margin: 0; font-size: 40px; color: #0077b6; margin: 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Dashboard Bagian Administrasi</h1>
+            <div class="welcome-section" style="display: flex; align-items: center; margin-top: 10px;">
+                <img src="{{ asset('img/bg3.jpg') }}" alt="Welcome" style="margin-right: 40px; border-radius: 10px; width: 500px; height: auto;">
+                <div style="margin-left: 90px;">
+                    <h3 style="font-size: 40px; color: #0077b6; margin: 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Selamat Datang di DocuArchive</h3>
+                    <p style="font-size: 30px; color: #0077b6; margin: 5px 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Atur dan Arsipkan Dokumen</p>
+                    <p style="font-size: 30px; color: #0077b6; margin: 5px 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Anda dengan Mudah dan Aman</p>
 
-<nav class="navbar-top">
-    <a class="navbar-brand logo" href="#">
-        <img src="path/to/logo.png" alt="Logo">
-        <span>DocuArchive</span>
-    </a>
-    <div class="d-flex align-items-center">
-        <div class="dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{ asset('img/user profile.png') }}" alt="Ikon User" class="rounded-circle" width="30" height="30">
-                <span class="ms-2">User</span>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="dropdown-item logout-btn">Logout</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="container-fluid">
-    <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar">
-            <ul class="nav flex-column">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarSuratDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ asset('img/surat.png') }}" alt="Ikon Surat" width="24" height="24"> Surat
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarSuratDropdown">
-                        <li><a class="dropdown-item" href="#">Surat Masuk</a></li>
-                        <li><a class="dropdown-item" href="#">Surat Keluar</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <img src="{{ asset('img/laporan.png') }}" alt="Ikon Laporan" width="24" height="24"> Laporan
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <img src="{{ asset('img/disposisi.png') }}" alt="Ikon Disposisi" width="24" height="24"> Disposisi
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-4 main-content">
-            <div class="card-main">
-                <h3 class="mt-4">Selamat Datang Di Dashboard Sekretariat</h3>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card-counter primary">
-                            <h5>Surat Masuk</h5>
-                            <p>{{ $surat_masuk_count }} Surat</p>
-                        </div>
+                    <!-- Buttons for Surat Masuk and Surat Keluar -->
+                    <div class="button-container" style="margin-top: 10px; display: flex; justify-content: flex-start; gap: 10px;">
+                        <a href="#" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #0077b6;">Surat Masuk</a>
+                        <a href="#" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #00b4d8;">Surat Keluar</a>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card-counter success">
-                            <h5>Surat Keluar</h5>
-                            <p>{{ $surat_keluar_count }} Surat</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card-counter warning">
-                            <h5>Disposisi Aktif</h5>
-                            <p>{{ $disposisi_aktif_count }} Disposisi</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <h5>Aktivitas Terbaru</h5>
-                    <ul class="list-group">
-                        @foreach($aktivitas_terbaru as $aktivitas)
-                            <li class="list-group-item">{{ $aktivitas }}</li>
-                        @endforeach
-                    </ul>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="statistics">
+            <div class="card">
+                <h5>Total Surat Masuk</h5>
+                <p>{{ $totalSuratMasuk }}</p>
+                <i class="fas fa-envelope card-icon"></i>
+            </div>
+            <div class="card">
+                <h5>Total Surat Keluar</h5>
+                <p>{{ $totalSuratKeluar }}</p>
+                <i class="fas fa-paper-plane card-icon"></i>
+            </div>
+            <div class="card">
+                <h5>Total Disposisi Aktif</h5>
+                <p>10</p>
+                <i class="bi bi-file-earmark-check-fill card-icon"></i>
+            </div>
+        </div>
+
+       <!-- Container for Recent Activities and Notifications -->
+<div class="card-container">
+    <!-- Recent Activities -->
+    <div class="recent-activities">
+        <h5>Recent Activities</h5>
+        <ul class="activity-list">
+            <li>Surat Masuk diterima dari Instansi A</li>
+            <li>Surat Keluar dikirim ke Instansi B</li>
+            <li>Disposisi surat oleh Pimpinan</li>
+        </ul>
+    </div>
+
+    <!-- Notifications -->
+    <div class="notifications">
+        <h5>Notifications</h5>
+        <ul class="notification-list">
+            <li>Surat No.123 telah disetujui.</li>
+            <li>Anda menerima surat baru dari Instansi C.</li>
+        </ul>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

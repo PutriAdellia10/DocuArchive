@@ -45,12 +45,11 @@ class InstansiController extends Controller
     }
     public function update(Request $request, $id)
     {
+        \Log::info($request->all());
         $request->validate([
             'nama_instansi' => 'required|string|max:255',
             'kontak' => 'required|string|max:255',
             'jenis_kerja_sama' => 'required|string|max:255',
-            'dibuat_pada' => 'required|date',
-            'diperbarui_pada' => 'required|date',
         ]);
 
         $instansi = Instansi::findOrFail($id);
@@ -58,8 +57,6 @@ class InstansiController extends Controller
             'nama_instansi' => $request->nama_instansi,
             'kontak' => $request->kontak,
             'jenis_kerja_sama' => $request->jenis_kerja_sama,
-            'dibuat_pada' => $request->dibuat_pada,
-            'diperbarui_pada' => $request->diperbarui_pada,
         ]);
 
         return redirect()->route('instansi.index');

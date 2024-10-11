@@ -13,13 +13,8 @@ class SekretariatController extends Controller
     {
         // Mengambil data untuk dashboard
         $data = [
-            'surat_masuk_count' => Surat::where('status', 'Masuk')->count(),
-            'surat_keluar_count' => Surat::where('status', 'Keluar')->count(),
-            'disposisi_aktif_count' => Disposisi::where('status', 'Aktif')->count(),
-            'aktivitas_terbaru' => [
-                'Surat Masuk baru diterima pada tanggal 21 Agustus 2024.',
-                'Disposisi baru dibuat pada tanggal 19 Agustus 2024.',
-            ],
+            'totalSuratMasuk' => Surat::where('status', 'Masuk')->count(),
+            'totalSuratKeluar' => Surat::where('status', 'Keluar')->count(),
         ];
 
         // Return ke view dashboard_sekretariat dengan data yang diambil

@@ -10,8 +10,8 @@ class SifatSuratController extends Controller
     // Menampilkan daftar sifat surat
     public function index()
     {
-        $sifatSurat = SifatSurat::all();
-        return view('sifat_surat.index', compact('sifatSurat'));
+        $sifatSurat = SifatSurat::paginate(10);
+        return view('layout.sifatsurat', compact('sifatSurat'));
     }
 
     // Menampilkan form untuk menambah sifat surat baru
