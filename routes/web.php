@@ -15,6 +15,7 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\RekapitulasiSuratController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\ProfilPerusahaanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -98,8 +99,14 @@ Route::put('/surat-keluar/{id}', [SuratController::class, 'keluarupdate'])->name
 Route::delete('/surat-keluar/{id}', [SuratController::class, 'keluardestroy'])->name('surat.keluar.destroy');
 Route::get('/surat-keluar/{id}', [SuratController::class, 'keluarshow'])->name('surat.keluar.show');
 
+Route::resource('disposisi', DisposisiController::class);
+Route::get('/disposisi', [DisposisiController::class, 'disposisi'])->name('disposisi');
+Route::get('/disposisi/create', [DisposisiController::class, 'create'])->name('disposisi.create');
+Route::post('/disposisi', [DisposisiController::class, 'store'])->name('disposisi.store');
+Route::get('/disposisi/{id}/edit', [DisposisiController::class, 'edit']);
 
-//Route::get('/surat/{id}/disposisi', [SuratController::class, 'showDisposisi'])->name('surat.disposisi');
+Route::get('/profilperusahaan', [ProfilPerusahaanController::class, 'index'])->name('profilperusahaan.index');
+Route::put('/profilperusahaan', [ProfilPerusahaanController::class, 'update'])->name('profilperusahaan.update');
 
 Route::resource('jenis_surat', JenisSuratController::class);
 

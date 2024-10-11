@@ -5,78 +5,88 @@ namespace App\Http\Controllers;
 use App\Models\Disposisi;
 use App\Models\Surat;
 use App\Models\Pengguna;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DisposisiController extends Controller
 {
-    // Menampilkan daftar disposisi
-    public function index()
+    // Method untuk menampilkan daftar disposisi
+    public function disposisi(Request $request) // Tambahkan Request sebagai parameter
     {
-        $disposisi = Disposisi::with('surat', 'pengguna')->get();
-        return view('disposisi.index', compact('disposisi'));
+        // Ambil semua data disposisi dari database
+        $query = Disposisi::query();
+
+        // Cek jika ada parameter pencarian
+        if ($request->has('search') && $request->input('search') != '') {
+            $searchTerm = $request->input('search');
+            $query->where('surat', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('pengguna', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('instruksi', 'LIKE', "%{$searchTerm}%");
+        }
+
+        // Ambil data disposisi berdasarkan query
+        $disposisi = $query->paginate(5);
+
+        // Kembalikan view dengan data disposisi
+        return view('layout.disposisi', compact('disposisi'));
     }
 
-    // Menampilkan form untuk menambah disposisi baru
-    public function create()
-    {
-        $surat = Surat::all();
-        $pengguna = Pengguna::all();
-        return view('disposisi.create', compact('surat', 'pengguna'));
-    }
-
-    // Menyimpan disposisi baru ke database
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'id_surat' => 'required|exists:surat,id',
-            'id_pengguna' => 'required|exists:pengguna,id',
-            'instruksi' => 'required|string',
-            'status' => 'required|in:Belum Diproses,Diproses,Selesai',
-        ]);
+{
+    Log::info($request->all()); // Ini untuk mengecek data yang diterima
 
-        Disposisi::create($validatedData);
+    // Validasi data input
+    $request->validate([
+        'surat' => 'required',
+        'pengguna' => 'required',
+        'instruksi' => 'required',
+        'status' => 'required',
+        'dibuat_pada' => 'required|date',
+    ]);
 
-        return redirect()->route('disposisi.index')->with('success', 'Disposisi berhasil ditambahkan.');
-    }
+    // Tambahkan data disposisi ke dalam database
+    Disposisi::create([
+        'surat' => $request->surat,
+        'pengguna' => $request->pengguna,
+        'instruksi' => $request->instruksi,
+        'status' => $request->status,
+        'dibuat_pada' => $request->dibuat_pada,
+    ]);
 
-    // Menampilkan form untuk mengedit disposisi
-    public function edit($id)
-    {
-        $disposisi = Disposisi::findOrFail($id);
-        $surat = Surat::all();
-        $pengguna = Pengguna::all();
-        return view('disposisi.edit', compact('disposisi', 'surat', 'pengguna'));
-    }
+    Log::info("Disposisi berhasil ditambahkan"); // Log setelah data berhasil disimpan
 
-    // Memperbarui disposisi di database
-    public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'id_surat' => 'required|exists:surat,id',
-            'id_pengguna' => 'required|exists:pengguna,id',
-            'instruksi' => 'required|string',
-            'status' => 'required|in:Belum Diproses,Diproses,Selesai',
-        ]);
+    // Redirect ke halaman daftar disposisi dengan pesan sukses
+    return redirect()->route('disposisi')->with('success', 'Disposisi berhasil ditambahkan');
+}
 
-        $disposisi = Disposisi::findOrFail($id);
-        $disposisi->update($validatedData);
+public function edit($id)
+{
+    $disposisi = Disposisi::find($id);
+    return response()->json($disposisi); // Mengembalikan data disposisi untuk diisi di modal
+}
 
-        return redirect()->route('disposisi.index')->with('success', 'Disposisi berhasil diperbarui.');
-    }
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'surat' => 'required',
+        'pengguna' => 'required',
+        'instruksi' => 'required',
+        'status' => 'required',
+        'dibuat_pada' => 'required|date',
+    ]);
 
-    // Menghapus disposisi dari database
-    public function destroy($id)
-    {
-        $disposisi = Disposisi::findOrFail($id);
-        $disposisi->delete();
+    $disposisi = Disposisi::find($id);
+    $disposisi->update($request->all());
 
-        return redirect()->route('disposisi.index')->with('success', 'Disposisi berhasil dihapus.');
-    }
+    return redirect()->route('disposisi')->with('success', 'Disposisi berhasil diperbarui.');
+}
 
-    // Menampilkan detail disposisi (opsional)
-    public function show($id)
-    {
-        $disposisi = Disposisi::with('surat', 'pengguna')->findOrFail($id);
-        return view('disposisi.show', compact('disposisi'));
-    }
+public function destroy($id)
+{
+    $disposisi = Disposisi::find($id);
+    $disposisi->delete();
+
+    return redirect()->route('disposisi')->with('success', 'Disposisi berhasil dihapus.');
+}
 }
