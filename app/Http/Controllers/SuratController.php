@@ -68,33 +68,24 @@ class SuratController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validasi input
-        $request->validate([
-            'no_agenda' => 'required|string',
-            'tanggal' => 'required|date',
-            'no_surat' => 'required|string|max:255|unique:surat,no_surat',
-            'tanggal_surat' => 'required|date',
-            'perihal' => 'required|string',
-            'konten' => 'required|string',
-            'id_sifat_surat' => 'required|integer',
-            'id_asal_surat' => 'required|integer',
-            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-            'status' => 'required|string|in:Masuk,Keluar',
-        ]);
+         // Validasi input
+    $request->validate([
+        'no_agenda' => 'required|string|max:255',
+        'tanggal' => 'required|date',
+        'asal_surat' => 'required|string|max:255',
+        'no_surat' => 'required|string|max:255',
+        'perihal' => 'required|string|max:255',
+    ]);
 
-        // Temukan data yang akan diperbarui
-        $surat = Surat::findOrFail($id);
+    // Cari surat berdasarkan ID
+    $surat = Surat::findOrFail($id);
 
-        // Perbarui data
-        $surat->no_agenda = $request->no_agenda;
-        $surat->tanggal = $request->tanggal;
-        $surat->id_asal_surat = $request->id_asal_surat;
-        $surat->no_surat = $request->no_surat;
-        $surat->tanggal_surat = $request->tanggal_surat;
-        $surat->perihal = $request->perihal;
-        $surat->konten = $request->konten;
-        $surat->id_sifat_surat = $request->id_sifat_surat;
-        $surat->status = $request->status;
+    // Update data surat
+    $surat->no_agenda = $request->no_agenda;
+    $surat->tanggal = $request->tanggal;
+    $surat->instansi->nama_instansi = $request->asal_surat; // Jika instansi ditampilkan
+    $surat->no_surat = $request->no_surat;
+    $surat->perihal = $request->perihal;
 
         // Periksa jika ada file dokumen baru
         if ($request->hasFile('dokumen')) {

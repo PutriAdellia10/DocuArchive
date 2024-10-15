@@ -15,7 +15,6 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\RekapitulasiSuratController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SifatSuratController;
-use App\Http\Controllers\NotifikasiController;
 
 use App\Http\Controllers\ProfilPerusahaanController;
 
@@ -109,12 +108,6 @@ Route::post('/disposisi/kirim', [DisposisiController::class, 'kirimNotifikasi'])
 Route::get('/surat/{id}/disposisi', [SuratController::class, 'disposisi'])->name('surat.disposisi');
 
 
-
-Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
-Route::get('/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead'])->name('notifikasi.read');
-Route::get('/notifikasi/{id}/disposisi', [NotifikasiController::class, 'showDisposisi'])->name('notifikasi.disposisi');
-
-
 Route::get('/profilperusahaan', [ProfilPerusahaanController::class, 'index'])->name('profilperusahaan.index');
 Route::put('/profilperusahaan', [ProfilPerusahaanController::class, 'update'])->name('profilperusahaan.update');
 
@@ -145,3 +138,15 @@ Route::put('sifat_surat/{id}', [SifatSuratController::class, 'update'])->name('s
 Route::delete('sifat_surat/{id}', [SifatSuratController::class, 'destroy'])->name('sifat_surat.destroy');
 Route::get('sifat_surat/{id}', [SifatSuratController::class, 'show'])->name('sifat_surat.show');
 
+use App\Http\Controllers\NotifikasiController;
+
+Route::middleware('auth')->group(function () {
+    // Route untuk menampilkan notifikasi pengguna
+    Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+
+    // Route untuk menandai notifikasi sebagai sudah dibaca
+    Route::get('/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead'])->name('notifikasi.markAsRead');
+
+    // Route untuk membuat notifikasi baru
+    Route::post('/notifikasi/create', [NotifikasiController::class, 'create'])->name('notifikasi.create');
+});

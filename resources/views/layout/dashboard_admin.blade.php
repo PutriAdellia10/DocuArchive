@@ -232,11 +232,27 @@
     <div class="notifications">
         <h5>Notifications</h5>
         <ul class="notification-list">
-            <li>Surat No.123 telah disetujui.</li>
-            <li>Anda menerima surat baru dari Instansi C.</li>
+            @forelse($notifikasi as $notif)
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        {{ $notif->pesan }}
+                        <small class="text-muted d-block">{{ $notif->dibuat_pada->diffForHumans() }}</small>
+                    </span>
+                    <div>
+                        @if(!$notif->sudah_dibaca)
+                            <a href="{{ route('notifikasi.markAsRead', $notif->id) }}" class="btn btn-sm btn-success">
+                                Tandai sebagai dibaca
+                            </a>
+                        @else
+                            <span class="badge badge-secondary">Dibaca</span>
+                        @endif
+                    </div>
+                </li>
+            @empty
+                <li class="list-group-item">Tidak ada notifikasi</li>
+            @endforelse
         </ul>
     </div>
-</div>
 
 </body>
 </html>

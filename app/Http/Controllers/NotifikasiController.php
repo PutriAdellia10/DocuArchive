@@ -8,52 +8,36 @@ use App\Models\Notifikasi;
 
 class NotifikasiController extends Controller
 {
-    // Menampilkan halaman notifikasi
-    public function index()
-    {
-        // Mendapatkan notifikasi yang belum dibaca untuk pengguna saat ini
-        $notifications = Notifikasi::where('id_pengguna', Auth::id())
-                                   ->whereNull('sudah_dibaca') // Menampilkan notifikasi yang belum dibaca
-                                   ->orderBy('dibuat_pada', 'desc')
-                                   ->get();
+     // Menampilkan semua notifikasi pengguna
+     public function index()
+     {
+         $idPengguna = auth()->id(); // Mengambil ID pengguna yang sedang login
+         $notifikasi = Notifikasi::where('id_pengguna', $idPengguna)
+                          ->orderBy('dibuat_pada', 'desc')
+                          ->get();
 
-        // Mengirim notifikasi ke tampilan
-        return view('layout.notifikasi', compact('notifications'));
-    }
+         return view('notifikasi.index', compact('notifikasi'));
+     }
 
-    // Menandai notifikasi sebagai sudah dibaca
-    public function markAsRead($id)
-    {
-        // Menemukan notifikasi berdasarkan ID
-        $notification = Notifikasi::where('id_pengguna', Auth::id())
-                                  ->where('id', $id)
-                                  ->first();
+     // Tandai notifikasi sebagai sudah dibaca
+     public function markAsRead($id)
+     {
+         $notifikasi = Notifikasi::findOrFail($id);
+         $notifikasi->sudah_dibaca = true;
+         $notifikasi->save();
 
-        // Jika notifikasi ditemukan, tandai sebagai sudah dibaca
-        if ($notification) {
-            $notification->sudah_dibaca = now(); // Update kolom sudah_dibaca
-            $notification->save();
-        }
+         return redirect()->back()->with('status', 'Notifikasi telah ditandai sebagai dibaca');
+     }
 
-        // Arahkan kembali ke halaman notifikasi
-        return redirect()->route('notifikasi.index');
-    }
+     // Membuat notifikasi baru (bisa untuk testing atau event)
+     public function create(Request $request)
+     {
+         Notifikasi::create([
+             'id_pengguna' => $request->input('id_pengguna'),
+             'pesan' => $request->input('pesan'),
+             'sudah_dibaca' => false,
+         ]);
 
-    // Menampilkan detail disposisi dari notifikasi
-    public function showDisposisi($id)
-    {
-        // Menemukan notifikasi berdasarkan ID
-        $notification = Notifikasi::where('id_pengguna', Auth::id())
-                                  ->where('id', $id)
-                                  ->first();
-
-        // Pastikan notifikasi ditemukan
-        if ($notification) {
-            // Arahkan ke halaman detail disposisi berdasarkan ID disposisi
-            return redirect()->route('disposisi.show', $notification->data['disposisi_id']);
-        }
-
-        // Jika notifikasi tidak ditemukan, arahkan kembali
-        return redirect()->route('notifikasi.index');
-    }
-}
+         return redirect()->back()->with('status', 'Notifikasi berhasil ditambahkan');
+     }
+ }

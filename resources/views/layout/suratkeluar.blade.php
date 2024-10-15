@@ -10,10 +10,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body {
+           body {
             font-family: Arial, sans-serif;
             background-color: #caf0f8; /* Light Blue Background */
             margin: 0;
@@ -111,6 +112,20 @@
             margin-right: 10px;
             color: #0077b6; /* Dark Blue Icon Color */
         }
+        .action-buttons {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Align items vertically centered */
+}
+
+.action-link {
+    margin-right: 15px; /* Add some space between the link and the button */
+    text-decoration: none; /* Remove underline from link */
+    color: #007bff; /* Set color to match button color */
+}
+
+.delete-form {
+    margin: 0; /* Remove default margin from the form */
+}
 
         .pagination {
             display: flex;
@@ -239,11 +254,11 @@
     @if(auth()->user()->peran == 'Admin')
         @include('components.sidebaradmin')
     @elseif(auth()->user()->peran == 'Sekretariat')
-        @include('components.sidebarpimdansekre')
+        @include('components.sidebarsekre')
     @elseif(auth()->user()->peran == 'Karyawan')
         @include('components.sidebarkaryawan')
     @elseif(auth()->user()->peran == 'Pimpinan')
-        @include('components.sidebarpimdansekre')
+        @include('components.sidebarpim')
     @else
         <p>Peran tidak dikenali.</p>
     @endif
@@ -276,7 +291,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nomor Agenda</th>
-                        <th>Tanggal Keluar</th>
+                        <th>Tanggal Masuk</th>
                         <th>Asal Surat</th>
                         <th>Nomor Surat</th>
                         <th>Tanggal Surat</th>
@@ -297,19 +312,18 @@
                         <td>{{ $surat->perihal }}</td>
                         <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
                         <td>
-                            <a href="{{ route('surat.keluar.show', $surat->id) }}" title="Lihat">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="#" class="edit-btn" data-id="{{ $surat->id }}" onclick="openEditModal({{ json_encode($surat) }})" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('surat.keluar.destroy', $surat->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" style="border:none; background:none; color:#007bff; cursor:pointer;" title="Hapus">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
+                            <div class="action-buttons">
+                                <a href="{{ route('disposisi.show', $surat->id) }}" title="Disposisi" class="action-link">
+                                    <i class="fas fa-folder"></i> Disposisi
+                                </a>
+                                <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form">
+                                    @csrf
+                                    @method('DELETE') <!-- Use DELETE method for deletion -->
+                                    <button type="submit" style="border:none; background:none; color:#007bff; cursor:pointer;" title="Hapus">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
