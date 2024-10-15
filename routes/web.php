@@ -15,6 +15,7 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\RekapitulasiSuratController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SifatSuratController;
+use App\Http\Controllers\NotifikasiController;
 
 use App\Http\Controllers\ProfilPerusahaanController;
 
@@ -104,7 +105,14 @@ Route::resource('disposisi', DisposisiController::class);
 Route::get('/disposisi', [DisposisiController::class, 'disposisi'])->name('disposisi');
 Route::get('/disposisi/create', [DisposisiController::class, 'create'])->name('disposisi.create');
 Route::post('/disposisi', [DisposisiController::class, 'store'])->name('disposisi.store');
-Route::get('/disposisi/{id}/edit', [DisposisiController::class, 'edit']);
+Route::post('/disposisi/kirim', [DisposisiController::class, 'kirimNotifikasi'])->name('disposisi.kirim');
+Route::get('/surat/{id}/disposisi', [SuratController::class, 'disposisi'])->name('surat.disposisi');
+
+
+
+Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+Route::get('/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead'])->name('notifikasi.read');
+Route::get('/notifikasi/{id}/disposisi', [NotifikasiController::class, 'showDisposisi'])->name('notifikasi.disposisi');
 
 
 Route::get('/profilperusahaan', [ProfilPerusahaanController::class, 'index'])->name('profilperusahaan.index');

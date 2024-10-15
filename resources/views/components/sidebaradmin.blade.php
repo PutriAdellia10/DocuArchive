@@ -84,7 +84,7 @@
     <div class="submenu" id="submenu-master">
         <a href="{{ route('sifat_surat.index') }}"><i class="bi bi-inbox"></i> Sifat Surat</a>
         <a href="{{ route('instansi.index') }}"><i class="bi bi-buildings-fill"></i> Instansi</a>
-        <a href="{{ route('laporan.masuk') }}"><i class="bi bi-house-gear-fill"></i> Profil Perusahaan</a>
+        <a href="{{ route('profilperusahaan.index') }}"><i class="bi bi-house-gear-fill"></i> Profil Perusahaan</a>
     </div>
     <a href="#" id="toggle-pengaturan">
         <i class="fas fa-cog"></i> Pengaturan
@@ -92,8 +92,7 @@
     </a>
     <div class="submenu" id="submenu-pengaturan">
         <a href="{{ route('user.profil') }}"><i class="bi bi-people-fill"></i> Manajemen User</a>
-        <a href="surat_keluar.html"><i class="bi bi-bell-fill"></i> Notifikasi</a>
-        <a href="surat_keluar.html"><i class="bi bi-database-fill"></i> Backup</a>
+        <a href="{{ route('notifikasi.index')}}"><i class="bi bi-bell-fill"></i> Notifikasi</a>
     </div>
 </div>
 <script>

@@ -263,7 +263,7 @@
     </style>
 </head>
 <body>
-    @include('components.navbar')
+    @include('components.navbarkaryawan')
     @include('components.sidebarkaryawan')
 
     <div class="content">
@@ -278,8 +278,8 @@
 
                     <!-- Buttons for Surat Masuk and Surat Keluar -->
                     <div class="button-container" style="margin-top: 10px; display: flex; justify-content: flex-start; gap: 10px;">
-                        <a href="#" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #0077b6;">Surat Masuk</a>
-                        <a href="#" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #00b4d8;">Surat Keluar</a>
+                        <a href="{{ route('surat.index') }}" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #0077b6;">Surat Masuk</a>
+                        <a href="{{ route('surat.keluar.index')}}" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #00b4d8;">Surat Keluar</a>
                     </div>
                 </div>
             </div>

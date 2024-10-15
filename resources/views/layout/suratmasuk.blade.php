@@ -298,14 +298,11 @@
                         <td>{{ $surat->perihal }}</td>
                         <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
                         <td>
-                            <a href="{{ route('surat.show', $surat->id) }}" title="Lihat">
-                                <i class="fas fa-eye"></i>
+                            <a href="{{ route('disposisi.show', $surat->id) }}" title="Disposisi">
+                                <i class="fas fa-folder"></i>
+                                Disposisi
                             </a>
-                            <a href="#" class="edit-btn" data-id="{{ $surat->id }}" onclick="openEditModal({{ json_encode($surat) }})" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?');">
-                                @csrf
+                            @csrf
                                 @method('DELETE')
                                 <button type="submit" style="border:none; background:none; color:#007bff; cursor:pointer;" title="Hapus">
                                     <i class="fas fa-trash-alt"></i>
