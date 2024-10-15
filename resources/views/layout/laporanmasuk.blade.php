@@ -189,11 +189,11 @@
     @if(auth()->user()->peran == 'Admin')
         @include('components.sidebaradmin')
     @elseif(auth()->user()->peran == 'Sekretariat')
-        @include('components.sidebarpimdansekre')
+        @include('components.sidebarsekre')
     @elseif(auth()->user()->peran == 'Karyawan')
         @include('components.sidebarkaryawan')
     @elseif(auth()->user()->peran == 'Pimpinan')
-        @include('components.sidebarpimdansekre')
+        @include('components.sidebarpim')
     @else
         <p>Peran tidak dikenali.</p>
     @endif

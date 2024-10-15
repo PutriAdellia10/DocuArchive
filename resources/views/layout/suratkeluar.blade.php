@@ -239,11 +239,11 @@
     @if(auth()->user()->peran == 'Admin')
         @include('components.sidebaradmin')
     @elseif(auth()->user()->peran == 'Sekretariat')
-        @include('components.sidebarpimdansekre')
+        @include('components.sidebarsekre')
     @elseif(auth()->user()->peran == 'Karyawan')
         @include('components.sidebarkaryawan')
     @elseif(auth()->user()->peran == 'Pimpinan')
-        @include('components.sidebarpimdansekre')
+        @include('components.sidebarpim')
     @else
         <p>Peran tidak dikenali.</p>
     @endif
@@ -277,7 +277,7 @@
                         <th>No</th>
                         <th>Nomor Agenda</th>
                         <th>Tanggal Keluar</th>
-                        <th>Asal Surat</th>
+                        <th>Tujuan Surat</th>
                         <th>Nomor Surat</th>
                         <th>Tanggal Surat</th>
                         <th>Perihal</th>
@@ -340,7 +340,7 @@
             </div>
 
             <div class="form-group">
-                <label for="id_asal_surat">Asal Surat *</label>
+                <label for="id_asal_surat">Tujuan Surat *</label>
                 <select id="id_asal_surat" name="id_asal_surat" required>
                     <option value="">--Pilih--</option>
                     @foreach($instansi as $inst)

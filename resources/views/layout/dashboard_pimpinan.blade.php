@@ -166,7 +166,7 @@
     </style>
 </head>
 <body>
-    @include('components.navbar')
+    @include('components.navbarpim')
 @include('components.sidebarpim')
 
     <div class="content">
@@ -181,8 +181,8 @@
 
                     <!-- Buttons for Surat Masuk and Surat Keluar -->
                     <div class="button-container" style="margin-top: 10px; display: flex; justify-content: flex-start; gap: 10px;">
-                        <a href="#" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #0077b6;">Surat Masuk</a>
-                        <a href="#" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #00b4d8;">Surat Keluar</a>
+                        <a href="{{route ('surat.index')}}" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #0077b6;">Surat Masuk</a>
+                        <a href="{{route ('surat.keluar.index')}}" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #00b4d8;">Surat Keluar</a>
                     </div>
                 </div>
             </div>
@@ -207,7 +207,7 @@
     </div>
     <div class="card">
         <h5>Total Instansi</h5>
-        <p>10</p>
+        <p>{{ $totalInstansi }}</p>
         <i class="fas fa-building card-icon"></i>
     </div>
     <div class="card">

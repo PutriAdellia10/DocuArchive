@@ -162,7 +162,7 @@
     </style>
 </head>
 <body>
- @include('components.navbar')
+ @include('components.navbarsekre')
  @include('components.sidebarsekre')
     <div class="content">
         <div class="header" style="display: flex; flex-direction: column; align-items: flex-start;">
