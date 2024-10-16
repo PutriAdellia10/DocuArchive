@@ -100,12 +100,12 @@ Route::put('/surat-keluar/{id}', [SuratController::class, 'keluarupdate'])->name
 Route::delete('/surat-keluar/{id}', [SuratController::class, 'keluardestroy'])->name('surat.keluar.destroy');
 Route::get('/surat-keluar/{id}', [SuratController::class, 'keluarshow'])->name('surat.keluar.show');
 
-Route::resource('disposisi', DisposisiController::class);
-Route::get('/disposisi', [DisposisiController::class, 'disposisi'])->name('disposisi');
+Route::get('/disposisi', [DisposisiController::class, 'index'])->name('disposisi.index');
 Route::get('/disposisi/create', [DisposisiController::class, 'create'])->name('disposisi.create');
 Route::post('/disposisi', [DisposisiController::class, 'store'])->name('disposisi.store');
-Route::post('/disposisi/kirim', [DisposisiController::class, 'kirimNotifikasi'])->name('disposisi.kirim');
-Route::get('/surat/{id}/disposisi', [SuratController::class, 'disposisi'])->name('surat.disposisi');
+Route::get('/disposisi/{id}', [DisposisiController::class, 'show'])->name('disposisi.show');
+Route::delete('/disposisi/{id}', [DisposisiController::class, 'destroy'])->name('disposisi.destroy');
+Route::post('/disposisi/kirim', [DisposisiController::class, 'kirim'])->name('disposisi.kirim');
 
 
 Route::get('/profilperusahaan', [ProfilPerusahaanController::class, 'index'])->name('profilperusahaan.index');

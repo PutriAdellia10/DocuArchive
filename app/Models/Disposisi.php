@@ -9,18 +9,20 @@ class Disposisi extends Model
 {
     use HasFactory;
 
-    protected $table = 'disposisi';
+    // Define the table associated with the model
+    protected $table = 'disposisi'; // Optional if your table name is the plural form of the model name
 
+    // Specify the fillable attributes
     protected $fillable = [
-        'surat',
-        'pengguna',
-        'instruksi',
-        'status',
-        'dibuat_pada',
+        'surat_id',     // ID of the related surat
+        'tindakan',     // Action to take
+        'kepada',       // Recipient
+        'keterangan',   // Description or additional information
     ];
 
-
-    public $timestamps = false;
+    // Optionally, you can define casts if needed
+    protected $casts = [
+        'created_at' => 'datetime', // Cast created_at to a Carbon instance
+        'updated_at' => 'datetime', // Cast updated_at to a Carbon instance
+    ];
 }
-
-

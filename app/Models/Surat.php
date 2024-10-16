@@ -65,4 +65,9 @@ class Surat extends Model
     {
         $this->attributes['status'] = strtolower($value);
     }
+    public function disposisi()
+{
+    return $this->hasMany(Disposisi::class);
+}
+
 }

@@ -200,79 +200,106 @@
 </head>
 <body>
 
-<div class="container">
-    <h1>Edit Data Surat dan Disposisi</h1>
-    <a href="{{ route('surat.index') }}" class="icon-back">
-        <i class="bi bi-backspace"></i>
-    </a>
+    <div class="container">
+        <h1>Edit Data Surat dan Disposisi</h1>
+        <a href="{{ route('surat.index') }}" class="icon-back">
+            <i class="bi bi-backspace"></i>
+        </a>
 
-    <div class="content">
-        <!-- Left Section: Edit Surat -->
-        <form action="{{ route('surat.update', $surat->id) }}" method="POST" class="left-section">
-            @csrf
-            @method('PUT')
-            <h2>Edit Data Surat</h2>
-            <table>
-                <tr>
-                    <th>Nomor Agenda:</th>
-                    <td><input type="text" name="no_agenda" value="{{ $surat->no_agenda }}" class="form-control"></td>
-                </tr>
-                <tr>
-                    <th>Tanggal Masuk:</th>
-                    <td><input type="date" name="tanggal" value="{{ $surat->tanggal }}" class="form-control"></td>
-                </tr>
-                <tr>
-                    <th>Asal Surat:</th>
-                    <td><input type="text" name="asal_surat" value="{{ $surat->instansi->nama_instansi }}" class="form-control"></td>
-                </tr>
-                <tr>
-                    <th>Nomor Surat:</th>
-                    <td><input type="text" name="no_surat" value="{{ $surat->no_surat }}" class="form-control"></td>
-                </tr>
-                <tr>
-                    <th>Perihal:</th>
-                    <td><input type="text" name="perihal" value="{{ $surat->perihal }}" class="form-control"></td>
-                </tr>
+        <div class="content">
+            <!-- Left Section: Edit Surat -->
+            <form action="{{ route('surat.update', $surat->id) }}" method="POST" class="left-section">
+                @csrf
+                @method('PUT')
+                <h2>Edit Data Surat</h2>
+                <table>
+                    <tr>
+                        <th>Nomor Agenda:</th>
+                        <td><input type="text" name="no_agenda" value="{{ $surat->no_agenda }}" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Tanggal Masuk:</th>
+                        <td><input type="date" name="tanggal" value="{{ $surat->tanggal }}" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Asal Surat:</th>
+                        <td><input type="text" name="asal_surat" value="{{ $surat->instansi->nama_instansi }}" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Nomor Surat:</th>
+                        <td><input type="text" name="no_surat" value="{{ $surat->no_surat }}" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Perihal:</th>
+                        <td><input type="text" name="perihal" value="{{ $surat->perihal }}" class="form-control"></td>
+                    </tr>
+                </table>
+                <button type="submit" class="btn-primary">Simpan Perubahan</button>
+
+                <div class="pdf-preview mt-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="PDF Icon">
+                    <p>{{ $surat->file_name }}</p>
+                    <a href="{{ route('surat.show', $surat->id) }}">Preview File</a>
+                </div>
+            </form>
+
+            <form action="{{ route('disposisi.kirim') }}" method="POST" class="right-section">
+                @csrf
+                <h2>Tindak Lanjut / Disposisi</h2>
+
+                <!-- Container for checkboxes -->
+                <div class="disposisi-options">
+                    @foreach(['Untuk Diketahui', 'Untuk Diperhatikan', 'Untuk Dipelajari', 'Disiapkan Jawaban', 'Jawab Langsung', 'ACC untuk Tindak Lanjut', 'Ambil Langkah Seperlunya', 'Dibicarakan', 'Dilaporkan', 'Segera Selesaikan', 'Copy Untuk'] as $option)
+                        <label class="disposisi-label">
+                            <input type="checkbox" name="tindakan[]" value="{{ $option }}"> {{ $loop->iteration }}. {{ $option }}
+                        </label>
+                    @endforeach
+                </div>
+
+                <label for="kepada">Kepada:</label>
+                <select id="kepada" name="kepada" class="form-select">
+                    <option value="">-- Pilih --</option>
+                    <option value="Sekretariat">Sekretariat</option>
+                    <option value="Pimpinan">Pimpinan</option>
+                    <option value="Karyawan">Karyawan</option>
+                    <option value="Admin">Admin</option>
+                </select>
+
+                <label for="keterangan">Keterangan:</label>
+                <textarea id="keterangan" name="keterangan" rows="4" placeholder="Tambahkan keterangan..." class="form-textarea"></textarea>
+
+                <input type="hidden" name="surat_id" value="{{ $surat->id }}"> <!-- Add this line to pass surat_id -->
+
+                <button type="submit" class="btn btn-primary">Kirim Disposisi</button>
+            </form>
+            <h2 class="mt-4">Daftar Disposisi</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Dari</th>
+                        <th>Kepada</th>
+                        <th>Keterangan</th>
+                        <th>Disposisi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if($disposisiEntries->isEmpty())
+                        <tr>
+                            <td colspan="4" class="text-center">Belum ada disposisi yang dikirim.</td>
+                        </tr>
+                    @else
+                        @foreach($disposisiEntries as $disposisi)
+                            <tr>
+                                <td>{{ $disposisi->surat_id }}</td> <!-- Assuming 'dari' is surat_id -->
+                                <td>{{ $disposisi->kepada }}</td>
+                                <td>{{ $disposisi->keterangan }}</td>
+                                <td>{{ $disposisi->tindakan }}</td> <!-- Adjust based on how tindakan is stored -->
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
             </table>
-            <button type="submit" class="btn-primary">Simpan Perubahan</button>
 
-            <div class="pdf-preview mt-4">
-                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="PDF Icon">
-                <p>{{ $surat->file_name }}</p>
-                <a href="{{ route('surat.show', $surat->id) }}">Preview File</a>
-            </div>
-        </form>
-
-<!-- Right Section: Disposisi -->
-<form action="{{ route('disposisi.kirim') }}" method="POST" class="right-section">
-    @csrf
-    <h2>Tindak Lanjut / Disposisi</h2>
-
-    <!-- Container for checkboxes -->
-    <div class="disposisi-options">
-        @foreach(['Untuk Diketahui', 'Untuk Diperhatikan', 'Untuk Dipelajari', 'Disiapkan Jawaban', 'Jawab Langsung', 'ACC untuk Tindak Lanjut', 'Ambil Langkah Seperlunya', 'Dibicarakan', 'Dilaporkan', 'Segera Selesaikan', 'Copy Untuk'] as $option)
-            <label class="disposisi-label">
-                <input type="checkbox" name="disposisi[]" value="{{ $option }}"> {{ $loop->iteration }}. {{ $option }}
-            </label>
-        @endforeach
-    </div>
-
-    <label for="kepada">Kepada:</label>
-    <select id="kepada" name="kepada" class="form-select">
-        <option value="">-- Pilih --</option>
-        <option value="Sekretariat">Sekretariat</option>
-        <option value="Pimpinan">Pimpinan</option>
-        <option value="Karyawan">Karyawan</option>
-        <option value="Admin">Admin</option>
-    </select>
-
-    <label for="keterangan">Keterangan:</label>
-    <textarea id="keterangan" name="keterangan" rows="4" placeholder="Tambahkan keterangan..." class="form-textarea"></textarea>
-
-    <button type="submit" class="btn btn-primary">Kirim Disposisi</button>
-</form>
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>

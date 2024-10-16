@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Surat;
 use App\Models\Instansi;
 use App\Models\SifatSurat;
+use App\Models\Disposisi;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
@@ -28,6 +29,13 @@ class SuratController extends Controller
         $instansi = Instansi::all();
         $sifatSurat = SifatSurat::all();
         return view('suratmasuk.create', compact('instansi', 'sifatSurat'));
+    }
+    public function edit($id)
+    {
+        $surat = Surat::findOrFail($id);
+        $disposisiEntries = Disposisi::where('surat_id', $id)->get() ?? collect(); // Ensure it's a collection
+
+        return view('surat.edit', compact('surat', 'disposisiEntries'));
     }
 
     public function store(Request $request)

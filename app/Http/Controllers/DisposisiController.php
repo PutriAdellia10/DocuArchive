@@ -18,15 +18,23 @@ class DisposisiController extends Controller
     // Menampilkan daftar disposisi
     public function index()
     {
-        $disposisi = Surat::all(); // Ambil semua surat sebagai contoh
-        return view('disposisi.index', compact('disposisi'));
+       // Get all disposisi entries
+    $disposisiEntries = Disposisi::all();
+
+    // Get disposisi entries for a specific surat
+    $disposisi = Disposisi::where('surat_id', $suratId)->get();
+
+        return view('disposisi.index', compact('disposisi','disposisiEntries'));
     }
 
     // Menampilkan detail disposisi
     public function show($id)
     {
         $surat = Surat::findOrFail($id);
-        return view('layout.disposisi', compact('surat'));
+        $disposisiEntries = Disposisi::where('surat_id', $id)->get();
+
+        // Pass both surat and disposisiEntries to the view
+        return view('layout.disposisi', compact('surat', 'disposisiEntries'));
     }
 
     // Menampilkan form untuk membuat disposisi baru
@@ -35,24 +43,54 @@ class DisposisiController extends Controller
         return view('disposisi.create');
     }
 
-    // Menyimpan disposisi baru
     public function store(Request $request)
     {
-        // Validasi input
+        // Validate input
         $request->validate([
-            'tindakan' => 'array|required',
+            'tindakan' => 'required|array', // Make sure tindakan is an array
             'kepada' => 'required|string',
-            'keterangan' => 'required|string',
+            'keterangan' => 'nullable|string',
+            'surat_id' => 'required|integer',
         ]);
 
-        // Simpan data disposisi ke database atau proses sesuai kebutuhan
-        // Misalnya, simpan ke tabel notifikasi
-        // Notification::create([...]);
+        // Convert tindakan to JSON properly
+        $tindakan = json_encode($request->tindakan); // Properly encode tindakan as JSON
 
-        // Menyimpan notifikasi ke session
-        Session::flash('success', 'Data disposisi berhasil dikirim.');
+        // Create a new Disposisi entry
+        Disposisi::create([
+            'surat_id' => $request->surat_id,
+            'tindakan' => $tindakan, // Store as JSON
+            'kepada' => $request->kepada,
+            'keterangan' => $request->keterangan,
+            'dari' => auth()->user()->name, // Assuming you want to store the sender
+        ]);
 
-        return redirect()->route('surat.index'); // Ubah sesuai dengan rute tujuan
+        return redirect()->back()->with('success', 'Disposisi telah dikirim!');
+    }
+
+    public function kirim(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'tindakan' => 'required|array', // Ensure tindakan is an array
+            'kepada' => 'required|string',
+            'keterangan' => 'nullable|string',
+            'surat_id' => 'required|integer', // Validate surat_id is present
+        ]);
+
+        // Encode tindakan array to JSON
+        $tindakan = json_encode($request->tindakan);
+
+        // Create a new disposisi entry
+        Disposisi::create([
+            'surat_id' => $request->surat_id,
+            'tindakan' => $tindakan, // Store tindakan as JSON
+            'kepada' => $request->kepada,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Disposisi telah dikirim!');
     }
 
     // Menghapus disposisi
@@ -62,4 +100,5 @@ class DisposisiController extends Controller
         $surat->delete();
         return redirect()->route('disposisi.index')->with('success', 'Disposisi berhasil dihapus.');
     }
+
 }
