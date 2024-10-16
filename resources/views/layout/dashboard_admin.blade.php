@@ -200,8 +200,8 @@
         <i class="fas fa-paper-plane card-icon"></i>
     </div>
     <div class="card">
-        <h5>Total Surat per Tahun</h5>
-        <p>50</p>
+        <h5>Total Surat</h5>
+        <p>{{$totalsuratpertahun}}</p>
         <i class="fas fa-calendar-alt card-icon"></i>
     </div>
     <div class="card">
@@ -222,9 +222,21 @@
     <div class="recent-activities">
         <h5>Recent Activities</h5>
         <ul class="activity-list">
-            @foreach($recentSuratMasuk as $surat)
-            <li>Surat Masuk dari {{ $surat->asal_surat }} pada {{ $surat->created_at->format('d-m-Y H:i') }}</li>
-            @endforeach
+            @forelse($recentSuratMasuk as $suratmasuk)
+                <li>
+                    Surat Masuk dari {{ $suratmasuk->instansi->nama_instansi }} pada {{ $suratmasuk->created_at->format('d-m-Y H:i') }}
+                </li>
+            @empty
+                <li>Tidak ada surat masuk terbaru</li>
+            @endforelse
+
+            @forelse($recentSuratKeluar as $suratkeluar)
+                <li>
+                    Surat Keluar ke {{ $suratkeluar->instansi->nama_instansi }} pada {{ $suratkeluar->created_at->format('d-m-Y H:i') }}
+                </li>
+            @empty
+                <li>Tidak ada surat keluar terbaru</li>
+            @endforelse
         </ul>
     </div>
 

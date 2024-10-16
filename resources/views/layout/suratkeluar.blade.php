@@ -293,11 +293,9 @@
                         <th>Nomor Agenda</th>
                         <th>Tanggal Keluar</th>
                         <th>Tujuan Surat</th>
-                        <th>Tanggal Masuk</th>
-                        <th>Asal Surat</th>
                         <th>Nomor Surat</th>
                         <th>Tanggal Surat</th>
-                        <th>Perihal</th>
+                        <th>Agenda</th>
                         <th>Sifat Surat</th>
                         <th>Aksi</th>
                     </tr>
