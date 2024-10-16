@@ -176,8 +176,8 @@
 
                     <!-- Buttons for Surat Masuk and Surat Keluar -->
                     <div class="button-container" style="margin-top: 10px; display: flex; justify-content: flex-start; gap: 10px;">
-                        <a href="#" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #0077b6;">Surat Masuk</a>
-                        <a href="#" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #00b4d8;">Surat Keluar</a>
+                        <a href="{{route ('surat.index')}}" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #0077b6;">Surat Masuk</a>
+                        <a href="{{route ('surat.keluar.index')}}" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #00b4d8;">Surat Keluar</a>
                     </div>
                 </div>
             </div>
@@ -208,9 +208,21 @@
     <div class="recent-activities">
         <h5>Recent Activities</h5>
         <ul class="activity-list">
-            <li>Surat Masuk diterima dari Instansi A</li>
-            <li>Surat Keluar dikirim ke Instansi B</li>
-            <li>Disposisi surat oleh Pimpinan</li>
+            @forelse($recentSuratMasuk as $suratmasuk)
+            <li>
+                Surat Masuk dari {{ $suratmasuk->instansi->nama_instansi }} pada {{ $suratmasuk->created_at->format('d-m-Y H:i') }}
+            </li>
+        @empty
+            <li>Tidak ada surat masuk terbaru</li>
+        @endforelse
+
+        @forelse($recentSuratKeluar as $suratkeluar)
+            <li>
+                Surat Keluar ke {{ $suratkeluar->instansi->nama_instansi }} pada {{ $suratkeluar->created_at->format('d-m-Y H:i') }}
+            </li>
+        @empty
+            <li>Tidak ada surat keluar terbaru</li>
+        @endforelse
         </ul>
     </div>
 

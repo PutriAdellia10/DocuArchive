@@ -310,9 +310,21 @@
     <div class="recent-activities">
         <h5>Recent Activities</h5>
         <ul class="activity-list">
-            <li>Surat Masuk diterima dari Instansi A</li>
-            <li>Surat Keluar dikirim ke Instansi B</li>
-            <li>Disposisi surat oleh Pimpinan</li>
+            @forelse($recentSuratMasuk as $suratmasuk)
+            <li>
+                Surat Masuk dari {{ $suratmasuk->instansi->nama_instansi }} pada {{ $suratmasuk->created_at->format('d-m-Y H:i') }}
+            </li>
+        @empty
+            <li>Tidak ada surat masuk terbaru</li>
+        @endforelse
+
+        @forelse($recentSuratKeluar as $suratkeluar)
+            <li>
+                Surat Keluar ke {{ $suratkeluar->instansi->nama_instansi }} pada {{ $suratkeluar->created_at->format('d-m-Y H:i') }}
+            </li>
+        @empty
+            <li>Tidak ada surat keluar terbaru</li>
+        @endforelse
         </ul>
     </div>
 

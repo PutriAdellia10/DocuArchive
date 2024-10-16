@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Surat; // Model Surat
 use App\Models\Disposisi; // Model Disposisi
 use App\Models\Notifikasi;
+use App\Models\Instansi;
+use Illuminate\Support\Facades\DB;
 
 class SekretariatController extends Controller
 {
@@ -15,19 +17,24 @@ class SekretariatController extends Controller
         // Ambil 5 surat masuk terbaru
         $recentSuratMasuk = Surat::where('status', 'Masuk')
             ->orderBy('created_at', 'desc')
-            ->take(1)
+            ->take(2)
             ->get();
 
         // Ambil 5 surat keluar terbaru
         $recentSuratKeluar = Surat::where('status', 'Keluar')
             ->orderBy('created_at', 'desc')
-            ->take(1)
+            ->take(2)
             ->get();
 
         // Ambil notifikasi terbaru
         $notifikasi = Notifikasi::orderBy('dibuat_pada', 'desc')
             ->take(5)
             ->get();
+
+        // query untuk menghitung total surat
+        $totalSuratPerTahun = DB::table('surat')
+        ->whereYear('tanggal_surat', date('Y')) // Menghitung surat per tahun ini
+        ->count(); // Menghitung total surat secara langsung
 
         // Contoh pengambilan data untuk dashboard admin, bisa diubah sesuai kebutuhan
         $data = [
