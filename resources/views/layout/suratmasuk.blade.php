@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Surat Masuk</title>
+    <link href="{{ asset('css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,138 +21,8 @@
             padding: 0;
         }
 
-        .navbar-top {
-            width: 100%;
-            background: linear-gradient(90deg, #0077b6, #00b4d8); /* Gradient Navbar */
-            padding: 10px 20px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            height: 60px;
-            border-bottom: 2px solid #005f73; /* Darker Blue Border */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle Shadow */
-        }
-
-        .navbar-top .logo {
-            display: flex;
-            align-items: center;
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-        }
-
-        .navbar-top .logo img {
-            width: 40px;
-            margin-right: 10px;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Logo Shadow */
-        }
-
-        .navbar-top .logo span {
-            font-size: 20px;
-        }
-
-        .navbar-top .people-icon {
-            position: relative;
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            color: #ffffff; /* White Icon Color */
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 0;
-            background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Background */
-            border: 1px solid #005f73; /* Darker Blue Border */
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Shadow */
-            padding: 10px;
-            width: 250px;
-            z-index: 1000;
-            color: #ffffff; /* White Text */
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu .user-info {
-            margin-bottom: 10px;
-        }
-
-        .dropdown-menu .user-info span {
-            font-weight: bold;
-        }
-
-        .dropdown-menu .dropdown-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            text-decoration: none;
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-            border-radius: 5px;
-            margin-bottom: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .dropdown-menu .dropdown-item i {
-            margin-right: 10px;
-        }
-
-        .dropdown-menu .dropdown-item:hover {
-            background-color: #005f73; /* Darker Blue Hover */
-        }
-
-        .sidebar {
-            width: 200px;
-            background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Sidebar */
-            height: 100vh;
-            padding: 70px 10px 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-top: 60px;
-            border-right: 2px solid #005f73; /* Darker Blue Border */
-            box-shadow: 4px 0 6px rgba(0,0,0,0.1); /* Sidebar Shadow */
-        }
-
-        .sidebar a {
-            text-decoration: none;
-            color: #ffffff; /* White Text */
-            margin: 10px 0;
-            text-align: left;
-            width: 100%;
-            padding: 12px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-            font-weight: bold;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar a i {
-            margin-right: 10px;
-        }
-
-        .sidebar a:hover {
-            background-color: #005f73; /* Darker Blue Hover */
-            color: #ffffff; /* White Text */
-        }
-
         .content {
-            margin-left: 220px;
+            margin-left: 240px;
             padding: 80px 20px 20px;
         }
 
@@ -238,6 +112,20 @@
             margin-right: 10px;
             color: #0077b6; /* Dark Blue Icon Color */
         }
+        .action-buttons {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Align items vertically centered */
+}
+
+.action-link {
+    margin-right: 15px; /* Add some space between the link and the button */
+    text-decoration: none; /* Remove underline from link */
+    color: #007bff; /* Set color to match button color */
+}
+
+.delete-form {
+    margin: 0; /* Remove default margin from the form */
+}
 
         .pagination {
             display: flex;
@@ -360,48 +248,24 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar-top">
-        <div class="logo">
-            <img src="https://via.placeholder.com/40" alt="Logo">
-            <span>Surat Masuk</span>
-        </div>
-        <div class="people-icon" onclick="toggleDropdown()">
-            <i class="fa fa-user"></i>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <div class="user-info">
-                    <span>John Doe</span>
-                    <br>
-                    <span>Admin</span>
-                </div>
-                <a href="#" class="dropdown-item">
-                    <i class="fa fa-cogs"></i> Settings
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fa fa-sign-out"></i> Logout
-                </a>
-            </div>
-        </div>
-    </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <a href="{{ route('dashboard_admin') }}">
-            <i class="fa fa-home"></i> Dashboard
-        </a>
-        <a href="#">
-            <i class="fa fa-envelope"></i> Surat Masuk
-        </a>
-        <a href="#">
-            <i class="fa fa-paper-plane"></i> Surat Keluar
-        </a>
-        <a href="#">
-            <i class="fa fa-file"></i> Laporan
-        </a>
-        <a href="#">
-            <i class="fa fa-cogs"></i> Master Data
-        </a>
-    </div>
+@include('components.navbar')
+
+    @if(auth()->check())
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.sidebaradmin')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.sidebarsekre')
+    @elseif(auth()->user()->peran == 'Karyawan')
+        @include('components.sidebarkaryawan')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.sidebarpim')
+    @else
+        <p>Peran tidak dikenali.</p>
+    @endif
+@else
+    <p>Anda belum login. Silakan login untuk melanjutkan.</p>
+@endif
 
     <!-- Main Content -->
     <div class="content">
@@ -449,19 +313,18 @@
                         <td>{{ $surat->perihal }}</td>
                         <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
                         <td>
-                            <a href="{{ route('surat.show', $surat->id) }}" title="Lihat">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('surat.edit', $surat->id) }}" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" style="border:none; background:none; color:#007bff; cursor:pointer;" title="Hapus">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
+                            <div class="action-buttons">
+                                <a href="{{ route('disposisi.show', $surat->id) }}" title="Disposisi" class="action-link">
+                                    <i class="fas fa-folder"></i> Disposisi
+                                </a>
+                                <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form">
+                                    @csrf
+                                    @method('DELETE') <!-- Use DELETE method for deletion -->
+                                    <button type="submit" style="border:none; background:none; color:#007bff; cursor:pointer;" title="Hapus">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -476,7 +339,7 @@
         </div>
     </div>
 
- <!-- Modal -->
+ <!-- Modal tambah surat-->
 <div class="modal" id="modal">
     <div class="modal-content">
         <h3 id="modalTitle">Tambah Surat Masuk</h3>
@@ -558,25 +421,96 @@
         </form>
     </div>
 </div>
-@include('crudsurat.editmasuk')
-<script>
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('show');
-    }
+<!-- Modal edit surat-->
+<div class="modal" id="modalEdit">
+    <div class="modal-content">
+        <h3 id="modalTitle">Edit Surat Masuk</h3>
+        <form id="modalFormEdit" action="{{ route('surat.update', $surat->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="form-group">
+                <label for="edit_no_agenda">No Agenda *</label>
+                <input type="text" id="edit_no_agenda" name="no_agenda" value="{{ $surat->no_agenda }}" required>
+            </div>
 
+            <div class="form-group">
+                <label for="edit_tanggal">Tanggal Masuk *</label>
+                <input type="date" id="edit_tanggal" name="tanggal" value="{{ $surat->tanggal }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_id_asal_surat">Asal Surat *</label>
+                <select id="edit_id_asal_surat" name="id_asal_surat" required>
+                    <option value="">--Pilih--</option>
+                    @foreach($instansi as $inst)
+                        <option value="{{ $inst->id }}" {{ $inst->id == $surat->id_asal_surat ? 'selected' : '' }}>{{ $inst->nama_instansi }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_no_surat">No Surat *</label>
+                <input type="text" id="edit_no_surat" name="no_surat" value="{{ $surat->no_surat }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_tanggal_surat">Tanggal Surat *</label>
+                <input type="date" id="edit_tanggal_surat" name="tanggal_surat" value="{{ $surat->tanggal_surat }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_perihal">Perihal</label>
+                <input type="text" id="edit_perihal" name="perihal" value="{{ $surat->perihal }}">
+            </div>
+
+            <div class="form-group">
+                <label for="edit_konten">Konten</label>
+                <textarea id="edit_konten" name="konten">{{ $surat->konten }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_id_sifat_surat">Sifat Surat *</label>
+                <select id="edit_id_sifat_surat" name="id_sifat_surat" required>
+                    <option value="">--Pilih--</option>
+                    @foreach($sifatSurat as $sifat)
+                        <option value="{{ $sifat->id }}" {{ $sifat->id == $surat->id_sifat_surat ? 'selected' : '' }}>{{ $sifat->nama_sifat }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_status">Status *</label>
+                <select id="edit_status" name="status" required>
+                    <option value="">--Pilih--</option>
+                    <option value="Masuk" {{ $surat->status == 'Masuk' ? 'selected' : '' }}>Masuk</option>
+                    <option value="Keluar" {{ $surat->status == 'Keluar' ? 'selected' : '' }}>Keluar</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_dokumen">Dokumen Elektronik *</label>
+                <input type="file" id="edit_dokumen" name="dokumen" accept=".pdf">
+                <p class="file-info">
+                    Keterangan: <br>
+                    - Tipe file yang bisa diunggah adalah *.pdf. <br>
+                    - Ukuran file yang bisa diunggah maksimal 10 Mb.
+                </p>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit">Simpan Perubahan</button>
+                <button type="button" onclick="closeModaledit()">Batal</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
     function openModal(type = 'add') {
         const modal = document.getElementById('modal');
         const modalTitle = document.getElementById('modalTitle');
         const form = document.getElementById('modalForm');
         modal.style.display = 'flex';
-        if (type === 'edit') {
-            modalTitle.textContent = 'Edit Surat Masuk';
-            // Populate form with existing data if needed
-            // Example: document.getElementById('no_agenda').value = existingData.no_agenda;
-        } else {
-            modalTitle.textContent = 'Tambah Surat Masuk';
-            form.reset(); // Reset form fields for new entry
-        }
     }
 
     function closeModal() {
@@ -591,6 +525,47 @@
             closeModal();
         }
     };
+    function openEditModal(surat) {
+        console.log(surat.status);
+    const form = document.getElementById('modalFormEdit');
+    form.action = `/surat-masuk/${surat.id}`;  // Sesuaikan URL ini dengan route update Anda
+
+    // Mengisi data ke dalam field modal form
+    document.getElementById('edit_no_agenda').value = surat.no_agenda;
+    document.getElementById('edit_tanggal').value = surat.tanggal;  // pastikan field ini tipe "date"
+    document.getElementById('edit_id_asal_surat').value = surat.id_asal_surat;  // ini adalah dropdown
+    document.getElementById('edit_no_surat').value = surat.no_surat;
+    document.getElementById('edit_tanggal_surat').value = surat.tanggal_surat;  // pastikan field ini tipe "date"
+    document.getElementById('edit_perihal').value = surat.perihal;
+    document.getElementById('edit_konten').value = surat.konten;  // konten sebaiknya berupa textarea
+    document.getElementById('edit_id_sifat_surat').value = surat.id_sifat_surat;  // ini adalah dropdown
+    document.getElementById('edit_status').value = surat.status;  // status ini bisa berupa select dropdown
+
+    // Menampilkan modal edit
+    const modal = document.getElementById('modalEdit');
+    modal.style.display = 'flex';  // Menampilkan modal dengan display flex
+}
+
+// Function to close the modal
+function closeModaledit() {
+    const modal = document.getElementById('modalEdit');
+    modal.style.display = 'none'; // Hide the modal
+}
+
+// Optional: Close the modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('modalEdit');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+
+// Optional: Close the modal with the ESC key
+document.onkeydown = function(event) {
+    if (event.key === "Escape") { // Check if the Esc key is pressed
+        closeModal();
+    }
+}
 
     document.getElementById('searchInput').addEventListener('keyup', function() {
         const value = this.value.toLowerCase();

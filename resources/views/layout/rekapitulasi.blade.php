@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Rekapitulasi</title>
+    <link href="{{ asset('css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* General Styles */
         body {
@@ -19,139 +22,8 @@
         }
 
         .container {
-            margin-left: 220px; /* Adjust based on sidebar width */
+            margin-left: 240px;
             padding: 80px 20px 20px;
-        }
-
-        /* Navbar Styles */
-        .navbar-top {
-            width: 100%;
-            background: linear-gradient(90deg, #0077b6, #00b4d8); /* Gradient Navbar */
-            padding: 10px 20px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            height: 60px;
-            border-bottom: 2px solid #005f73; /* Darker Blue Border */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle Shadow */
-        }
-
-        .navbar-top .logo {
-            display: flex;
-            align-items: center;
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-        }
-
-        .navbar-top .logo img {
-            width: 40px;
-            margin-right: 10px;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Logo Shadow */
-        }
-
-        .navbar-top .logo span {
-            font-size: 20px;
-        }
-
-        .navbar-top .people-icon {
-            position: relative;
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            color: #ffffff; /* White Icon Color */
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 0;
-            background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Background */
-            border: 1px solid #005f73; /* Darker Blue Border */
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Shadow */
-            padding: 10px;
-            width: 250px;
-            z-index: 1000;
-            color: #ffffff; /* White Text */
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu .user-info {
-            margin-bottom: 10px;
-        }
-
-        .dropdown-menu .user-info span {
-            font-weight: bold;
-        }
-
-        .dropdown-menu .dropdown-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            text-decoration: none;
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-            border-radius: 5px;
-            margin-bottom: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .dropdown-menu .dropdown-item i {
-            margin-right: 10px;
-        }
-
-        .dropdown-menu .dropdown-item:hover {
-            background-color: #005f73; /* Darker Blue Hover */
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            width: 200px;
-            background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Sidebar */
-            height: 100vh;
-            padding: 70px 10px 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-top: 60px;
-            border-right: 2px solid #005f73; /* Darker Blue Border */
-            box-shadow: 4px 0 6px rgba(0,0,0,0.1); /* Sidebar Shadow */
-        }
-
-        .sidebar a {
-            text-decoration: none;
-            color: #ffffff; /* White Text */
-            margin: 10px 0;
-            text-align: left;
-            width: 100%;
-            padding: 12px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-            font-weight: bold;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar a i {
-            margin-right: 10px;
-        }
-
-        .sidebar a:hover {
-            background-color: #005f73; /* Darker Blue Hover */
         }
 
         /* Content Styles */
@@ -272,29 +144,8 @@
     </style>
 </head>
 <body>
-    <div class="navbar-top">
-        <div class="logo">
-            <img src="logo.png" alt="Logo">
-            <span>Rekapitulasi</span>
-        </div>
-        <div class="people-icon" onclick="toggleDropdown()">
-            <i class="bi bi-person-circle"></i>
-            <div class="dropdown-menu" id="userDropdown">
-                <div class="user-info">
-                    <span>Welcome, User!</span>
-                </div>
-                <a href="#" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
-                <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
-                <a href="#" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
-        </div>
-    </div>
-    <div class="sidebar">
-        <a href="#"><i class="fas fa-home"></i> Home</a>
-        <a href="#"><i class="fas fa-file-alt"></i> Letters</a>
-        <a href="#"><i class="fas fa-chart-line"></i> Reports</a>
-        <a href="#"><i class="fas fa-cogs"></i> Settings</a>
-    </div>
+    @include('components.navbar')
+    @include('components.sidebaradmin')
     <div class="container">
         <div class="header">
             <h2>Rekapitulasi Surat</h2>
@@ -312,10 +163,12 @@
                 </div>
                 <div class="form-buttons">
                     <button type="submit" class="btn">Tampil</button>
-                    <a onclick="window.print()" class="btn btn-cetak">Cetak</a>
+                    <a onclick="printTable()" class="btn btn-cetak">Cetak</a>
                 </div>
             </div>
         </form>
+        <div id="printSection">
+            <h1 id="printTitle"> Laporan Surat - Tahun <span id="selectedYear">{{ request('tahun') }}</span></h1>
         <div id="tableContainer" class="table-container {{ $showTable ? 'show' : '' }}">
             <table>
                 <thead>
@@ -345,6 +198,36 @@
     </div>
 
     <script>
+
+function updateTitle() {
+    // Ambil nilai dari input tahun
+    var selectedYear = document.getElementById('tahun').value;
+
+    // Jika tahun tidak kosong, ubah judulnya
+    if (selectedYear) {
+        document.getElementById('selectedYear').innerText = selectedYear;
+    } else {
+        document.getElementById('selectedYear').innerText = 'Pilih Tahun';
+    }
+}
+
+function printTable() {
+    // Update judul sebelum cetak
+    updateTitle();
+
+    var printContents = document.getElementById('printSection').innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    // Cetak hanya konten yang diinginkan
+    document.body.innerHTML = "<html><head><title>" + document.getElementById('printTitle').innerText + "</title></head><body>" + printContents + "</body></html>";
+
+    window.print();
+
+    // Kembalikan tampilan seperti semula
+    document.body.innerHTML = originalContents;
+}
+
+
         function toggleDropdown() {
             const dropdown = document.getElementById('userDropdown');
             dropdown.classList.toggle('show');

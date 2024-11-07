@@ -5,21 +5,48 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Surat; // Model Surat
 use App\Models\Disposisi; // Model Disposisi
+use App\Models\Notifikasi;
+use App\Models\Instansi;
+use Illuminate\Support\Facades\DB;
 
 class SekretariatController extends Controller
 {
     // Menampilkan halaman dashboard sekretariat
     public function index()
     {
-        // Mengambil data untuk dashboard
+        // Ambil 5 surat masuk terbaru
+        $recentSuratMasuk = Surat::where('status', 'Masuk')
+            ->orderBy('created_at', 'desc')
+            ->take(2)
+            ->get();
+
+        // Ambil 5 surat keluar terbaru
+        $recentSuratKeluar = Surat::where('status', 'Keluar')
+            ->orderBy('created_at', 'desc')
+            ->take(2)
+            ->get();
+
+        // Ambil notifikasi terbaru
+        $notifikasi = Notifikasi::orderBy('dibuat_pada', 'desc')
+            ->take(5)
+            ->get();
+
+        // query untuk menghitung total surat
+        $totalSuratPerTahun = DB::table('surat')
+        ->whereYear('tanggal_surat', date('Y')) // Menghitung surat per tahun ini
+        ->count(); // Menghitung total surat secara langsung
+
+        // Contoh pengambilan data untuk dashboard admin, bisa diubah sesuai kebutuhan
         $data = [
-            'surat_masuk_count' => Surat::where('status', 'Masuk')->count(),
-            'surat_keluar_count' => Surat::where('status', 'Keluar')->count(),
-            'disposisi_aktif_count' => Disposisi::where('status', 'Aktif')->count(),
-            'aktivitas_terbaru' => [
-                'Surat Masuk baru diterima pada tanggal 21 Agustus 2024.',
-                'Disposisi baru dibuat pada tanggal 19 Agustus 2024.',
-            ],
+            'title' => 'Dashboard Admin',
+            'pengguna' => \App\Models\User::all(),
+            'totalSuratMasuk' => Surat::where('status', 'Masuk')->count(),
+            'totalSuratKeluar' => Surat::where('status', 'Keluar')->count(),
+            'totalInstansi' => Instansi::count(),
+            'instansiList' => Instansi::all(),
+            'recentSuratMasuk' => $recentSuratMasuk,
+            'recentSuratKeluar' => $recentSuratKeluar,
+            'notifikasi' => $notifikasi, // Tambahkan notifikasi di sini
         ];
 
         // Return ke view dashboard_sekretariat dengan data yang diambil

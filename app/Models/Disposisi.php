@@ -7,23 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Disposisi extends Model
 {
+    use HasFactory;
 
+    // Nama tabel dalam database
     protected $table = 'disposisi';
 
+    // Kolom-kolom yang dapat diisi
     protected $fillable = [
-        'id_surat',
-        'id_pengguna',
-        'instruksi',
-        'status',
+        'surat_id',
+        'tindakan',
+        'kepada',
+        'keterangan',
+        'lampiran',
+        'catatan',
     ];
 
     public function surat()
     {
-        return $this->belongsTo(Surat::class, 'id_surat');
+        return $this->belongsTo(Surat::class, 'surat_id');
     }
 
-    public function pengguna()
-    {
-        return $this->belongsTo(Pengguna::class, 'id_pengguna');
-    }
+    /**
+     * Customisasi timestamps jika diperlukan.
+     * Jika tidak perlu, Anda bisa menghapus atau mengubahnya sesuai keperluan.
+     */
+    public $timestamps = true;
 }

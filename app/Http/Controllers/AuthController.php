@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Surat;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -23,7 +21,9 @@ class AuthController extends Controller
     {
         // Validasi input
         $validator = Validator::make($request->all(), [
-            'nama_pengguna' => 'required|string|max:255|unique:pengguna', // tabel "pengguna"
+            'nama_pengguna' => 'required|string|max:50|unique:pengguna', // tabel "pengguna"
+            'email' => 'required|email|max:100|unique:pengguna', // email harus unik
+            'jabatan' => 'nullable|string|max:100', // jabatan opsional
             'kata_sandi' => 'required|string|confirmed|min:8',
             'peran' => 'required|string|in:Admin,Karyawan,Sekretariat,Pimpinan',
         ]);
@@ -36,29 +36,14 @@ class AuthController extends Controller
         // Buat pengguna baru dengan password yang di-hash
         $pengguna = User::create([
             'nama_pengguna' => $request->input('nama_pengguna'),
+            'email' => $request->input('email'),
+            'jabatan' => $request->input('jabatan'), // jika ada jabatan
             'kata_sandi' => Hash::make($request->input('kata_sandi')), // Hash password
             'peran' => $request->input('peran'),
         ]);
 
-        // Login pengguna setelah pendaftaran
-       // Auth::login($pengguna);
-
-       // Redirect ke halaman login setelah pendaftaran berhasil
-     return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
-
-        // Redirect ke halaman sesuai dengan peran (role)
-        switch ($pengguna->peran) {
-            case 'Admin':
-                return redirect()->intended('/dashboard_admin');
-            case 'Sekretariat':
-                return redirect()->intended('/dashboard_sekretariat');
-            case 'Karyawan':
-                return redirect()->intended('/dashboard_karyawan');
-            case 'Pimpinan':
-                return redirect()->intended('/dashboard_pimpinan');
-            default:
-                return redirect()->route('home');
-        }
+        // Redirect ke halaman login setelah pendaftaran berhasil
+        return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
     }
 
     // Menampilkan formulir login
@@ -72,13 +57,13 @@ class AuthController extends Controller
     {
         // Validasi input
         $request->validate([
-            'nama_pengguna' => 'required|string',
+            'email' => 'required|email|string', // Mengganti nama_pengguna dengan email
             'kata_sandi' => 'required|string',
-            'peran' => 'required|string',
+            'peran' => 'required|string|in:Admin,Karyawan,Sekretariat,Pimpinan',
         ]);
 
-        // Mencari pengguna berdasarkan nama_pengguna dan peran
-        $user = User::where('nama_pengguna', $request->nama_pengguna)
+        // Mencari pengguna berdasarkan email dan peran
+        $user = User::where('email', $request->email) // Mengganti nama_pengguna dengan email
                     ->where('peran', $request->peran)
                     ->first();
 
@@ -101,7 +86,7 @@ class AuthController extends Controller
             }
         } else {
             // Jika login gagal
-            return redirect()->back()->with('error', 'Login gagal. Periksa kembali username, kata sandi, dan peran Anda.');
+            return redirect()->back()->with('error', 'Login gagal. Periksa kembali email, kata sandi, dan peran Anda.');
         }
     }
 
@@ -113,6 +98,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Anda telah logout.');
     }
 }

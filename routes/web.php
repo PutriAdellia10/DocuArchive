@@ -6,15 +6,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DisposisiController;
+
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SekretariatController;
 use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\SuratController;
-use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\RekapitulasiSuratController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\SifatSuratController;
+use App\Http\Controllers\DisposisiController;
+
+use App\Http\Controllers\ProfilPerusahaanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -93,75 +96,61 @@ Route::get('/surat-masuk/{id}', [SuratController::class, 'show'])->name('surat.s
 Route::get('/surat-keluar', [SuratController::class, 'indexKeluar'])->name('surat.keluar.index');
 Route::get('/surat-keluar/create', [SuratController::class, 'keluarcreate'])->name('surat.keluar.create');
 Route::post('/surat-keluar', [SuratController::class, 'keluarstore'])->name('surat.keluar.store');
-Route::get('/surat-keluar/{id}/edit', [SuratController::class, 'keluaredit'])->name('surat.keluar.edit');
-Route::put('/surat-keluar/{id}', [SuratController::class, 'keluarupdate'])->name('surat.keluar.update');
+Route::get('/surat/keluar/{id}/edit', [SuratController::class, 'keluaredit'])->name('surat.keluar.edit');
+Route::put('/surat/keluar/{id}', [SuratController::class, 'keluarupdate'])->name('surat.keluar.update');
 Route::delete('/surat-keluar/{id}', [SuratController::class, 'keluardestroy'])->name('surat.keluar.destroy');
 Route::get('/surat-keluar/{id}', [SuratController::class, 'keluarshow'])->name('surat.keluar.show');
+Route::post('/surat/{id}/kirim-ke-sekretariat', [SuratController::class, 'kirimKeSekretariat'])->name('surat.kirimKeSekretariat');
+Route::post('/surat/{id}/keputusan', [SuratController::class, 'keputusanDisposisi'])->name('surat.keputusan');
 
+Route::get('disposisi', [DisposisiController::class, 'index'])->name('disposisi.index');
+Route::post('disposisi/{id}', [DisposisiController::class, 'store'])->name('disposisi.store');
+Route::get('disposisi/{id}', [DisposisiController::class, 'show'])->name('disposisi.show');
+Route::get('disposisi/{id}/edit', [DisposisiController::class, 'edit'])->name('disposisi.edit');
+Route::put('disposisi/{id}', [DisposisiController::class, 'update'])->name('disposisi.update');
+Route::delete('disposisi/{id}', [DisposisiController::class, 'destroy'])->name('disposisi.destroy');
+Route::post('disposisi/submit/{id}', [DisposisiController::class, 'submitDisposition'])->name('disposisi.submit');
+Route::post('disposisi/tindak-lanjut/{id}', [DisposisiController::class, 'tindakLanjut'])->name('disposisi.tindakLanjut');
 
-//Route::get('/surat/{id}/disposisi', [SuratController::class, 'showDisposisi'])->name('surat.disposisi');
+Route::get('/profilperusahaan', [ProfilPerusahaanController::class, 'index'])->name('profilperusahaan.index');
+Route::put('/profilperusahaan', [ProfilPerusahaanController::class, 'update'])->name('profilperusahaan.update');
 
-Route::resource('jenis_surat', JenisSuratController::class);
 
 Route::get('/rekapitulasi', [RekapitulasiSuratController::class, 'index'])->name('rekapitulasi.index');
 
 
-
 // Rute untuk menampilkan laporan masuk
 Route::get('/laporan-masuk', [LaporanController::class, 'laporanMasuk'])->name('laporan.masuk');
-
 // Rute untuk menampilkan laporan keluar
 Route::get('/laporan-keluar', [LaporanController::class, 'laporanKeluar'])->name('laporan.keluar');
-
-
-
-
-
-
-// Route::get('/instansi', function () {
-//     return view('layout.instansi');
-// })->name('instansi');
-// Route::get('/tambahinstansi', function () {
-//     return view('layout.tambahinstansi');
-// })->name('tambahinstansi');
-// use App\Http\Controllers\InstansiController;
-
-// Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi');
-// Route::get('/instansi/tambah', [InstansiController::class, 'create'])->name('instansi.create');
-// Route::post('/instansi', [InstansiController::class, 'store'])->name('instansi.store');
-
-
-// Route::resource('instansi', InstansiController::class);
-// Route::get('instansi/{id}', [InstansiController::class, 'show']);
-// Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi.index');
-// Route::post('/instansi', [InstansiController::class, 'store']);
-// Route::delete('/instansi/{id}', [InstansiController::class, 'destroy']);
-// Route::put('/instansi/{id}', [InstansiController::class, 'update'])->name('instansi.update');
-
 
 
 Route::get('instansi', [InstansiController::class, 'index'])->name('instansi.index');
 Route::post('instansi', [InstansiController::class, 'store'])->name('instansi.store');
 Route::get('instansi/{id}', [InstansiController::class, 'show'])->name('instansi.show');
+Route::put('/instansi/{id}', [InstansiController::class, 'update'])->name('instansi.update');
 Route::delete('instansi/{id}', [InstansiController::class, 'destroy'])->name('instansi.destroy');
+Route::get('/cariInstansi', [InstansiController::class, 'cariInstansi'])->name('instansi.cari');
 
-// Route::get('/templatesurat', function () {
-//     return view('layout.templatesurat');
-// })->name('template_surat');
-// use App\Http\Controllers\TemplateSuratController;
+// Menampilkan daftar sifat surat
+Route::get('sifat_surat', [SifatSuratController::class, 'index'])->name('sifat_surat.index');
+Route::get('sifat_surat/create', [SifatSuratController::class, 'create'])->name('sifat_surat.create');
+Route::post('sifat_surat', [SifatSuratController::class, 'store'])->name('sifat_surat.store');
+Route::get('sifat_surat/{id}/edit', [SifatSuratController::class, 'edit'])->name('sifat_surat.edit');
+Route::put('sifat_surat/{id}', [SifatSuratController::class, 'update'])->name('sifat_surat.update');
+Route::delete('sifat_surat/{id}', [SifatSuratController::class, 'destroy'])->name('sifat_surat.destroy');
+Route::get('sifat_surat/{id}', [SifatSuratController::class, 'show'])->name('sifat_surat.show');
 
-// Route::resource('template_surat', TemplateSuratController::class);
-use App\Http\Controllers\TemplateSuratController;
 
-Route::get('template_surat', [TemplateSuratController::class, 'index'])->name('template_surat.index');
-Route::post('/template_surat', [TemplateSuratController::class, 'store'])->name('template_surat.store');
-Route::put('template_surat/{id}', [TemplateSuratController::class, 'update']);
-Route::put('template_surat/{id}', [TemplateSuratController::class, 'create'])->name('surat.create');
-Route::delete('template_surat/{id}', [TemplateSuratController::class, 'destroy']);
-Route::post('/generate_template', [TemplateController::class, 'submit_surat']);
-Route::post('/submit_surat', [TemplateSuratController::class, 'store'])->name('submit.surat');
-Route::post('/template_surat/generate', [TemplateSuratController::class, 'generate'])->name('template_surat.generate');
-Route::post('/submit_surat', [TemplateSuratControllerController::class, 'create']);
+// Route::get('template_surat', [TemplateSuratController::class, 'index'])->name('template_surat.index');
+// Route::post('/template_surat', [TemplateSuratController::class, 'store'])->name('template_surat.store');
+// Route::put('template_surat/{id}', [TemplateSuratController::class, 'update']);
+// Route::put('template_surat/{id}', [TemplateSuratController::class, 'create'])->name('surat.create');
+// Route::delete('template_surat/{id}', [TemplateSuratController::class, 'destroy']);
+// Route::post('/generate_template', [TemplateController::class, 'submit_surat']);
+// Route::post('/submit_surat', [TemplateSuratController::class, 'store'])->name('submit.surat');
+// Route::post('/template_surat/generate', [TemplateSuratController::class, 'generate'])->name('template_surat.generate');
+// Route::post('/submit_surat', [TemplateSuratControllerController::class, 'create']);
 
 
 
@@ -206,3 +195,17 @@ Route::get('/surat_mutasi', function () {
     return view('template_surat.surat_mutasi');
 })->name('surat_mutasi');
 // Route::get('/generate/{id}', [YourController::class, 'generate'])->name('generate');
+
+use App\Http\Controllers\NotifikasiController;
+
+Route::middleware('auth')->group(function () {
+    // Route untuk menampilkan notifikasi pengguna
+    Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+
+    // Route untuk menandai notifikasi sebagai sudah dibaca
+    Route::get('/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead'])->name('notifikasi.markAsRead');
+
+    // Route untuk membuat notifikasi baru
+    Route::post('/notifikasi/create', [NotifikasiController::class, 'create'])->name('notifikasi.create');
+});
+

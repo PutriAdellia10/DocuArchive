@@ -5,7 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen User</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link href="{{ asset('css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -15,52 +21,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
         }
-
-        .navbar {
-            background-color: #33a393; /* Brighter shade */
-            color: rgb(0, 0, 0);
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        .navbar img {
-            width: 50px;
-            margin-right: 10px;
-        }
-
-        .navbar h2 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        .sidebar {
-            width: 200px;
-            background-color: #33a393; /* Same brighter color as navbar */
-            position: fixed;
-            height: 100%;
-            padding-top: 60px; /* Adjusted for top navbar height */
-            padding-left: 20px;
-            top: 0;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: rgb(2, 2, 2); /* Text color remains white */
-            margin-bottom: 5px;
-        }
-
-        .sidebar a:hover {
-            background-color: #4bc2b0;
-        }
-
         .content {
             margin-left: 220px;
             margin-top: 60px; /* Adjusted for top navbar height */
@@ -78,7 +38,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #76c7c0;
+            background-color: #00b4d8;
             padding: 10px;
             border-radius: 8px;
             font-weight: bold;
@@ -87,7 +47,7 @@
 
         .table-container {
             margin-top: 20px;
-            border: 1px solid #76c7c0;
+            border: 1px solid #00b4d8;
             border-radius: 8px;
             background-color: #e9f1f7;
         }
@@ -98,20 +58,27 @@
         }
 
         .table-container th, .table-container td {
-            border: 1px solid #76c7c0;
+            border: 1px solid #00b4d8;
             padding: 10px;
             text-align: left;
         }
 
         .table-container th {
-            background-color: #76c7c0;
+            background-color: #00b4d8;
             color: black;
+        }
+        .table-container tbody tr:nth-child(even) {
+            background-color: #f1f1f1; /* Light Gray */
+        }
+
+        .table-container tbody tr:hover {
+            background-color: #e0f7fa; /* Very Light Blue */
         }
 
         .actions a {
             margin-right: 10px;
             text-decoration: none;
-            color: #33a393;
+            color: #00b4d8;
         }
 
         .pagination {
@@ -121,7 +88,7 @@
         }
 
         .pagination button {
-            background-color: #96bdb9;
+            background-color: #00b4d8;
             border: none;
             padding: 10px;
             border-radius: 5px;
@@ -136,23 +103,24 @@
 </head>
 
 <body>
-    <div class="navbar">
-        <img src="{{ asset('img/logo.jpg') }}" alt="logo" class="logo">
-        <h2>Docu Archive</h2>
-    </div>
-
-    <div class="sidebar">
-        <a href="#">Dashboard</a>
-        <a href="#">Surat</a>
-        <a href="#">Laporan</a>
-        <a href="#">Template Surat</a>
-        <a href="#">Instansi</a>
-        <a href="#">Pengaturan</a>
-    </div>
+   @include('components.navbar')
+   @if(auth()->check())
+   @if(auth()->user()->peran == 'Admin')
+       @include('components.sidebaradmin')
+   @elseif(auth()->user()->peran == 'Sekretariat')
+       @include('components.sidebarpimdansekre')
+   @elseif(auth()->user()->peran == 'Karyawan')
+       @include('components.sidebarkaryawan')
+   @elseif(auth()->user()->peran == 'Pimpinan')
+       @include('components.sidebarpimdansekre')
+   @else
+       <p>Peran tidak dikenali.</p>
+   @endif
+@else
+   <p>Anda belum login. Silakan login untuk melanjutkan.</p>
+@endif
 
     <div class="content">
-        <!-- Tombol Kembali -->
-        <a href="{{ url('/dashboard_admin') }}" class="btn btn-secondary mb-3">Kembali</a>
         <!-- Menampilkan pesan sukses -->
         @if (session('success'))
             <div class="alert alert-success">

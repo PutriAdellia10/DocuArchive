@@ -59,7 +59,7 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                <h4>Detail Data Surat Keluar</h4>
+                <h4>Edit Data Surat Keluar</h4>
             </div>
             <div class="card-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -88,7 +88,7 @@
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Asal Surat:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{  $surat->instansi->nama_instansi }}</p>
+                                    <p class="form-control-plaintext">{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</p>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -103,19 +103,36 @@
                                     <p class="form-control-plaintext">{{ $surat->tanggal_surat }}</p>
                                 </div>
                             </div>
+
+                            <!-- Form Edit Perihal -->
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Perihal:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->perihal }}</p>
+                                    <form action="{{ route('surat.update', $surat->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="text" class="form-control" name="perihal" value="{{ $surat->perihal }}" required>
+                                        <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Simpan Perubahan</button>
+                                    </form>
                                 </div>
                             </div>
+
+                            <!-- Form Edit Keterangan -->
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Keterangan:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->konten }}</p>
+                                    <form action="{{ route('surat.update', $surat->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <textarea class="form-control" name="konten" rows="4" required>{{ $surat->konten }}</textarea>
+                                        <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Simpan Perubahan</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('surat.keluar.index') }}'">Tutup</button>
                     </div>
                     <div class="tab-pane fade" id="dokumen-elektronik" role="tabpanel" aria-labelledby="dokumen-elektronik-tab">
                         <div class="mt-3">
@@ -123,9 +140,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer text-end">
-                <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('surat.keluar.index') }}'">Tutup</button>
             </div>
         </div>
     </div>

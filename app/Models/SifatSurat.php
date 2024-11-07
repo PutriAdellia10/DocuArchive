@@ -16,6 +16,9 @@ class SifatSurat extends Model
         'deskripsi',
     ];
 
+    // Menonaktifkan timestamps
+    public $timestamps = false;
+
     public function surat()
     {
         return $this->hasMany(Surat::class, 'id_sifat_surat','id');
