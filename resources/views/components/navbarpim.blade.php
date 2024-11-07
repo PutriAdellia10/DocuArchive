@@ -107,7 +107,7 @@
         <i class="fa fa-user"></i>
         <div class="dropdown-menu" id="user-dropdown">
             <div class="user-info">
-                <span></span>
+                <span>Pimpinan</span>
             </div>
             <!-- Button Logout -->
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -132,36 +132,24 @@
     font-weight: bold;
 }
 
-.activity-list, .notification-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.activity-list li, .notification-list li {
+.activity-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 8px 0;
     border-bottom: 1px solid #f1f1f1;
 }
 
-        /* Chart */
-        .chart-container {
-            background: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
+.activity-list li span {
+    flex-grow: 1;
+    margin-right: 10px;
+}
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .statistics {
-                grid-template-columns: 1fr;
-            }
-            .content {
-                margin-left: 0;
-                padding: 80px 10px 20px;
-            }
-        }
+.activity-list li time {
+    color: #030303;
+    white-space: nowrap; /* Pastikan tanggal tidak terpotong */
+}
+
     </style>
 </head>
 <body>
@@ -223,20 +211,23 @@
         <h5>Recent Activities</h5>
         <ul class="activity-list">
             @forelse($recentSuratMasuk as $suratmasuk)
-                <li>
-                    Surat Masuk dari {{ $suratmasuk->instansi->nama_instansi }} pada {{ $suratmasuk->created_at->format('d-m-Y H:i') }}
-                </li>
-            @empty
-                <li>Tidak ada surat masuk terbaru</li>
-            @endforelse
+            <li>
+                <span>Surat Masuk dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
+            </li>
+        @empty
+            <li><span>Tidak ada surat masuk terbaru</span></li>
+        @endforelse
 
-            @forelse($recentSuratKeluar as $suratkeluar)
-                <li>
-                    Surat Keluar ke {{ $suratkeluar->instansi->nama_instansi }} pada {{ $suratkeluar->created_at->format('d-m-Y H:i') }}
-                </li>
-            @empty
-                <li>Tidak ada surat keluar terbaru</li>
-            @endforelse
+        @forelse($recentSuratKeluar as $suratkeluar)
+            <li>
+                <span>Surat Keluar ke {{ $suratkeluar->instansi ? $suratkeluar->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                <time>{{ $suratkeluar->created_at->format('d-m-Y H:i') }}</time>
+            </li>
+        @empty
+            <li><span>Tidak ada surat keluar terbaru</span></li>
+        @endforelse
+
         </ul>
     </div>
 

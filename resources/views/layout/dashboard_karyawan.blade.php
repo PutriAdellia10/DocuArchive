@@ -19,105 +19,6 @@
             margin: 0;
             padding: 0;
         }
-
-        .navbar-top {
-            width: 100%;
-            background: linear-gradient(90deg, #0077b6, #00b4d8);
-            padding: 10px 20px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            height: 60px;
-            border-bottom: 2px solid #005f73;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .navbar-top .logo {
-            display: flex;
-            align-items: center;
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .navbar-top .logo img {
-            width: 40px;
-            margin-right: 10px;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .people-icon {
-            position: relative;
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            color: #ffffff;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 0;
-            background: linear-gradient(180deg, #0077b6, #00b4d8);
-            border: 1px solid #005f73;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            padding: 10px;
-            width: 250px;
-            z-index: 1000;
-            color: #ffffff;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .sidebar {
-            width: 220px;
-            background: linear-gradient(180deg, #0077b6, #00b4d8);
-            padding: 70px 10px 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-top: 60px;
-            border-right: 2px solid #005f73;
-            box-shadow: 4px 0 6px rgba(0,0,0,0.1);
-            height: calc(100vh - 60px);
-            overflow-y: auto;
-        }
-
-        .sidebar a {
-            text-decoration: none;
-            color: #ffffff;
-            margin: 10px 0;
-            text-align: left;
-            width: 100%;
-            padding: 12px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-            font-weight: bold;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-        }
-        .sidebar a i {
-            margin-right: 10px;
-        }
-        .sidebar a:hover {
-            background-color: #005f73;
-            color: #ffffff;
-        }
-
         .content {
             margin-left: 240px;
             padding: 80px 20px 20px;
@@ -149,15 +50,14 @@
             align-items: center;
         }
 
-        /* Enhanced Statistic Cards */
         .statistics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
 
-        .card {
+.card {
     background-color: #ffffff;
     border-radius: 15px;
     padding: 20px;
@@ -169,24 +69,25 @@
     padding-top: 60px; /* Ruang untuk icon */
 }
 
-        .card h5 {
-            font-size: 18px;
-            color: #0077b6;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
+.card h5 {
+    font-size: 18px;
+    color: #0077b6;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
 
-        .card p {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0;
-            color: #333;
-        }
+.card p {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
 /* Icon centered on top */
 .card-icon {
     font-size: 50px;
@@ -196,6 +97,8 @@
     left: 50%;
     transform: translateX(-50%); /* Menggeser icon ke tengah */
 }
+
+
     /* Container for Recent Activities and Notifications */
 .card-container {
     display: flex;
@@ -229,36 +132,23 @@
     font-weight: bold;
 }
 
-.activity-list, .notification-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.activity-list li, .notification-list li {
+.activity-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 8px 0;
     border-bottom: 1px solid #f1f1f1;
 }
 
-        /* Chart */
-        .chart-container {
-            background: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
+.activity-list li span {
+    flex-grow: 1;
+    margin-right: 10px;
+}
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .statistics {
-                grid-template-columns: 1fr;
-            }
-            .content {
-                margin-left: 0;
-                padding: 80px 10px 20px;
-            }
-        }
+.activity-list li time {
+    color: #030303;
+    white-space: nowrap; /* Pastikan tanggal tidak terpotong */
+}
 
     </style>
 </head>
@@ -312,19 +202,22 @@
         <ul class="activity-list">
             @forelse($recentSuratMasuk as $suratmasuk)
             <li>
-                Surat Masuk dari {{ $suratmasuk->instansi->nama_instansi }} pada {{ $suratmasuk->created_at->format('d-m-Y H:i') }}
+                <span>Surat Masuk dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
             </li>
         @empty
-            <li>Tidak ada surat masuk terbaru</li>
+            <li><span>Tidak ada surat masuk terbaru</span></li>
         @endforelse
 
         @forelse($recentSuratKeluar as $suratkeluar)
             <li>
-                Surat Keluar ke {{ $suratkeluar->instansi->nama_instansi }} pada {{ $suratkeluar->created_at->format('d-m-Y H:i') }}
+                <span>Surat Keluar ke {{ $suratkeluar->instansi ? $suratkeluar->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                <time>{{ $suratkeluar->created_at->format('d-m-Y H:i') }}</time>
             </li>
         @empty
-            <li>Tidak ada surat keluar terbaru</li>
+            <li><span>Tidak ada surat keluar terbaru</span></li>
         @endforelse
+
         </ul>
     </div>
 

@@ -228,11 +228,11 @@ padding: 80px 20px 20px;
     @if(auth()->user()->peran == 'Admin')
         @include('components.sidebaradmin')
     @elseif(auth()->user()->peran == 'Sekretariat')
-        @include('components.sidebarpimdansekre')
+        @include('components.sidebarsekre')
     @elseif(auth()->user()->peran == 'Karyawan')
         @include('components.sidebarkaryawan')
     @elseif(auth()->user()->peran == 'Pimpinan')
-        @include('components.sidebarpimdansekre')
+        @include('components.sidebarpim')
     @else
         <p>Peran tidak dikenali.</p>
     @endif
@@ -261,17 +261,24 @@ padding: 80px 20px 20px;
                 </tr>
             </thead>
             <tbody>
-                @foreach ($sifatSurat as $sifat)
-                    <tr>
-                        <td>{{ $sifat->id }}</td>
-                        <td>{{ $sifat->nama_sifat }}</td>
-                        <td>{{ $sifat->deskripsi }}</td>
-                        <td class="actions">
-                            <i class="fas fa-edit" onclick="openEditModal({{ $sifat->id }}, '{{ $sifat->nama_sifat }}', '{{ $sifat->deskripsi }}')"></i>
-                            <i class="fas fa-trash" onclick="deleteInstansi({{ $sifat->id }})"></i>
-                        </td>
-                    </tr>
-                @endforeach
+                @if($sifatSurat->count() == 0)
+    <tr>
+        <td colspan="4" style="text-align: center;">Tidak ada data sifat surat.</td>
+    </tr>
+@else
+    @foreach ($sifatSurat as $sifat)
+        <tr>
+            <td>{{ $sifat->id }}</td>
+            <td>{{ $sifat->nama_sifat }}</td>
+            <td>{{ $sifat->deskripsi }}</td>
+            <td class="actions">
+                <i class="fas fa-edit" onclick="openEditModal({{ $sifat->id }}, '{{ $sifat->nama_sifat }}', '{{ $sifat->deskripsi }}')"></i>
+                <i class="fas fa-trash" onclick="deleteSifatSurat({{ $sifat->id }})"></i>
+            </td>
+        </tr>
+    @endforeach
+@endif
+
             </tbody>
         </table>
     </div>
@@ -306,6 +313,8 @@ padding: 80px 20px 20px;
     </div>
 </div>
 
+
+
 <script>
     function openModal() {
         document.getElementById("addModal").style.display = "flex";
@@ -326,11 +335,27 @@ padding: 80px 20px 20px;
         document.getElementById("editModal").style.display = "none";
     }
 
-    function deleteInstansi(id) {
-        if (confirm("Apakah Anda yakin ingin menghapus sifat surat ini?")) {
-            document.location.href = `/sifat_surat/${id}`; // Adjust according to your route
-        }
+    function deleteSifatSurat(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus sifat surat ini?")) {
+        let form = document.createElement('form');
+        form.action = `/sifat_surat/${id}`;
+        form.method = 'POST';
+        form.innerHTML = `
+            @csrf
+            @method('DELETE')
+        `;
+        document.body.appendChild(form);
+        form.submit();
     }
+}
+
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
 
     // Close modals when clicking outside of them
     window.onclick = function(event) {

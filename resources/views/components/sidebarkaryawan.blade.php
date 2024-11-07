@@ -67,6 +67,7 @@
         <a href="{{ route('surat.index') }}"><i class="bi bi-envelope-arrow-up-fill"></i> Surat Masuk</a>
         <a href="{{ route('surat.keluar.index') }}"><i class="bi bi-envelope-arrow-down-fill"></i> Surat Keluar</a>
     </div>
+    <a href="#"><i class="bi bi-file-earmark-text-fill"></i>Template Surat</a>
     <a href="#"><i class="bi bi-clipboard-data-fill"></i> Disposisi</a>
         <a href="surat_keluar.html"><i class="bi bi-database-fill"></i>Notifikasi </a>
     </div>

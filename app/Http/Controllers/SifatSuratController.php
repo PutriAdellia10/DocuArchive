@@ -8,11 +8,18 @@ use Illuminate\Http\Request;
 class SifatSuratController extends Controller
 {
     // Menampilkan daftar sifat surat
-    public function index()
+    public function index(Request $request)
     {
-        $sifatSurat = SifatSurat::paginate(10);
+        $query = SifatSurat::query();
+
+        if ($request->has('search')) {
+            $query->where('nama_sifat', 'LIKE', '%' . $request->search . '%');
+        }
+
+        $sifatSurat = $query->paginate(10);
         return view('layout.sifatsurat', compact('sifatSurat'));
     }
+
 
     // Menampilkan form untuk menambah sifat surat baru
     public function create()
@@ -42,31 +49,37 @@ class SifatSuratController extends Controller
 
     // Memperbarui sifat surat di database
     public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'nama_sifat' => 'required|string|max:50',
-            'deskripsi' => 'nullable|string',
-        ]);
+{
+    $sifatSurat = SifatSurat::findOrFail($id);
 
-        $sifatSurat = SifatSurat::findOrFail($id);
-        $sifatSurat->update($validatedData);
+    $validatedData = $request->validate([
+        'nama_sifat' => 'required|string|max:50',
+        'deskripsi' => 'nullable|string',
+    ]);
 
-        return redirect()->route('sifat_surat.index')->with('success', 'Sifat surat berhasil diperbarui.');
-    }
+    $sifatSurat->update($validatedData);
 
-    // Menghapus sifat surat dari database
-    public function destroy($id)
-    {
-        $sifatSurat = SifatSurat::findOrFail($id);
-        $sifatSurat->delete();
+    return redirect()->route('sifat_surat.index')->with('success', 'Sifat surat berhasil diperbarui.');
+}
 
-        return redirect()->route('sifat_surat.index')->with('success', 'Sifat surat berhasil dihapus.');
-    }
+public function destroy($id)
+{
+    $sifatSurat = SifatSurat::findOrFail($id);
+    $sifatSurat->delete();
+
+    return redirect()->route('sifat_surat.index')->with('success', 'Sifat surat berhasil dihapus.');
+}
 
     // Menampilkan detail sifat surat (opsional)
     public function show($id)
-    {
-        $sifatSurat = SifatSurat::findOrFail($id);
-        return view('sifat_surat.show', compact('sifatSurat'));
+{
+    $sifatSurat = SifatSurat::find($id);
+
+    if (!$sifatSurat) {
+        return redirect()->route('sifat_surat.index')->with('error', 'Sifat surat tidak ditemukan.');
     }
+
+    return view('layout.sifatsurat', compact('sifatSurat'));
+}
+
 }

@@ -140,6 +140,39 @@
     border-bottom: 1px solid #f1f1f1;
 }
 
+/* Recent Activities Styling */
+.recent-activities h5 {
+    font-size: 18px;
+    color: #0077b6;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.activity-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.activity-list li span {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.activity-list li time {
+    color: #030303;
+    white-space: nowrap; /* Pastikan tanggal tidak terpotong */
+}
+
+
         /* Chart */
         .chart-container {
             background: #ffffff;
@@ -210,19 +243,22 @@
         <ul class="activity-list">
             @forelse($recentSuratMasuk as $suratmasuk)
             <li>
-                Surat Masuk dari {{ $suratmasuk->instansi->nama_instansi }} pada {{ $suratmasuk->created_at->format('d-m-Y H:i') }}
+                <span>Surat Masuk dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
             </li>
         @empty
-            <li>Tidak ada surat masuk terbaru</li>
+            <li><span>Tidak ada surat masuk terbaru</span></li>
         @endforelse
 
         @forelse($recentSuratKeluar as $suratkeluar)
             <li>
-                Surat Keluar ke {{ $suratkeluar->instansi->nama_instansi }} pada {{ $suratkeluar->created_at->format('d-m-Y H:i') }}
+                <span>Surat Keluar ke {{ $suratkeluar->instansi ? $suratkeluar->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                <time>{{ $suratkeluar->created_at->format('d-m-Y H:i') }}</time>
             </li>
         @empty
-            <li>Tidak ada surat keluar terbaru</li>
+            <li><span>Tidak ada surat keluar terbaru</span></li>
         @endforelse
+
         </ul>
     </div>
 

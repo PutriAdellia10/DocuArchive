@@ -67,6 +67,7 @@
         <a href="{{ route('surat.index') }}"><i class="bi bi-envelope-arrow-up-fill"></i> Surat Masuk</a>
         <a href="{{ route('surat.keluar.index') }}"><i class="bi bi-envelope-arrow-down-fill"></i> Surat Keluar</a>
     </div>
+    <a href="#"><i class="bi bi-file-earmark-text-fill"></i>Template Surat</a>
     <a href="#"><i class="bi bi-clipboard-data-fill"></i> Disposisi</a>
     <a href="#" id="toggle-laporan">
         <i class="fas fa-chart-line"></i> Laporan
@@ -75,6 +76,9 @@
     <div class="submenu" id="submenu-laporan">
         <a href="{{ route('laporan.masuk') }}"><i class="bi bi-inbox"></i> Laporan Masuk</a>
         <a href="{{ route('laporan.keluar') }}"><i class="bi bi-send"></i> Laporan Keluar</a>
+    </div>
+    <div class="submenu" id="submenu-pengaturan">
+        <a href="{{ route('notifikasi.index')}}"><i class="bi bi-bell-fill"></i> Notifikasi</a>
     </div>
 </div>
 <script>

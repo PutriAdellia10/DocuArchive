@@ -86,6 +86,7 @@
         <a href="{{ route('instansi.index') }}"><i class="bi bi-buildings-fill"></i> Instansi</a>
         <a href="{{ route('profilperusahaan.index') }}"><i class="bi bi-house-gear-fill"></i> Profil Perusahaan</a>
     </div>
+    <a href="#"><i class="bi bi-file-earmark-text-fill"></i>Template Surat</a>
     <a href="#" id="toggle-pengaturan">
         <i class="fas fa-cog"></i> Pengaturan
         <span class="arrow" id="arrow-pengaturan">&#9654;</span>
@@ -95,6 +96,7 @@
         <a href="{{ route('notifikasi.index')}}"><i class="bi bi-bell-fill"></i> Notifikasi</a>
     </div>
 </div>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const toggles = [

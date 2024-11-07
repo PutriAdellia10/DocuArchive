@@ -121,12 +121,12 @@ Route::get('/laporan-masuk', [LaporanController::class, 'laporanMasuk'])->name('
 Route::get('/laporan-keluar', [LaporanController::class, 'laporanKeluar'])->name('laporan.keluar');
 
 
-
 Route::get('instansi', [InstansiController::class, 'index'])->name('instansi.index');
 Route::post('instansi', [InstansiController::class, 'store'])->name('instansi.store');
 Route::get('instansi/{id}', [InstansiController::class, 'show'])->name('instansi.show');
 Route::put('/instansi/{id}', [InstansiController::class, 'update'])->name('instansi.update');
 Route::delete('instansi/{id}', [InstansiController::class, 'destroy'])->name('instansi.destroy');
+Route::get('/cariInstansi', [InstansiController::class, 'cariInstansi'])->name('instansi.cari');
 
 
 // Menampilkan daftar sifat surat

@@ -239,158 +239,200 @@ padding: 80px 20px 20px;
 @else
     <p>Anda belum login. Silakan login untuk melanjutkan.</p>
 @endif
-    <div class="content">
-        <div class="header">
-            <h2></i> Instansi</h2>
-            <button class="add-button" onclick="openModal()">Tambah Instansi</button>
+<div class="content">
+    <div class="header">
+        <h2>Instansi</h2>
+        <button class="add-button" onclick="openModal()">Tambah Instansi</button>
+    </div>
+    <div class="table-container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Cari Instansi">
         </div>
-        <div class="table-container">
-            <div class="search-container">
-                <form action="{{ route('instansi.index') }}" method="GET">
-                    <input type="text" name="search" placeholder="Cari Instansi..." value="{{ request('search') }}">
-                </form>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nama Instansi</th>
-                        <th>Kontak</th>
-                        <th>Jenis Kerja Sama</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($instansi as $i)
-                    <tr>
-                        <td>{{ $i->id }}</td>
-                        <td>{{ $i->nama_instansi }}</td>
-                        <td>{{ $i->kontak }}</td>
-                        <td>{{ $i->jenis_kerja_sama }}</td>
-                        <td class="actions">
-                            <i class="fas fa-edit" onclick="openEditModal({{ json_encode($i) }})"></i>
-                            <i class="fas fa-trash" onclick="deleteInstansi({{ $i->id }})"></i>
-                        </td>
-                    </tr>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama Instansi</th>
+                    <th>Kontak</th>
+                    <th>Jenis Kerja Sama</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($instansi as $item)
+                <tr>
+                    <td>{{ $item->id }}</td> <!-- Akses id dari setiap instansi -->
+                    <td>{{ $item->nama_instansi }}</td>
+                    <td>{{ $item->kontak }}</td>
+                    <td>{{ $item->jenis_kerja_sama }}</td>
+                    <td class="actions">
+                        <i class="fas fa-edit" onclick="openEditModal({{ json_encode($item) }})"></i>
+                        <i class="fas fa-trash" onclick="deleteInstansi({{ $item->id }})"></i>
+                    </td>
+                </tr>
                 @endforeach
-                </tbody>
-            </table>
-            <div class="pagination">
-                @if ($instansi->onFirstPage())
-                    <span class="pagination-button disabled">&laquo; Prev</span>
-                @else
-                    <a href="{{ $instansi->previousPageUrl() }}" class="pagination-button">&laquo; Prev</a>
-                @endif
+            </tbody>
+        </table>
 
-                @if ($instansi->hasMorePages())
-                    <a href="{{ $instansi->nextPageUrl() }}" class="pagination-button">Next &raquo;</a>
-                @else
-                    <span class="pagination-button disabled">Next &raquo;</span>
-                @endif
-            </div>
+        <!-- Paginasi -->
+        {{ $instansi->links() }} <!-- Ini untuk menampilkan tautan paginasi -->
+
+        <div class="pagination">
+            @if ($instansi->onFirstPage())
+                <span class="pagination-button disabled">&laquo; Prev</span>
+            @else
+                <a href="{{ $instansi->previousPageUrl() }}" class="pagination-button">&laquo; Prev</a>
+            @endif
+
+            @if ($instansi->hasMorePages())
+                <a href="{{ $instansi->nextPageUrl() }}" class="pagination-button">Next &raquo;</a>
+            @else
+                <span class="pagination-button disabled">Next &raquo;</span>
+            @endif
         </div>
-    </div>
-    <!-- Modal for Tambah Instansi -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Tambah Instansi</h2>
-            <form id="instansiForm" action="{{ route('instansi.store') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id" id="id">
-                <label for="nama_instansi">Nama Instansi:</label>
-                <input type="text" id="nama_instansi" name="nama_instansi" required>
-                <label for="kontak">Kontak:</label>
-                <input type="text" id="kontak" name="kontak" required>
-                <label for="jenis_kerja_sama">Jenis Kerja Sama:</label>
-                <input type="text" id="jenis_kerja_sama" name="jenis_kerja_sama" required>
-                <button type="submit" id="submitButton">Simpan</button>
-            </form>
-        </div>
-    </div>
- <!-- Modal for Edit Instansi -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle">Edit Instansi</h2>
-        <form id="editInstansiForm" action="{{ route('instansi.update', ['id' => $i->id ?? '']) }}" method="POST">
-            @csrf
-            @method('PUT') <!-- Menggunakan PUT untuk update -->
-            <input type="hidden" id="id" name="id" value="{{ $instansi->id ?? '' }}">
-
-            <label for="nama_instansi">Nama Instansi:</label>
-            <input type="text" id="nama_instansi" name="nama_instansi" value="{{ $instansi->nama_instansi ?? '' }}" required>
-
-            <label for="kontak">Kontak:</label>
-            <input type="text" id="kontak" name="kontak" value="{{ $instansi->kontak ?? '' }}" required>
-
-            <label for="jenis_kerja_sama">Jenis Kerja Sama:</label>
-            <input type="text" id="jenis_kerja_sama" name="jenis_kerja_sama" value="{{ $instansi->jenis_kerja_sama ?? '' }}" required>
-
-            <button type="submit">Simpan Perubahan</button>
-        </form>
-
     </div>
 </div>
 
-    <script>
-        function toggleDropdown() {
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            dropdownMenu.classList.toggle('show');
-        }
+<!-- Modal untuk Tambah  -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Tambah Instansi</h2>
+        <form id="instansiForm" action="{{ route('instansi.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="id" id="id">
+            <label for="nama_instansi">Nama Instansi:</label>
+            <input type="text" id="nama_instansi" name="nama_instansi" required>
+            <label for="kontak">Kontak:</label>
+            <input type="text" id="kontak" name="kontak" required>
+            <label for="jenis_kerja_sama">Jenis Kerja Sama:</label>
+            <input type="text" id="jenis_kerja_sama" name="jenis_kerja_sama" required>
+            <button type="submit" id="submitButton">Simpan</button>
+        </form>
+    </div>
+</div>
 
-        function openModal() {
-            document.getElementById("modal").style.display = "flex";
-        }
+<!-- Modal untuk Edit Instansi -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Edit Instansi</h2>
+        <form id="editInstansiForm" action="" method="POST">
+            @csrf
+            @method('PUT') <!-- Menggunakan PUT untuk update -->
+            <input type="hidden" id="editId" name="id" value="">
 
-        function closeModal() {
-            document.getElementById("modal").style.display = "none";
-            document.getElementById("instansiForm").reset(); // Reset form fields
-        }
+            <label for="edit_nama_instansi">Nama Instansi:</label>
+            <input type="text" id="edit_nama_instansi" name="nama_instansi" required>
 
-        function openEditModal(instansi) {
-    console.log(instansi); // Periksa apakah data instansi benar
+            <label for="edit_kontak">Kontak:</label>
+            <input type="text" id="edit_kontak" name="kontak" required>
+
+            <label for="edit_jenis_kerja_sama">Jenis Kerja Sama:</label>
+            <input type="text" id="edit_jenis_kerja_sama" name="jenis_kerja_sama" required>
+
+            <button type="submit">Simpan Perubahan</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById("modal").style.display = "flex";
+        document.getElementById("modalTitle").innerText = "Tambah Instansi";
+        document.getElementById("instansiForm").reset(); // Reset form untuk tambah
+        document.getElementById("id").value = ""; // Kosongkan ID
+        document.getElementById("instansiForm").action = "{{ route('instansi.store') }}"; // Set aksi untuk tambah
+    }
+
+    function closeModal() {
+        document.getElementById("modal").style.display = "none";
+        document.getElementById("instansiForm").reset(); // Reset form fields
+    }
+
+    function openEditModal(instansi) {
     document.getElementById("modalTitle").innerText = "Edit Instansi";
-    document.getElementById("id").value = instansi.id;
-    document.getElementById("nama_instansi").value = instansi.nama_instansi;
-    document.getElementById("kontak").value = instansi.kontak;
-    document.getElementById("jenis_kerja_sama").value = instansi.jenis_kerja_sama;
-    document.getElementById("modal").style.display = "flex"; // Tampilkan modal
+    document.getElementById("editId").value = instansi.id;
+    document.getElementById("edit_nama_instansi").value = instansi.nama_instansi;
+    document.getElementById("edit_kontak").value = instansi.kontak;
+    document.getElementById("edit_jenis_kerja_sama").value = instansi.jenis_kerja_sama;
+
+    // Set action form ke rute update yang benar berdasarkan ID instansi
+    document.getElementById("editInstansiForm").action = `{{ url('instansi') }}/${instansi.id}`;
+
+    document.getElementById("editModal").style.display = "flex"; // Tampilkan modal
 }
-        function closeEditModal() {
-            document.getElementById("modal").style.display = "none";
-            document.getElementById("instansiForm").reset(); // Reset form fields
-        }
 
-        function deleteInstansi(id) {
-            if (confirm("Apakah Anda yakin ingin menghapus instansi ini?")) {
-                // Call your delete route here
-                fetch(`/instansi/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Reload the page or update the UI
-                        location.reload();
-                    } else {
-                        alert("Gagal menghapus instansi.");
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
-        }
 
-        // Close the modal when clicking outside of it
-        window.onclick = function(event) {
-            const modal = document.getElementById("modal");
-            if (event.target === modal) {
-                closeModal();
+
+function deleteInstansi(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus instansi ini?")) {
+        fetch(`/instansi/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}', // Token CSRF untuk keamanan
+                'Content-Type': 'application/json'
             }
-        };
-    </script>
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload(); // Reload halaman setelah penghapusan
+            } else {
+                alert("Gagal menghapus instansi.");
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        const modal = document.getElementById("modal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+    const keyword = this.value;
+
+    // Lakukan permintaan AJAX hanya jika ada kata kunci
+    if (keyword.length > 0) {
+        fetch(`/cariInstansi?keyword=${keyword}`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Bersihkan isi tabel terlebih dahulu
+            const tableBody = document.querySelector('.table-container tbody');
+            tableBody.innerHTML = '';
+
+            // Perbarui tabel dengan hasil pencarian
+            data.forEach(instansi => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${instansi.id}</td>
+                    <td>${instansi.nama_instansi}</td>
+                    <td>${instansi.kontak}</td>
+                    <td>${instansi.jenis_kerja_sama}</td>
+                    <td class="actions">
+                        <i class="fas fa-edit" onclick="openEditModal(${JSON.stringify(instansi)})"></i>
+                        <i class="fas fa-trash" onclick="deleteInstansi(${instansi.id})"></i>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        // Jika tidak ada kata kunci, tampilkan semua data (opsional)
+        location.reload(); // Memuat ulang untuk menampilkan semua data
+    }
+});
+
+</script>
 </body>
 </html>

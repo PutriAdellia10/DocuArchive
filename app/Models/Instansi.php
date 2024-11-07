@@ -38,4 +38,3 @@ class Instansi extends Model
     }
 
 }
-
