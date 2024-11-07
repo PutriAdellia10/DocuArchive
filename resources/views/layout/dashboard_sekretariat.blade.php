@@ -250,15 +250,6 @@
             <li><span>Tidak ada surat masuk terbaru</span></li>
         @endforelse
 
-        @forelse($recentSuratKeluar as $suratkeluar)
-            <li>
-                <span>Surat Keluar ke {{ $suratkeluar->instansi ? $suratkeluar->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
-                <time>{{ $suratkeluar->created_at->format('d-m-Y H:i') }}</time>
-            </li>
-        @empty
-            <li><span>Tidak ada surat keluar terbaru</span></li>
-        @endforelse
-
         </ul>
     </div>
 

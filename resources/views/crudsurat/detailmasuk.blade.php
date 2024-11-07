@@ -59,15 +59,98 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                <h4>Dokumen Elektronik</h4>
+                <h4>Edit Data Surat Masuk</h4>
             </div>
             <div class="card-body">
-                <div class="mt-3">
-<iframe src="{{ asset('storage/dokumen_masuk/' . basename($surat->dokumen)) }}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
-                </div>
-            </div>
-            <div class="card-footer text-end">
-                <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('surat.index') }}'">Tutup</button>
+                <form action="{{ route('surat.update', $surat->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="data-surat-tab" data-bs-toggle="tab" data-bs-target="#data-surat" type="button" role="tab" aria-controls="data-surat" aria-selected="true">Data Surat</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="dokumen-elektronik-tab" data-bs-toggle="tab" data-bs-target="#dokumen-elektronik" type="button" role="tab" aria-controls="dokumen-elektronik" aria-selected="false">Dokumen Elektronik</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="data-surat" role="tabpanel" aria-labelledby="data-surat-tab">
+                            <div class="mt-3">
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Nomor Agenda:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="no_agenda" value="{{ $surat->no_agenda }}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Tanggal Masuk:</label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" name="tanggal" value="{{ $surat->tanggal }}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Pengirim</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="pengirim" value="{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Asal Surat:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="instansi" value="{{ $surat->instansi ? $surat->instansi->nama_instansi : '' }}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Nomor Surat:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="no_surat" value="{{ $surat->no_surat }}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Tanggal Surat:</label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" name="tanggal_surat" value="{{ $surat->tanggal_surat }}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Perihal:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="perihal" value="{{ $surat->perihal }}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Keterangan:</label>
+                                    <div class="col-sm-9">
+                                        <textarea class="form-control" name="konten">{{ $surat->konten }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="dokumen-elektronik" role="tabpanel" aria-labelledby="dokumen-elektronik-tab">
+                            <div class="mt-3">
+                                @if($surat->dokumen)
+                                    @if(strpos($surat->dokumen, 'dokumen_masuk') !== false)
+                                        <iframe src="{{ asset('storage/dokumen_masuk/' . basename($surat->dokumen)) }}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+                                    @elseif(strpos($surat->dokumen, 'dokumen_keluar') !== false)
+                                        <iframe src="{{ asset('storage/dokumen_keluar/' . basename($surat->dokumen)) }}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+                                    @else
+                                        <p>Dokumen tidak ditemukan di folder yang diharapkan.</p>
+                                    @endif
+                                @else
+                                    <p>Dokumen tidak tersedia.</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer text-end">
+                        <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('surat.index') }}'">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

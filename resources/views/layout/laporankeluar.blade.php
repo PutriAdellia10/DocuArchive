@@ -183,9 +183,18 @@
     </style>
 </head>
    <body>
-    @include('components.navbar')
 
     @if(auth()->check())
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.navbar')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.navbarsekre')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.navbarpim')
+    @else
+        <p>Peran tidak dikenali.</p>
+    @endif
+
     @if(auth()->user()->peran == 'Admin')
         @include('components.sidebaradmin')
     @elseif(auth()->user()->peran == 'Sekretariat')
@@ -203,7 +212,7 @@
 
     <div class="container">
         <div class="header">
-            <h2><i class="bi bi-file-earmark-text"></i>Laporan Surat Masuk</h2>
+            <h2><i class="bi bi-file-earmark-text"></i>Laporan Surat Keluar</h2>
         </div>
             <div class="content">
                 <form method="GET" action="{{ route('laporan.keluar') }}" id="filterForm">
@@ -230,27 +239,37 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>No Agenda</th>
-                                    <th>Tanggal</th>
-                                    <th>Asal Surat</th>
-                                    <th>No Surat</th>
+                                    <th>No</th>
+                                    <th>Nomor Agenda</th>
+                                    <th>Tanggal Keluar</th>
+                                    <th>Tujuan Surat</th>
+                                    <th>Nomor Surat</th>
                                     <th>Tanggal Surat</th>
                                     <th>Perihal</th>
-                                    <th>Keterangan</th>
                                     <th>Sifat Surat</th>
+                                    <th>Status Disposisi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($surats as $surat)
-                                    <tr>
-                                        <td>{{ $surat->no_agenda }}</td>
-                                        <td>{{ $surat->tanggal }}</td>
-                                        <td>{{ $surat->instansi->nama_instansi }}</td>
-                                        <td>{{ $surat->no_surat }}</td>
-                                        <td>{{ $surat->tanggal_surat }}</td>
-                                        <td>{{ $surat->perihal }}</td>
-                                        <td>{{ $surat->konten }}</td>
-                                        <td>{{ $surat->sifatSurat->nama_sifat }}</td>
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $surat->no_agenda }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($surat->tanggal)->format('d-m-Y') }}</td>
+                                    <td>
+                                        @if ($surat->tujuan_pengguna_id)
+                                            {{ $surat->tujuanPengguna->jabatan ?? '--' }}
+                                        @elseif ($surat->tujuan_instansi_id)
+                                            {{ $surat->tujuanInstansi->nama_instansi ?? '--' }}
+                                        @else
+                                            --
+                                        @endif
+                                    </td>
+                                    <td>{{ $surat->no_surat }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($surat->tanggal_surat)->format('d-m-Y') }}</td>
+                                    <td>{{ $surat->perihal }}</td>
+                                    <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
+                                    <td>{{ $surat->status_disposisi }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

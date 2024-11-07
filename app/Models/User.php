@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -15,7 +14,9 @@ class User extends Authenticatable
 
     protected $fillable = [
         'nama_pengguna',
-        'nama_lengkap',
+        'nama_lengkap', // Make sure this field is added in your database
+        'email', // Add the email field
+        'jabatan', // Add the jabatan field
         'kata_sandi',
         'peran',
     ];
@@ -26,4 +27,11 @@ class User extends Authenticatable
 
     const CREATED_AT = 'dibuat_pada';
     const UPDATED_AT = 'diperbarui_pada';
+
+    public function surats()
+    {
+        return $this->hasMany(Surat::class, 'pengirim_id');
+    }
+
 }
+

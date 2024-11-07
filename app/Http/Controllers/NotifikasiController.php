@@ -16,7 +16,7 @@ class NotifikasiController extends Controller
                           ->orderBy('dibuat_pada', 'desc')
                           ->get();
 
-         return view('notifikasi.index', compact('notifikasi'));
+         return view('layout.notifikasi', compact('notifikasi'));
      }
 
      // Tandai notifikasi sebagai sudah dibaca
