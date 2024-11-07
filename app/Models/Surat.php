@@ -29,6 +29,12 @@ class Surat extends Model
         'id_asal_surat',
         'dokumen',
         'status',
+        'pengirim_id',
+        'pengirim_eksternal',
+        'tujuan_pengguna_id',
+        'tujuan_instansi_id',
+        'status_pengiriman',
+        'status_disposisi',
     ];
 
     protected $dates = [
@@ -39,7 +45,7 @@ class Surat extends Model
     // Relasi dengan model lain
     public function instansi()
     {
-        return $this->belongsTo(Instansi::class, 'id_asal_surat');
+        return $this->belongsTo(Instansi::class, 'id_asal_surat'); // Sesuaikan dengan nama kolom yang sesuai
     }
 
     public function sifatSurat()
@@ -54,6 +60,24 @@ class Surat extends Model
     {
         return $this->hasMany(Laporan::class, 'surat_id');
     }
+
+    public function pengirim()
+    {
+        return $this->belongsTo(User::class, 'pengirim_id');
+    }
+
+    public function tujuanPengguna()
+    {
+        return $this->belongsTo(User::class, 'tujuan_pengguna_id');
+    }
+    public function tujuanInstansi()
+    {
+        return $this->belongsTo(Instansi::class, 'tujuan_instansi_id');
+    }
+    public function disposisi()
+    {
+        return $this->hasMany(Disposisi::class, 'surat_id');
+    }
     // Accessor untuk status
     public function getStatusAttribute($value)
     {
@@ -65,9 +89,5 @@ class Surat extends Model
     {
         $this->attributes['status'] = strtolower($value);
     }
-    public function disposisi()
-{
-    return $this->hasMany(Disposisi::class);
-}
 
 }

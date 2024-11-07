@@ -67,7 +67,6 @@
         <a href="{{ route('surat.index') }}"><i class="bi bi-envelope-arrow-up-fill"></i> Surat Masuk</a>
         <a href="{{ route('surat.keluar.index') }}"><i class="bi bi-envelope-arrow-down-fill"></i> Surat Keluar</a>
     </div>
-    <a href="#"><i class="bi bi-clipboard-data-fill"></i> Disposisi</a>
     <a href="#" id="toggle-laporan">
         <i class="fas fa-chart-line"></i> Laporan
         <span class="arrow" id="arrow-laporan">&#9654;</span>

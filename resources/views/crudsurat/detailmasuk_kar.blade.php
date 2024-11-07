@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Data Surat Keluar</title>
+    <title>Detail Data Surat Masuk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -59,7 +59,7 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                <h4>Edit Data Surat Keluar</h4>
+                <h4>Detail Data Surat Masuk</h4>
             </div>
             <div class="card-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -103,43 +103,41 @@
                                     <p class="form-control-plaintext">{{ $surat->tanggal_surat }}</p>
                                 </div>
                             </div>
-
-                            <!-- Form Edit Perihal -->
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Perihal:</label>
                                 <div class="col-sm-9">
-                                    <form action="{{ route('surat.update', $surat->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="text" class="form-control" name="perihal" value="{{ $surat->perihal }}" required>
-                                        <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Simpan Perubahan</button>
-                                    </form>
+                                    <p class="form-control-plaintext">{{ $surat->perihal }}</p>
                                 </div>
                             </div>
-
-                            <!-- Form Edit Keterangan -->
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Keterangan:</label>
                                 <div class="col-sm-9">
-                                    <form action="{{ route('surat.update', $surat->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <textarea class="form-control" name="konten" rows="4" required>{{ $surat->konten }}</textarea>
-                                        <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Simpan Perubahan</button>
-                                    </form>
+                                    <p class="form-control-plaintext">{{ $surat->konten }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer text-end">
-                        <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('surat.keluar.index') }}'">Tutup</button>
-                    </div>
                     <div class="tab-pane fade" id="dokumen-elektronik" role="tabpanel" aria-labelledby="dokumen-elektronik-tab">
                         <div class="mt-3">
-                            <iframe src="{{ asset('storage/dokumen_keluar/' . basename($surat->dokumen)) }}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+                            @if($surat->dokumen)
+                                @if(strpos($surat->dokumen, 'dokumen_masuk') !== false)
+                                    <!-- Menampilkan Dokumen Masuk -->
+                                    <iframe src="{{ asset('storage/dokumen_masuk/' . basename($surat->dokumen)) }}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+                                @elseif(strpos($surat->dokumen, 'dokumen_keluar') !== false)
+                                    <!-- Menampilkan Dokumen Keluar -->
+                                    <iframe src="{{ asset('storage/dokumen_keluar/' . basename($surat->dokumen)) }}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+                                @else
+                                    <p>Dokumen tidak ditemukan di folder yang diharapkan.</p>
+                                @endif
+                            @else
+                                <p>Dokumen tidak tersedia.</p>
+                            @endif
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer text-end">
+                <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('surat.index') }}'">Tutup</button>
             </div>
         </div>
     </div>

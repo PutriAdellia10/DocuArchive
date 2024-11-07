@@ -76,7 +76,6 @@
         <a href="{{ route('laporan.keluar') }}"><i class="bi bi-send"></i> Laporan Keluar</a>
         <a href="{{ route('rekapitulasi.index') }}"><i class="bi bi-save"></i> Rekapitulasi</a>
     </div>
-    <a href="#"><i class="bi bi-clipboard-data-fill"></i> Disposisi</a>
     <a href="#" id="toggle-master">
         <i class="fas fa-file-invoice"></i> Master Data
         <span class="arrow" id="arrow-master">&#9654;</span>

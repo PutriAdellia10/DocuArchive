@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DisposisiController;
+
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SekretariatController;
 use App\Http\Controllers\PimpinanController;
@@ -15,6 +15,7 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\RekapitulasiSuratController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SifatSuratController;
+use App\Http\Controllers\DisposisiController;
 
 use App\Http\Controllers\ProfilPerusahaanController;
 
@@ -95,18 +96,21 @@ Route::get('/surat-masuk/{id}', [SuratController::class, 'show'])->name('surat.s
 Route::get('/surat-keluar', [SuratController::class, 'indexKeluar'])->name('surat.keluar.index');
 Route::get('/surat-keluar/create', [SuratController::class, 'keluarcreate'])->name('surat.keluar.create');
 Route::post('/surat-keluar', [SuratController::class, 'keluarstore'])->name('surat.keluar.store');
-Route::get('/surat-keluar/{id}/edit', [SuratController::class, 'keluaredit'])->name('surat.keluar.edit');
-Route::put('/surat-keluar/{id}', [SuratController::class, 'keluarupdate'])->name('surat.keluar.update');
+Route::get('/surat/keluar/{id}/edit', [SuratController::class, 'keluaredit'])->name('surat.keluar.edit');
+Route::put('/surat/keluar/{id}', [SuratController::class, 'keluarupdate'])->name('surat.keluar.update');
 Route::delete('/surat-keluar/{id}', [SuratController::class, 'keluardestroy'])->name('surat.keluar.destroy');
 Route::get('/surat-keluar/{id}', [SuratController::class, 'keluarshow'])->name('surat.keluar.show');
+Route::post('/surat/{id}/kirim-ke-sekretariat', [SuratController::class, 'kirimKeSekretariat'])->name('surat.kirimKeSekretariat');
+Route::post('/surat/{id}/keputusan', [SuratController::class, 'keputusanDisposisi'])->name('surat.keputusan');
 
-Route::get('/disposisi', [DisposisiController::class, 'index'])->name('disposisi.index');
-Route::get('/disposisi/create', [DisposisiController::class, 'create'])->name('disposisi.create');
-Route::post('/disposisi', [DisposisiController::class, 'store'])->name('disposisi.store');
-Route::get('/disposisi/{id}', [DisposisiController::class, 'show'])->name('disposisi.show');
-Route::delete('/disposisi/{id}', [DisposisiController::class, 'destroy'])->name('disposisi.destroy');
-Route::post('/disposisi/kirim', [DisposisiController::class, 'kirim'])->name('disposisi.kirim');
-
+Route::get('disposisi', [DisposisiController::class, 'index'])->name('disposisi.index');
+Route::post('disposisi/{id}', [DisposisiController::class, 'store'])->name('disposisi.store');
+Route::get('disposisi/{id}', [DisposisiController::class, 'show'])->name('disposisi.show');
+Route::get('disposisi/{id}/edit', [DisposisiController::class, 'edit'])->name('disposisi.edit');
+Route::put('disposisi/{id}', [DisposisiController::class, 'update'])->name('disposisi.update');
+Route::delete('disposisi/{id}', [DisposisiController::class, 'destroy'])->name('disposisi.destroy');
+Route::post('disposisi/submit/{id}', [DisposisiController::class, 'submitDisposition'])->name('disposisi.submit');
+Route::post('disposisi/tindak-lanjut/{id}', [DisposisiController::class, 'tindakLanjut'])->name('disposisi.tindakLanjut');
 
 Route::get('/profilperusahaan', [ProfilPerusahaanController::class, 'index'])->name('profilperusahaan.index');
 Route::put('/profilperusahaan', [ProfilPerusahaanController::class, 'update'])->name('profilperusahaan.update');
@@ -150,3 +154,4 @@ Route::middleware('auth')->group(function () {
     // Route untuk membuat notifikasi baru
     Route::post('/notifikasi/create', [NotifikasiController::class, 'create'])->name('notifikasi.create');
 });
+

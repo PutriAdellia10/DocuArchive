@@ -230,14 +230,6 @@
         @empty
             <li>Tidak ada surat masuk terbaru</li>
         @endforelse
-
-        @forelse($recentSuratKeluar as $suratkeluar)
-            <li>
-                Surat Keluar ke {{ $suratkeluar->instansi->nama_instansi }} pada {{ $suratkeluar->created_at->format('d-m-Y H:i') }}
-            </li>
-        @empty
-            <li>Tidak ada surat keluar terbaru</li>
-        @endforelse
         </ul>
     </div>
 
