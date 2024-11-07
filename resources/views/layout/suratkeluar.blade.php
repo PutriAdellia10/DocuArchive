@@ -357,6 +357,145 @@
         .cancel-button:hover {
             background-color: #d62839; /* Darker Red Hover */
         }
+            .request-button {
+        background-color: #00b4d8; /* Biru Cerah */
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        display: inline-block;
+        width: 150px;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        margin-left: 5px; /* Jarak antar tombol lebih kecil */
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .request-button:hover {
+        background-color: #0077b6; /* Biru Lebih Gelap saat hover */
+        transform: scale(1.05); /* Sedikit memperbesar saat hover */
+    }
+    table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        /* Button styles */
+        .generate-button {
+            background-color: #0077b6; /* Dark Blue Button */
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            width: 150px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .generate-button:hover {
+            background-color: #005f73; /* Darker Blue Hover */
+            transform: scale(1.05); /* Slightly Enlarge on Hover */
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Ensure it's above other elements */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #0077b6;
+            text-align: center;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .modal-content select,
+        .modal-content input[type="text"],
+        .modal-content textarea,
+        .modal-content input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: #f4d35e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .modal-content button:hover {
+            background-color: #e09c36;
+        }
+
+        /* Prevent body scrolling when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
+        button, select {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #5fa8d3;
+            border: none;
+            color: white;
+            border-radius: 5px;
+        }
+
     </style>
 </head>
 <body>
@@ -408,6 +547,7 @@
         <div class="header">
             <h2>Data Surat Keluar</h2>
             <button class="add-button" onclick="openModal()">Tambah Surat Keluar</button>
+            <button class="add-recipe-btn"> <a href="{{ route('generete') }}">Request</a></button>
         </div>
         <div class="card-body">
             <div class="table-controls">
@@ -606,8 +746,36 @@
             row.style.display = found ? '' : 'none';
         });
     });
+    function generateTemplate(id) {
+                // Open the modal
+                document.getElementById('formModal').style.display = 'flex';
+                document.body.classList.add('modal-open'); // Disable body scroll
+
+                // Optionally, fetch template details using the template ID
+                fetch(`/api/get_template/${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('template_surat').innerHTML = `
+                            <option value="${data.id}" selected>${data.nama_template}</option>
+                        `;
+                    })
+                    .catch(error => console.error('Error fetching template:', error));
+            }
+
+            // Function to close modal
+            function closeFormModal() {
+                document.getElementById('formModal').style.display = 'none';
+                document.body.classList.remove('modal-open'); // Enable body scroll again
+            }
+
+            // Close modal when clicking outside the modal content
+            window.onclick = function(event) {
+                var modal = document.getElementById('formModal');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    document.body.classList.remove('modal-open'); // Enable body scroll again
+                }
+            }
 </script>
-
-
 </body>
 </html>

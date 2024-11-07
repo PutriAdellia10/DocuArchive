@@ -147,7 +147,7 @@ Route::delete('instansi/{id}', [InstansiController::class, 'destroy'])->name('in
 
 // Route::get('/templatesurat', function () {
 //     return view('layout.templatesurat');
-// });
+// })->name('template_surat');
 // use App\Http\Controllers\TemplateSuratController;
 
 // Route::resource('template_surat', TemplateSuratController::class);
@@ -156,10 +156,53 @@ use App\Http\Controllers\TemplateSuratController;
 Route::get('template_surat', [TemplateSuratController::class, 'index'])->name('template_surat.index');
 Route::post('/template_surat', [TemplateSuratController::class, 'store'])->name('template_surat.store');
 Route::put('template_surat/{id}', [TemplateSuratController::class, 'update']);
+Route::put('template_surat/{id}', [TemplateSuratController::class, 'create'])->name('surat.create');
 Route::delete('template_surat/{id}', [TemplateSuratController::class, 'destroy']);
+Route::post('/generate_template', [TemplateController::class, 'submit_surat']);
+Route::post('/submit_surat', [TemplateSuratController::class, 'store'])->name('submit.surat');
+Route::post('/template_surat/generate', [TemplateSuratController::class, 'generate'])->name('template_surat.generate');
+Route::post('/submit_surat', [TemplateSuratControllerController::class, 'create']);
+
+
+
 
 Route::get('/generete', function () {
-    return view('layout.generete');
-});
+    return view('template_surat.generete');
+})->name('generete');
 
-Route::get('/generate/{id}', [YourController::class, 'generate'])->name('generate');
+Route::get('/permohonan_cuti', function () {
+    return view('template_surat.permohonan_cuti');
+})->name('permohonan_cuti');
+
+Route::get('/perjanjian_karyawan', function () {
+    return view('template_surat.perjanjian_karyawan');
+})->name('perjanjian_karyawan');
+
+Route::get('/surat_undurdiri', function () {
+    return view('template_surat.surat_undurdiri');
+})->name('surat_undurdiri');
+
+Route::get('/surat_undangan', function () {
+    return view('template_surat.surat_undangan');
+})->name('surat_undangan');
+
+Route::get('/tanda_tangan', function () {
+    return view('template_surat.tanda_tangan');
+})->name('tanda_tangan');
+
+Route::get('/surat_SP', function () {
+    return view('template_surat.surat_SP');
+})->name('surat_SP');
+
+Route::get('/surat_pemberitahuan', function () {
+    return view('template_surat.surat_pemberitahuan');
+})->name('surat_pemberitahuan');
+
+Route::get('/surat_permohonan_kerjasama', function () {
+    return view('template_surat.surat_permohonan_kerjasama');
+})->name('surat_permohonan_kerjasama');
+
+Route::get('/surat_mutasi', function () {
+    return view('template_surat.surat_mutasi');
+})->name('surat_mutasi');
+// Route::get('/generate/{id}', [YourController::class, 'generate'])->name('generate');
