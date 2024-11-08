@@ -339,7 +339,7 @@
                                    </a>
 
                                    <!-- Button Lihat Detail -->
-                                   <form action="{{ route('surat.show', $surat->id) }}" method="GET" class="view-form">
+                                   <form action="{{ route('surat.keluar.show', $surat->id) }}" method="GET" class="view-form">
                                        @csrf
                                        <button type="submit" class="btn btn-outline-primary btn-sm d-flex align-items-center" title="Lihat Detail Surat">
                                            <i class="fas fa-eye me-2"></i> Lihat

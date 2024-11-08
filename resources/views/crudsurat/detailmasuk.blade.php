@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Data Surat Masuk</title>
+    <title>Data Surat Masuk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -59,7 +59,7 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                <h4>Edit Data Surat Masuk</h4>
+                <h4>{{ auth()->user()->peran === 'Pimpinan' ? 'Detail Data Surat Masuk' : 'Edit Data Surat Masuk' }}</h4>
             </div>
             <div class="card-body">
                 <form action="{{ route('surat.update', $surat->id) }}" method="POST">
@@ -81,49 +81,81 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Nomor Agenda:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="no_agenda" value="{{ $surat->no_agenda }}">
+                                        @if(auth()->user()->peran === 'Pimpinan')
+                                            <p class="form-control-plaintext">{{ $surat->no_agenda }}</p>
+                                        @else
+                                            <input type="text" class="form-control" name="no_agenda" value="{{ $surat->no_agenda }}">
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Tanggal Masuk:</label>
                                     <div class="col-sm-9">
-                                        <input type="date" class="form-control" name="tanggal" value="{{ $surat->tanggal }}">
+                                        @if(auth()->user()->peran === 'Pimpinan')
+                                            <p class="form-control-plaintext">{{ $surat->tanggal }}</p>
+                                        @else
+                                            <input type="date" class="form-control" name="tanggal" value="{{ $surat->tanggal }}">
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Pengirim</label>
                                     <div class="col-sm-9">
+                                        @if(auth()->user()->peran === 'Pimpinan')
+                                        <p class="form-control-plaintext">{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}</p>
+                                        @else
                                         <input type="text" class="form-control" name="pengirim" value="{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}">
+                                    @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Asal Surat:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="instansi" value="{{ $surat->instansi ? $surat->instansi->nama_instansi : '' }}">
+                                        @if(auth()->user()->peran === 'Pimpinan')
+                                        <p class="form-control-plaintext">{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</p>
+                                        @else
+                                        <input type="text" class="form-control" name="instansi" value="{{$surat->instansi ? $surat->instansi->nama_instansi : '--'  }}">
+                                    @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Nomor Surat:</label>
                                     <div class="col-sm-9">
+                                        @if(auth()->user()->peran === 'Pimpinan')
+                                        <p class="form-control-plaintext">{{ $surat->no_surat }}</p>
+                                        @else
                                         <input type="text" class="form-control" name="no_surat" value="{{ $surat->no_surat }}">
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label">Tanggal Surat:</label>
+                                    <label class="col-sm-3 col-form-label">Tanggal Masuk:</label>
                                     <div class="col-sm-9">
-                                        <input type="date" class="form-control" name="tanggal_surat" value="{{ $surat->tanggal_surat }}">
+                                        @if(auth()->user()->peran === 'Pimpinan')
+                                            <p class="form-control-plaintext">{{ $surat->tanggal_surat }}</p>
+                                        @else
+                                            <input type="date" class="form-control" name="tanggal" value="{{ $surat->tanggal_surat }}">
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Perihal:</label>
                                     <div class="col-sm-9">
+                                        @if(auth()->user()->peran === 'Pimpinan')
+                                        <p class="form-control-plaintext">{{$surat->perihal  }}</p>
+                                        @else
                                         <input type="text" class="form-control" name="perihal" value="{{ $surat->perihal }}">
+                                    @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Keterangan:</label>
                                     <div class="col-sm-9">
+                                        @if(auth()->user()->peran === 'Pimpinan')
+                                        <p class="form-control-plaintext">{{$surat->konten  }}</p>
+                                        @else
                                         <textarea class="form-control" name="konten">{{ $surat->konten }}</textarea>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -147,8 +179,10 @@
                     </div>
 
                     <div class="card-footer text-end">
-                        <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('surat.index') }}'">Tutup</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" onclick="history.back()">Tutup</button>
+                        @if(auth()->user()->peran !== 'Pimpinan')
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        @endif
                     </div>
                 </form>
             </div>
