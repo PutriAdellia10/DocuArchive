@@ -214,12 +214,6 @@ class SuratController extends Controller
             // Jika Sekretariat, tampilkan surat
             return view('crudsurat.detailmasuk', compact('surat'));
         } elseif ($user->peran == 'Pimpinan') {
-            $suratId = session()->get('surat_dibaca', []);
-
-            if (!in_array($surat->id, $suratId)) {
-                // Simpan surat yang dibaca dalam session
-                session()->push('surat_dibaca', $surat->id);  // Menambahkan ID surat yang dibaca ke session
-            }
             return view('crudsurat.detailmasuk', compact('surat'));
         } elseif ($user->peran == 'Karyawan') {
             // Jika Karyawan, tampilkan hanya status surat dan instruksi
@@ -423,8 +417,31 @@ class SuratController extends Controller
 
     public function keluarshow($id)
     {
+        // Ambil data surat berdasarkan ID
         $surat = Surat::findOrFail($id);
-        return view('crudsurat.detailkeluar', compact('surat'));
+        $user = Auth::user();
+
+        // Memastikan peran pengguna ada
+        if (!$user) {
+            return abort(403, 'Pengguna tidak teridentifikasi.');
+        }
+
+        // Menyaring akses berdasarkan peran
+        if ($user->peran == 'Admin') {
+            // Jika Admin, tampilkan semua informasi surat
+            return view('crudsurat.detailkeluar', compact('surat'));
+        } elseif ($user->peran == 'Sekretariat') {
+            // Jika Sekretariat, tampilkan surat
+            return view('crudsurat.detailkeluar', compact('surat'));
+        } elseif ($user->peran == 'Pimpinan') {
+            return view('crudsurat.detailKeluar', compact('surat'));
+        } elseif ($user->peran == 'Karyawan') {
+            // Jika Karyawan, tampilkan hanya status surat dan instruksi
+            return view('crudsurat.detailmasuk_kar', compact('surat'));
+        } else {
+            // Jika peran tidak teridentifikasi, arahkan ke halaman lain atau tampilkan error
+            return abort(403);
+        }
     }
     public function kirimKeSekretariat($id)
 {

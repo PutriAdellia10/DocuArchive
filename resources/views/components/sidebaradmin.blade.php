@@ -72,9 +72,7 @@
         <a href="{{ route('surat.index') }}"><i class="bi bi-envelope-arrow-up-fill"></i> Surat Masuk</a>
         <a href="{{ route('surat.keluar.index') }}"><i class="bi bi-envelope-arrow-down-fill"></i> Surat Keluar</a>
     </div>
-
     <a href="{{ route('generete') }}"><i class="bi bi-card-text"></i>Format Surat</a>
-
     <button id="toggle-master">
         <i class="fas fa-file-invoice"></i> Master Data
         <span class="arrow" id="arrow-master">&#9654;</span>
