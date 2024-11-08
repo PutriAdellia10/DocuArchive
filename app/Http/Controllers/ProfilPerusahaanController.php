@@ -12,7 +12,7 @@ class ProfilPerusahaanController extends Controller
     public function index()
     {
         // Ambil data dari model Perusahaan
-        $perusahaan = Perusahaan::first();
+        $perusahaan = Perusahaan::first() ?? new Perusahaan();
 
         // Kirim data ke view layout.profilperusahaan
         return view('layout.profilperusahaan', compact('perusahaan'));
@@ -20,39 +20,39 @@ class ProfilPerusahaanController extends Controller
 
     // Metode update untuk menyimpan perubahan profil perusahaan
     public function update(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
-            'telepon' => 'required|string|max:20',
-            'email' => 'required|email|max:255',
-            'logo' => 'nullable|image|max:2048', // Logo opsional
-        ]);
+{
+    // Validasi input
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'alamat' => 'required|string|max:255',
+        'telepon' => 'required|string|max:20',
+        'email' => 'required|email|max:255',
+        'logo' => 'nullable|image|max:2048', // Logo opsional
+    ]);
 
-        // Ambil data perusahaan dari database, atau buat baru jika belum ada
-        $perusahaan = Perusahaan::first();
-        if (!$perusahaan) {
-            $perusahaan = new Perusahaan();
-        }
+    // Ambil data perusahaan dari database
+    $perusahaan = Perusahaan::where('nama', $request->nama)->first();
 
-        // Perbarui data perusahaan dengan input baru
-        $perusahaan->nama = $request->nama;
-        $perusahaan->alamat = $request->alamat;
-        $perusahaan->kontak = $request->telepon;
-        $perusahaan->email = $request->email;
-
-        // Cek apakah ada file logo yang diunggah
-        if ($request->hasFile('logo')) {
-            // Simpan file logo dan update path di database
-            $path = $request->file('logo')->store('img', 'public');
-            $perusahaan->logo = $path;
-        }
-
-        // Simpan perubahan ke database
-        $perusahaan->save();
-
-        // Redirect ke halaman profil perusahaan dengan pesan sukses
-        return redirect()->route('profilperusahaan.index')->with('success', 'Profil perusahaan berhasil diperbarui.');
+    if (!$perusahaan) {
+        // Jika data perusahaan tidak ada, buat baru
+        $perusahaan = new Perusahaan();
     }
+
+    // Update data perusahaan
+    $perusahaan->nama = $request->nama;
+    $perusahaan->alamat = $request->alamat;
+    $perusahaan->telepon = $request->telepon;
+    $perusahaan->email = $request->email;
+
+    // Jika ada logo, simpan file logo
+    if ($request->hasFile('logo')) {
+        $perusahaan->logo = $request->file('logo')->store('img', 'public');
+    }
+
+    // Simpan perubahan ke database
+    $perusahaan->save();
+
+    // Redirect dengan pesan sukses
+    return redirect()->route('profilperusahaan.index')->with('success', 'Profil perusahaan berhasil diperbarui.');
+}
 }

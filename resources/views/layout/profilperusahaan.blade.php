@@ -29,16 +29,18 @@
         .card-header {
             background-color: #a0d3d1;
             color: #333;
-            font-size: 18px;
+            font-size: 20px; /* Slightly larger font size for better readability */
+            font-weight: bold;
         }
 
         .table th, .table td {
             border: none;
-            padding: 10px;
+            padding: 12px; /* Increase padding for better spacing */
+            vertical-align: middle; /* Align text to the middle of cells */
         }
 
         .table th {
-            width: 150px;
+            width: 180px; /* Adjust width for better alignment */
         }
 
         .btn-primary {
@@ -72,9 +74,24 @@
             margin-top: 20px;  /* Add top margin for space from the navbar */
         }
 
+        .center-card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh; /* Ensures the card is vertically centered */
+        }
+
+        .card {
+            max-width: 900px; /* Increase the maximum width of the card */
+            width: 100%; /* Make the card responsive */
+        }
+
         @media (max-width: 768px) {
             .content-wrapper {
                 margin-left: 0;
+            }
+            .card {
+                max-width: 100%; /* Make the card full width on smaller screens */
             }
         }
     </style>
@@ -100,66 +117,68 @@
 
     <!-- Main Content -->
     <div class="content-wrapper">
-        <div class="col-md-9">
-            <div class="card mt-4">
-                <div class="card-header">
-                    <i class="bi bi-house-door"></i> Profil Perusahaan
-                </div>
-                <div class="card-body">
-                    <!-- Success and Error Messages -->
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+        <div class="center-card">
+            <div class="col-md-9">
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="bi bi-house-door"></i> Profil Perusahaan
+                    </div>
+                    <div class="card-body">
+                        <!-- Success and Error Messages -->
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
-                    <!-- Company Profile Details -->
-                    @if ($perusahaan)
-                        <table class="table">
-                            <tr>
-                                <th>Nama Perusahaan</th>
-                                <td>{{ $perusahaan->nama }}</td>
-                            </tr>
-                            <tr>
-                                <th>Alamat</th>
-                                <td>{{ $perusahaan->alamat }}</td>
-                            </tr>
-                            <tr>
-                                <th>Telepon</th>
-                                <td>{{ $perusahaan->kontak }}</td>
-                            </tr>
-                            <tr>
-                                <th>Email</th>
-                                <td>{{ $perusahaan->email ?? 'Tidak tersedia' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Logo</th>
-                                <td>
-                                    @if($perusahaan->logo)
-                                        <img src="{{ asset('img/logo.jpg') }}" alt="Logo" style="width: 100px;">
-                                    @else
-                                        Tidak tersedia
-                                    @endif
-                                </td>
-                            </tr>
-                        </table>
-                        <!-- Edit Profile Button -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfilModal">
-                            Ubah
-                        </button>
-                    @else
-                        <p>Data perusahaan tidak tersedia.</p>
-                    @endif
+                        <!-- Company Profile Details -->
+                        @if ($perusahaan)
+                            <table class="table">
+                                <tr>
+                                    <th>Nama Perusahaan</th>
+                                    <td>{{ $perusahaan->nama }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Alamat</th>
+                                    <td>{{ $perusahaan->alamat }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Telepon</th>
+                                    <td>{{ $perusahaan->telepon }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{{ $perusahaan->email ?? 'Tidak tersedia' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Logo</th>
+                                    <td>
+                                        @if($perusahaan->logo)
+                                            <img src="{{ asset('img/logo.jpg') }}" alt="Logo" style="width: 100px;">
+                                        @else
+                                            Tidak tersedia
+                                        @endif
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Edit Profile Button -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfilModal">
+                                Ubah
+                            </button>
+                        @else
+                            <p>Data perusahaan tidak tersedia.</p>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -187,7 +206,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="telepon" class="form-label">Telepon</label>
-                            <input type="text" class="form-control" id="telepon" name="telepon" value="{{ $perusahaan->kontak }}">
+                            <input type="text" class="form-control" id="telepon" name="telepon" value="{{ $perusahaan->telepon }}">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
