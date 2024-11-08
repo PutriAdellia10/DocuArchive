@@ -73,49 +73,53 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="data-surat" role="tabpanel" aria-labelledby="data-surat-tab">
                         <div class="mt-3">
+                            <form action="{{ route('surat.update', $surat->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Nomor Agenda:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->no_agenda }}</p>
+                                    <input type="text" name="no_agenda" class="form-control" value="{{ $surat->no_agenda }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Tanggal Keluar:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->tanggal }}</p>
+                                    <input type="text" name="tanggal" class="form-control" value="{{ $surat->tanggal }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Asal Surat:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</p>
+                                    <input type="text" name="nama_instansi" class="form-control" value="{{ $surat->instansi ? $surat->instansi->nama_instansi : '' }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Nomor Surat:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->no_surat }}</p>
+                                    <input type="text" name="no_surat" class="form-control" value="{{ $surat->no_surat }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Tanggal Surat:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->tanggal_surat }}</p>
+                                    <input type="text" name="tanggal_surat" class="form-control" value="{{ $surat->tanggal_surat }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Perihal:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->perihal }}</p>
+                                    <input type="text" name="perihal" class="form-control" value="{{ $surat->perihal }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 col-form-label">Keterangan:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->konten }}</p>
+                                    <input type="text" name="konten" class="form-control" value="{{ $surat->konten }}">
                                 </div>
                             </div>
                         </div>
+                    </form>
                     </div>
                     <div class="tab-pane fade" id="dokumen-elektronik" role="tabpanel" aria-labelledby="dokumen-elektronik-tab">
                         <div class="mt-3">
