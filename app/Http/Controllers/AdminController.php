@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Surat;
-use App\Models\Instansi;
+use App\Models\Disposisi;
 use App\Models\Notifikasi;
+use App\Models\Instansi;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -34,19 +36,33 @@ class AdminController extends Controller
         ->whereYear('tanggal_surat', date('Y')) // Menghitung surat per tahun ini
         ->count(); // Menghitung total surat secara langsung
 
+        // Total Surat Masuk dengan disposisi 'Selesai'
+        $totalSuratMasukSelesai = Surat::where('status', 'Masuk')
+        ->where('status_disposisi', 'Selesai')
+        ->count();
+
+        // Total Surat Keluar dengan disposisi 'Selesai' yang tidak dibuat oleh Karyawan
+        $totalSuratKeluarSelesai = Surat::where('status', 'Keluar')
+        ->where('status_disposisi', 'Selesai')
+        ->count();
+
+        // Total Disposisi Aktif (status 'Masuk' atau 'Keluar' dan disposisi 'Belum Diproses' atau 'Diproses')
+        $totalDisposisiAktif = Surat::whereIn('status', ['Masuk', 'Keluar'])
+        ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses'])
+        ->count();
         // Contoh pengambilan data untuk dashboard admin, bisa diubah sesuai kebutuhan
         $data = [
             'title' => 'Dashboard Admin',
-            'pengguna' => \App\Models\User::all(),
-            'totalSuratMasuk' => Surat::where('status', 'Masuk')->count(),
-            'totalSuratKeluar' => Surat::where('status', 'Keluar')->count(),
+            'pengguna' => User::all(),
             'totalInstansi' => Instansi::count(),
             'instansiList' => Instansi::all(),
             'recentSuratMasuk' => $recentSuratMasuk,
             'recentSuratKeluar' => $recentSuratKeluar,
-            'notifikasi' => $notifikasi, // Tambahkan notifikasi di
-            'totalsuratpertahun'=> $totalSuratPerTahun,
-
+            'notifikasi' => $notifikasi,
+            'totalSuratMasukSelesai' => $totalSuratMasukSelesai,
+            'totalSuratKeluarSelesai' => $totalSuratKeluarSelesai,
+            'totalDisposisiAktif' => $totalDisposisiAktif,
+            'totalSuratPerTahun' => $totalSuratPerTahun,
         ];
 
         // Return ke view dashboard_admin dengan data yang diambil

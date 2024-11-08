@@ -19,49 +19,40 @@ class SuratController extends Controller
     public function indexMasuk()
     {
         $user = Auth::user();
-
-        // Ambil semua instansi dan sifat surat sekali saja
         $instansi = Instansi::all();
         $sifatSurat = SifatSurat::all();
-        // Ambil surat berdasarkan peran pengguna
-        if ($user->peran == 'Karyawan') {
-            $suratMasuk = Surat::where('status', 'Masuk')->get();
-            $suratMasuk = Surat::whereIn('status_disposisi', [ 'Diproses','Selesai'])->get();
-            return view('surat.masuk_kar', compact('suratMasuk', 'instansi', 'sifatSurat')); // View untuk Karyawan
-        } elseif ($user->peran == 'Pimpinan') {
-            // Ambil surat yang status disposisinya "Diproses"
-            // Untuk surat masuk
-            $suratMasuk = Surat::where('status_disposisi', 'Diproses','Selesai')
-                ->where('status', 'Masuk')
-                ->get();
-           // Ambil surat keluar yang tidak dibuat oleh Sekretaris dan status disposisinya "Diproses"
-           $suratKeluar = Surat::where('status', 'Keluar')
-           ->where('status_disposisi', 'Diproses')
-           ->whereDoesntHave('pengirim', function($query) {
-               $query->where('peran', 'Sekretariat');
-           })
-           ->get();
-            $suratMasuk = $suratMasuk->merge($suratKeluar);
-            return view('surat.masuk', compact('suratMasuk', 'instansi', 'sifatSurat')); // View untuk Pimpinan
-        } elseif ($user->peran == 'Sekretariat') {
-            $suratMasuk = Surat::where('status', 'Masuk')
+
+        // Base query for incoming and outgoing letters based on user role
+        $suratMasuk = Surat::where('status', 'Masuk')
+            ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses', 'Selesai']);
+        $suratKeluar = Surat::where('status', 'Keluar')
             ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses', 'Selesai'])
-            ->get();
-            // Ambil surat dengan status 'Keluar' yang bukan dibuat oleh pengguna dengan peran 'Sekretaris'
-            $suratKeluar = Surat::where('status', 'Keluar')
-           ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
-           ->whereDoesntHave('pengirim', function($query) {
-               $query->where('peran', 'Sekretariat');
-           })
-           ->get();
-            $suratMasuk = $suratMasuk->merge($suratKeluar);
-            return view('surat.masuk', compact('suratMasuk', 'instansi', 'sifatSurat')); // View untuk Sekretariat
-        } elseif ($user->peran == 'Admin') {
-            $suratMasuk = Surat::where('status', 'Masuk')->get();// Admin melihat semua surat masuk
-            return view('layout.suratmasuk', compact('suratMasuk', 'instansi', 'sifatSurat')); // View untuk Admin
-        } else {
-            return abort(403); // Akses ditolak jika peran tidak dikenali
+            ->whereDoesntHave('pengirim', function ($query) {
+                $query->where('peran', 'Sekretariat');
+            });
+
+        // Customize query and view based on user role
+        switch ($user->peran) {
+            case 'Karyawan':
+                $suratMasuk = Surat::where('status', 'Masuk')
+                    ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
+                    ->get();
+                return view('surat.masuk_kar', compact('suratMasuk', 'instansi', 'sifatSurat'));
+
+            case 'Pimpinan':
+                $suratMasuk = $suratMasuk->where('status_disposisi', 'Diproses')->get()->merge($suratKeluar->get());
+                break;
+
+            case 'Sekretariat':
+            case 'Admin':
+                $suratMasuk = $suratMasuk->get()->merge($suratKeluar->get());
+                break;
+
+            default:
+                return abort(403); // Access denied if role is unrecognized
         }
+
+        return view('surat.masuk', compact('suratMasuk', 'instansi', 'sifatSurat'));
     }
 
     public function create()
@@ -279,8 +270,18 @@ class SuratController extends Controller
                 ->get();
             return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat','pengguna')); // View untuk Sekretariat
         } elseif ($user->peran == 'Admin') {
-            $suratKeluar = Surat::all(); // Admin melihat semua surat keluar
-            return view('surat.keluar_admin', compact('suratKeluar', 'instansi', 'sifatSurat')); // View untuk Admin
+            $suratKeluar = Surat::where('status', 'Keluar')
+            ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
+            ->get();
+            $suratKeluar = Surat::where('status', 'Keluar')
+                ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
+                ->whereNotIn('pengirim_id', function($query) {
+                    $query->select('id')
+                        ->from('pengguna')
+                        ->where('peran', 'Karyawan');
+                })
+                ->get();
+            return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat','pengguna')); // View untuk Admin
         } else {
             return abort(403); // Akses ditolak jika peran tidak dikenali
         }
