@@ -11,8 +11,10 @@ class Perusahaan extends Model
 
     // Nama tabel yang digunakan oleh model ini
     protected $table = 'perusahaan';
+    public $primaryKey = null;
 
     // Kolom yang boleh diisi (Mass Assignment)
+    public $timestamps = false;
     protected $fillable = [
         'nama',
         'alamat',
