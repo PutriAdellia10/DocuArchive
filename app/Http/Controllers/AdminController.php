@@ -44,6 +44,9 @@ class AdminController extends Controller
         // Total Surat Keluar dengan disposisi 'Selesai' yang tidak dibuat oleh Karyawan
         $totalSuratKeluarSelesai = Surat::where('status', 'Keluar')
         ->where('status_disposisi', 'Selesai')
+        ->whereDoesntHave('pengirim', function($query) {
+            $query->where('peran', 'Karyawan');
+        })
         ->count();
 
         // Total Disposisi Aktif (status 'Masuk' atau 'Keluar' dan disposisi 'Belum Diproses' atau 'Diproses')

@@ -303,7 +303,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($suratMasuk as $surat)
+                    @foreach($suratGabungan as $surat)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $surat->no_agenda }}</td>

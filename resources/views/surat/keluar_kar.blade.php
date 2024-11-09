@@ -335,7 +335,7 @@
                             <form action="{{ route('surat.kirimKeSekretariat', $surat->id) }}" method="POST" class="send-form ms-2">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-success d-flex align-items-center btn-sm" title="Kirim ke Sekretariat">
-                                    <i class="fas fa-paper-plane me-2"></i> Kirim ke Sekretariat
+                                    <i class="fas fa-paper-plane me-2"></i> Kirim
                                 </button>
                             </form>
                         @else
@@ -362,14 +362,9 @@
         <form id="modalForm" action="{{ route('surat.keluar.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label for="no_agenda">No Agenda *</label>
-                <input type="text" id="no_agenda" name="no_agenda" required>
+                <label for="tanggal">Tanggal Keluar *</label>
+                <input type="date" id="tanggal" name="tanggal" required value="{{ old('tanggal', now()->toDateString()) }}">
             </div>
-            <div class="form-group">
-                <label for="tanggal">Tanggal Masuk *</label>
-                <input type="date" id="tanggal" name="tanggal" required>
-            </div>
-
             <div class="form-group">
                 <label for="no_surat">No Surat *</label>
                 <input type="text" id="no_surat" name="no_surat" required>
