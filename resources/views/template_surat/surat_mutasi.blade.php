@@ -168,6 +168,9 @@
     </style>
 </head>
 <body>
+    <a href="{{ route('generete') }}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 
     <div class="container">
         <div class="section">
@@ -245,12 +248,13 @@
             <p class="indented">Kami ucapkan terima kasih atas kerjasama dan kontribusi yang telah diberikan pada posisi sebelumnya, dan kami berharap Saudara/i dapat terus memberikan yang terbaik di posisi yang baru.</p>
             <br><p>Demikian surat mutasi ini kami sampaikan. Atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
             <p class="signature">Hormat Kami,<br><br>
-                <div id="signature-right" style="text-align: right;"> <!-- Wrap both elements in this div -->
-                    <div id="preview-signature"></div> <!-- Placeholder for signature image -->
-                <span id="preview-signatureName">Manager HRD</span><br>
-                Jabatan: <span id="preview-signatureJabatan">Manager HRD</span>
-            </div>
-        </div>
+                <div id="signature-right" style="text-align: right;">
+                    <div id="preview-signature"></div> <!-- Tempat pratinjau tanda tangan -->
+                    <span id="preview-atasan">Budi Santoso</span><br>
+                    Jabatan: <span id="preview-jabatanAtasan">HRD Manager</span>
+                </div>
+            </p>
+
     </div>
 
     <script>
@@ -260,39 +264,44 @@
         }
         let signatureImgSrc = ""; // Store the signature image data URL here
 
-function previewSignature() {
-    const file = document.getElementById('signatureInput').files[0];
-    const reader = new FileReader();
+        function previewSignature() {
+        const file = document.getElementById('signatureInput').files[0];
+        const reader = new FileReader();
 
-    reader.onloadend = function () {
-        signatureImgSrc = reader.result; // Set the signature image data URL
-        document.getElementById('signature-preview-img').src = reader.result; // Update the image preview container
-        updatePreview(); // Call updatePreview to reflect the image in the letter preview
-    };
+        reader.onloadend = function () {
+            signatureImgSrc = reader.result; // Set the signature image data URL
+            const img = document.getElementById('signature-preview-img');
+            img.src = reader.result; // Set the image source to the loaded data URL
+            img.onload = () => updatePreview(); // Ensure the image is loaded before calling updatePreview
+        };
 
-    if (file) {
-        reader.readAsDataURL(file);
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            signatureImgSrc = ""; // Clear image if no file is selected
+            updatePreview();
+        }
+    }
+    function updatePreview() {
+    document.getElementById('preview-nomor').textContent = document.getElementById('nomor').value;
+    document.getElementById('preview-lampiran').textContent = document.getElementById('lampiran').value;
+    document.getElementById('preview-pegawai').textContent = document.getElementById('pegawai').value;
+    document.getElementById('preview-jabatanSaatIni').textContent = document.getElementById('jabatanSaatIni').value;
+    document.getElementById('preview-jabatanBaru').textContent = document.getElementById('jabatanBaru').value;
+    document.getElementById('preview-departemen').textContent = document.getElementById('departemen').value;
+    document.getElementById('preview-tanggalMutasi').textContent = document.getElementById('tanggalMutasi').value;
+    document.getElementById('preview-alasan').textContent = document.getElementById('alasan').value;
+    document.getElementById('preview-atasan').textContent = document.getElementById('atasan').value;
+    document.getElementById('preview-jabatanAtasan').textContent = document.getElementById('jabatanAtasan').value;
+
+    const signaturePreviewElement = document.getElementById('preview-signature');
+    if (signatureImgSrc) {
+        signaturePreviewElement.innerHTML = `<img src="${signatureImgSrc}" alt="Signature" style="max-height: 50px;" />`;
     } else {
-        signatureImgSrc = ""; // Clear image if no file is selected
-        updatePreview();
+        signaturePreviewElement.innerHTML = ""; // Hapus jika tidak ada tanda tangan
     }
 }
-function updatePreview() {
-            document.getElementById('preview-nomor').textContent = document.getElementById('nomor').value;
-            document.getElementById('preview-lampiran').textContent = document.getElementById('lampiran').value;
-            document.getElementById('preview-pegawai').textContent = document.getElementById('pegawai').value;
-            document.getElementById('preview-jabatanSaatIni').textContent = document.getElementById('jabatanSaatIni').value;
-            document.getElementById('preview-jabatanBaru').textContent = document.getElementById('jabatanBaru').value;
-            document.getElementById('preview-departemen').textContent = document.getElementById('departemen').value;
-            document.getElementById('preview-tanggalMutasi').textContent = document.getElementById('tanggalMutasi').value;
-            document.getElementById('preview-alasan').textContent = document.getElementById('alasan').value;
-            document.getElementById('preview-atasan').textContent = document.getElementById('atasan').value;
-            document.getElementById('preview-jabatanAtasan').textContent = document.getElementById('jabatanAtasan').value;
-            const signaturePreviewElement = document.getElementById('preview-signature');
-            if (signatureImgSrc) {
-                signaturePreviewElement.innerHTML = `<img src="${signatureImgSrc}" alt="Signature" />`;
-            }
-        }
+
 
 
         function downloadPDF() {
@@ -334,7 +343,7 @@ function updatePreview() {
         pdf.addImage(imgData, 'PNG', marginLeft, marginTop, imgWidth, imgHeight);
 
         // Save PDF file
-        pdf.save("Surat_Peringatan.pdf");
+        pdf.save("Surat_Mutasi.pdf");
     });
 }
     </script>
