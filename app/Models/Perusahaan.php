@@ -7,9 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Perusahaan extends Model
 {
-    protected $table = 'profil_perusahaan'; // Pastikan tabel ini ada di database
+    use HasFactory;
 
-    protected $fillable = ['visi', 'misi', 'alamat', 'kontak', 'dibuat_pada', 'diperbarui_pada'];
+    // Nama tabel yang digunakan oleh model ini
+    protected $table = 'perusahaan';
+    public $primaryKey = null;
 
-    public $timestamps = false; // Nonaktifkan jika tidak ada kolom created_at dan updated_at
+    // Kolom yang boleh diisi (Mass Assignment)
+    public $timestamps = false;
+    protected $fillable = [
+        'nama',
+        'alamat',
+        'kontak',
+        'email',
+        'logo',
+    ];
+
+    // Kolom yang tidak boleh diubah secara mass-assignment
+    protected $guarded = [];
+
+    // Jika perlu, Anda dapat mendefinisikan relasi atau metode lain
 }

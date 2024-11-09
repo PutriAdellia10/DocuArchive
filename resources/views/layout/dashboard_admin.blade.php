@@ -179,17 +179,17 @@
 <div class="statistics">
     <div class="card">
         <h5>Total Surat Masuk</h5>
-        <p>{{ $totalSuratMasuk }}</p>
+        <p>{{ $totalSuratMasukSelesai }}</p>
         <i class="fas fa-envelope card-icon"></i>
     </div>
     <div class="card">
         <h5>Total Surat Keluar</h5>
-        <p>{{ $totalSuratKeluar }}</p>
+        <p>{{ $totalSuratKeluarSelesai }}</p>
         <i class="fas fa-paper-plane card-icon"></i>
     </div>
     <div class="card">
         <h5>Total Surat</h5>
-        <p>{{$totalsuratpertahun}}</p>
+        <p>{{$totalSuratPerTahun}}</p>
         <i class="fas fa-calendar-alt card-icon"></i>
     </div>
     <div class="card">

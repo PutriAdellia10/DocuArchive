@@ -206,32 +206,32 @@
             </div>
         </div>
 
-       <!-- Statistics Cards -->
-<div class="statistics">
-    <div class="card">
-        <h5>Total Surat Masuk</h5>
-        <p>{{ $totalSuratMasuk }}</p>
-        <i class="fas fa-envelope card-icon"></i>
-    </div>
-    <div class="card">
-        <h5>Total Surat Keluar</h5>
-        <p>{{ $totalSuratKeluar }}</p>
-        <i class="fas fa-paper-plane card-icon"></i>
-    </div>
+           <!-- Statistics Cards -->
+           <div class="statistics">
+            <div class="card">
+                <h5>Total Surat Masuk</h5>
+                <p>{{ $totalSuratMasukSelesai }}</p>
+                <i class="fas fa-envelope card-icon"></i>
+            </div>
+            <div class="card">
+                <h5>Total Surat Keluar</h5>
+                <p>{{ $totalSuratKeluarSelesai}}</p>
+                <i class="fas fa-paper-plane card-icon"></i>
+            </div>
+            <div class="card">
+                <h5>Total Disposisi Aktif</h5>
+                <p>{{ $totalDisposisiAktif}}</p>
+                <i class="bi bi-file-earmark-check-fill card-icon"></i>
+            </div>
     <div class="card">
         <h5>Total Surat</h5>
-        <p>{{$totalsuratpertahun}}</p>
+        <p>{{$totalSuratPerTahun}}</p>
         <i class="fas fa-calendar-alt card-icon"></i>
     </div>
     <div class="card">
         <h5>Total Instansi</h5>
         <p>{{ $totalInstansi }}</p>
         <i class="fas fa-building card-icon"></i>
-    </div>
-    <div class="card">
-        <h5>Total Disposisi Aktif</h5>
-        <p>10</p>
-        <i class="bi bi-file-earmark-check-fill card-icon"></i>
     </div>
 </div>
 
