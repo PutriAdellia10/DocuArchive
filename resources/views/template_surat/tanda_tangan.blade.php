@@ -74,6 +74,10 @@
     </style>
 </head>
 <body>
+    <a href="{{ route('generete') }}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
+
     <h1>Gambar Tanda Tangan</h1>
     <canvas id="signatureCanvas"></canvas>
     <div id="controls">
