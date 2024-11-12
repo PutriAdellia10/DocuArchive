@@ -172,6 +172,9 @@
     </style>
 </head>
 <body>
+    <a href="{{ route('generete') }}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 
     <div class="container">
         <div class="section">

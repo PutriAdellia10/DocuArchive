@@ -16,45 +16,63 @@ class SuratController extends Controller
 {
     // Surat Masuk Methods
 
-    public function indexMasuk()
+     public function indexMasuk()
     {
         $user = Auth::user();
-        $instansi = Instansi::all();
-        $sifatSurat = SifatSurat::all();
-
-        // Base query for incoming and outgoing letters based on user role
-        $suratMasuk = Surat::where('status', 'Masuk')
-            ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses', 'Selesai']);
-        $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses', 'Selesai'])
-            ->whereDoesntHave('pengirim', function ($query) {
-                $query->where('peran', 'Sekretariat');
-            });
-
-        // Customize query and view based on user role
-        switch ($user->peran) {
-            case 'Karyawan':
-                $suratMasuk = Surat::where('status', 'Masuk')
-                    ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
-                    ->get();
-                return view('surat.masuk_kar', compact('suratMasuk', 'instansi', 'sifatSurat'));
-
-            case 'Pimpinan':
-                $suratMasuk = $suratMasuk->where('status_disposisi', 'Diproses')->get()->merge($suratKeluar->get());
-                break;
-
-            case 'Sekretariat':
-            case 'Admin':
-                $suratMasuk = $suratMasuk->get()->merge($suratKeluar->get());
-                break;
-
-            default:
-                return abort(403); // Access denied if role is unrecognized
+        $instansi = Instansi::all(); // Ambil semua instansi
+        $sifatSurat = SifatSurat::all(); // Ambil semua sifat surat
+        $pengguna = User::all();
+        // Cek peran pengguna dan ambil surat keluar yang sesuai
+        if ($user->peran == 'Karyawan') {
+            $suratMasuk = Surat::where('status', 'Masuk')
+            ->get();
+            $suratKeluar = Surat::where('status', 'Keluar')
+            ->whereHas('pengirim', function ($query) {
+                $query->where('peran', 'Karyawan');
+            })
+            ->get();
+            $suratGabungan = $suratMasuk->merge($suratKeluar);
+        return view('surat.masuk_kar', compact('suratGabungan', 'instansi', 'sifatSurat', 'pengguna'));
+        } elseif ($user->peran == 'Pimpinan') {
+            $suratMasuk = Surat::where('status', 'Masuk')
+            ->whereIn('status_disposisi', ['Diproses','Selesai'])
+            ->get();
+            $suratKeluar = Surat::where('status', 'Keluar')
+                ->whereIn('status_disposisi', [ 'Diproses','Selesai'])
+                ->whereNotIn('pengirim_id', function($query) {
+                    $query->select('id')
+                        ->from('pengguna')
+                        ->where('peran', 'Sekretariat');
+                })
+                ->get();
+                $suratGabungan = $suratMasuk->merge($suratKeluar);
+            return view('surat.masuk', compact('suratGabungan', 'instansi', 'sifatSurat','pengguna'));
+        } elseif ($user->peran == 'Sekretariat') {
+            $suratMasuk = Surat::where('status', 'Masuk')
+            ->get();
+            $suratKeluar = Surat::where('status', 'Keluar')
+                ->whereDoesntHave('pengirim', function($query) {
+                    $query->where('peran', 'Sekretariat');
+                })
+                ->get();
+                $suratGabungan = $suratMasuk->merge($suratKeluar);
+            return view('surat.masuk', compact('suratGabungan','instansi', 'sifatSurat','pengguna')); // View untuk Sekretariat
+        } elseif ($user->peran == 'Admin') {
+            $suratMasuk = Surat::where('status', 'Masuk')
+            ->get();
+            $suratKeluar = Surat::where('status', 'Keluar')
+                ->whereNotIn('pengirim_id', function($query) {
+                    $query->select('id')
+                        ->from('pengguna')
+                        ->where('peran', 'Sekretariat');
+                })
+                ->get();
+                $suratGabungan = $suratMasuk->merge($suratKeluar);
+            return view('surat.masuk', compact('suratGabungan','instansi', 'sifatSurat','pengguna')); // View untuk Admin
+        } else {
+            return abort(403); // Akses ditolak jika peran tidak dikenali
         }
-
-        return view('surat.masuk', compact('suratMasuk', 'instansi', 'sifatSurat'));
     }
-
     public function create()
     {
         $instansi = Instansi::all();
@@ -76,7 +94,6 @@ class SuratController extends Controller
     {
         // Validasi input
         $request->validate([
-            'no_agenda' => 'required|string',
             'tanggal' => 'required|date',
             'no_surat' => 'required|string|max:255|unique:surat,no_surat',
             'tanggal_surat' => 'required|date',
@@ -93,13 +110,23 @@ class SuratController extends Controller
             'status_pengiriman' => 'nullable|string',
         ]);
 
+        // Generate next no_agenda in format AG001, AG002, etc.
+        $lastSurat = Surat::where('no_agenda', 'like', 'AG%')->orderBy('no_agenda', 'desc')->first();
+        if ($lastSurat) {
+            $lastNumber = (int) substr($lastSurat->no_agenda, 2);
+            $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            $nextNumber = '001';
+        }
+        $noAgenda = 'AG' . $nextNumber;
+
         // Simpan file dokumen jika ada
         $path = $request->file('dokumen') ? $request->file('dokumen')->store('dokumen_masuk', 'public') : null;
         $user = auth()->user();
 
-        // Simpan data surat
+        // Simpan data surat dengan no_agenda yang dihasilkan
         Surat::create([
-            'no_agenda' => $request->no_agenda,
+            'no_agenda' => $noAgenda,
             'tanggal' => $request->tanggal,
             'no_surat' => $request->no_surat,
             'tanggal_surat' => $request->tanggal_surat,
@@ -109,12 +136,12 @@ class SuratController extends Controller
             'id_asal_surat' => $request->id_asal_surat,
             'dokumen' => $path,
             'status' => $request->status,
-            'created_by' => Auth::id(),
-            'pengirim_id' => $request->pengirim_eksternal ? NULL : $request->pengirim_id,  // Set pengirim_id ke NULL jika pengirim eksternal
-            'pengirim_eksternal' => $request->pengirim_eksternal, // Simpan pengirim eksternal
-            'tujuan_pengguna_id' => $request->tujuan_pengguna_id, // Menyimpan ID Pengguna Tujuan
-            'tujuan_instansi_id' => $request->tujuan_instansi_id, // Menyimpan ID Instansi Tujuan
-            'status_pengiriman' => $request->status_pengiriman, // Menyimpan Status Pengiriman
+            'created_by' => auth()->id(),
+            'pengirim_id' => $user->id,
+            'pengirim_eksternal' => $request->pengirim_eksternal,
+            'tujuan_pengguna_id' => $request->tujuan_pengguna_id,
+            'tujuan_instansi_id' => $request->tujuan_instansi_id,
+            'status_pengiriman' => $request->status_pengiriman,
             'status_disposisi' => $request->status_disposisi ?? 'Belum Diproses',
         ]);
 
@@ -239,10 +266,10 @@ class SuratController extends Controller
             return view('surat.keluar_kar', compact('suratKeluar', 'instansi', 'sifatSurat')); // View untuk Karyawan
         } elseif ($user->peran == 'Pimpinan') {
             $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
+            ->whereIn('status_disposisi', ['Diproses','Selesai'])
             ->get();
             $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
+                ->whereIn('status_disposisi', [ 'Diproses','Selesai'])
                 ->whereNotIn('pengirim_id', function($query) {
                     $query->select('id')
                         ->from('pengguna')
@@ -315,12 +342,27 @@ class SuratController extends Controller
             'status_disposisi' => 'nullable|string',
         ]);
 
-        // Simpan file dokumen
-        $path = $request->file('dokumen')->store('dokumen_keluar', 'public');
+        // Menentukan nomor agenda baru
+        $lastAgenda = Surat::latest('no_agenda')->first(); // Ambil surat terakhir berdasarkan no_agenda
+        $newNumber = 1; // Nilai default untuk agenda pertama
+
+        if ($lastAgenda) {
+            // Ambil angka terakhir dari no_agenda (misalnya AG007 -> 7)
+            $lastNumber = (int) substr($lastAgenda->no_agenda, 2); // Mengambil angka setelah 'AG'
+            $newNumber = $lastNumber + 1;
+        }
+
+        // Format nomor agenda baru, misalnya 'AG007'
+        $newAgenda = 'AG' . str_pad($newNumber, 3, '0', STR_PAD_LEFT); // Format menjadi AG007
+
+        // Simpan file dokumen jika ada
+        $path = $request->file('dokumen') ? $request->file('dokumen')->store('dokumen_keluar', 'public') : null;
+
         $user = auth()->user();
-        // Simpan data surat
+
+        // Simpan data surat dengan no_agenda yang sudah otomatis terisi
         Surat::create([
-            'no_agenda' => $request->no_agenda,
+            'no_agenda' => $newAgenda, // Menggunakan nomor agenda baru
             'tanggal' => $request->tanggal,
             'no_surat' => $request->no_surat,
             'tanggal_surat' => $request->tanggal_surat,
@@ -340,6 +382,7 @@ class SuratController extends Controller
 
         return redirect()->route('surat.keluar.index')->with('success', 'Data berhasil disimpan');
     }
+
 
     public function keluarupdate(Request $request, $id)
     {
@@ -437,7 +480,7 @@ class SuratController extends Controller
             return view('crudsurat.detailKeluar', compact('surat'));
         } elseif ($user->peran == 'Karyawan') {
             // Jika Karyawan, tampilkan hanya status surat dan instruksi
-            return view('crudsurat.detailmasuk_kar', compact('surat'));
+            return view('crudsurat.detailkeluar_kar', compact('surat'));
         } else {
             // Jika peran tidak teridentifikasi, arahkan ke halaman lain atau tampilkan error
             return abort(403);

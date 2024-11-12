@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Surat Permohonan Izin Cuti</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -11,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-         body {
+       body {
             font-family: 'Times New Roman', serif;
             margin: 0;
             padding: 20px;
@@ -41,6 +40,7 @@
             max-width: 40%;
             transition: background-color 0.3s, box-shadow 0.3s;
         }
+
         .preview {
         flex: 1;
         max-height: none;
@@ -80,7 +80,19 @@
             text-indent: 30px;
         }
 
-        .signature {
+        .preview {
+        flex: 1;
+        max-height: none;
+        overflow-y: visible;
+        padding: 20px;
+        /* background-color: #f9f9f9; */ /* Hapus atau komentari baris ini */
+        line-height: 1.5;
+        font-size: 14px;
+        color: #333;
+        text-align: justify;
+    }
+
+    .signature {
             text-align: right;
             margin-top: 20px;
         }
@@ -158,123 +170,119 @@
     <a href="{{ route('generete') }}" class="back-button">
         <i class="fas fa-arrow-left"></i> Kembali
     </a>
-    <div class="container">
-        <div class="section">
-            <button class="toggle-button" onclick="toggleForm()">
-                <span>Isi Data Surat Permohonan Izin Cuti</span>
-                <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="form-section" id="form-section">
-                <label for="kepada">Kepada Yth</label>
-                <input type="text" id="kepada" placeholder="Nama penerima surat" oninput="updatePreview()" value="Kepala HRD">
 
-                <label for="nama">Nama</label>
-                <input type="text" id="nama" placeholder="Nama pengaju cuti" oninput="updatePreview()" value="Andi Susanto">
+<div class="container">
+    <div class="section">
+        <button class="toggle-button" onclick="toggleForm()">
+            <span>Isi Data Surat Perintah</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="form-section" id="form-section">
+            <label for="nomor">Nomor</label>
+            <input type="text" id="nomor" placeholder="Nomor surat" oninput="updatePreview()" value="SP-001/HRD/PT-RM/XI/2024">
 
-                <label for="alamat">Alamat</label>
-                <input type="text" id="alamat" placeholder="Alamat pengaju" oninput="updatePreview()" value="Jl. Merpati No. 45, Yogyakarta">
+            <label for="pegawai">Nama Pegawai</label>
+            <input type="text" id="pegawai" placeholder="Nama Pegawai" oninput="updatePreview()" value="Andi Susanto">
 
-                <label for="jabatan">Jabatan</label>
-                <input type="text" id="jabatan" placeholder="Jabatan pengaju" oninput="updatePreview()" value="Staff Marketing">
+            <label for="jabatan">Jabatan Pegawai</label>
+            <input type="text" id="jabatan" placeholder="Jabatan" oninput="updatePreview()" value="Staff Marketing">
 
-                <label for="tanggal_mulai">Tanggal Mulai Cuti</label>
-                <input type="date" id="tanggal_mulai" oninput="updatePreview()">
+            <label for="tugas">Tugas</label>
+            <input type="text" id="tugas" placeholder="Tugas yang diberikan" oninput="updatePreview()" value="Mengelola proyek pemasaran baru">
 
-                <label for="tanggal_selesai">Tanggal Selesai Cuti</label>
-                <input type="date" id="tanggal_selesai" oninput="updatePreview()">
+            <label for="tanggalMulai">Tanggal Mulai</label>
+            <input type="text" id="tanggalMulai" placeholder="Tanggal Mulai" oninput="updatePreview()" value="15 November 2024">
 
-                <label for="alasan">Alasan Cuti</label>
-                <textarea id="alasan" placeholder="Alasan permohonan cuti" oninput="updatePreview()">Sakit</textarea>
-            </div>
-            <h3>Tanda Tangan Elektronik</h3>
+            <label for="tanggalSelesai">Tanggal Selesai</label>
+            <input type="text" id="tanggalSelesai" placeholder="Tanggal Selesai" oninput="updatePreview()" value="30 November 2024">
+
+            <label for="atasan">Nama Atasan yang Menetapkan</label>
+            <input type="text" id="atasan" placeholder="Nama Atasan" oninput="updatePreview()" value="Budi Santoso">
+
+            <label for="jabatanAtasan">Jabatan Atasan</label>
+            <input type="text" id="jabatanAtasan" placeholder="Jabatan Atasan" oninput="updatePreview()" value="HRD Manager">
+        </div>
+        <h3>Tanda Tangan Elektronik</h3>
             <input type="file" id="signatureInput" accept="image/*" onchange="previewSignature()" />
             <div id="signature-container">
                 <div id="signature-preview-placeholder" class="signature-preview">
                     <img id="signature-preview-img" src="" alt="Preview Tanda Tangan">
                 </div>
             </div>
-            <button onclick="downloadPDF()"><i class="fas fa-download"></i> Download PDF</button>
-        </div>
-
-         <div id="letter-preview" class="preview">
-            <div class="header">
-                <img src="{{ asset('img/logo_transparent.png') }}" alt="Logo Perusahaan">
-                <div style="text-align: center;">
-                    <h2><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROCKET MANAJEMEN</span></h2>
-                    <p>Jl. Solo Km. 5,5 Sleman Yogyakarta<br>
-                       Telp (0271) 2424242, Fax (0127) 2424245<br>
-                       email: manajemenrocket@gmail.com, www.rocketmanajemen.com
-                    </p>
-                </div>
-            </div>
-            <p>Lampiran: 1 lembar<br>
-               Perihal: Permohonan Izin Cuti</p>
-            <p>Kepada Yth.<br>
-               <span id="preview-kepada">Kepala HRD</span><br>
-               Di Tempat
-            </p>
-            <br><p>&nbsp;&nbsp;Dengan Hormat,</p>
-            <p>Saya yang bertanda tangan di bawah ini:</p><br>
-            <p class="indented">Nama: <span id="preview-nama">Andi Susanto</span><br>
-                <p class="indented"> Alamat: <span id="preview-alamat">Jl. Merpati No. 45, Yogyakarta</span><br>
-                <p class="indented">  Jabatan: <span id="preview-jabatan">Staff Marketing</span></p><br>
-            <p>&nbsp;&nbsp;Dengan ini saya mengajukan permohonan izin cuti bekerja karena terhitung mulai tanggal <span id="preview-tanggal_mulai">15 November 2024</span> sampai <span id="preview-tanggal_selesai">30 November 2024</span>.
-            karena <span id="preview-alasan"></span>.
-            Demikian Surat Permohonan Izin Cuti ini saya ajukan. Besar harapan saya agar permohonan ini dapat dikabulkan. Atas perhatian dan izin yang diberikan, saya ucapkan terima kasih.</p><br>
-            <p class="signature">Hormat Kami,<br><br>
-                <div id="signature-right" style="text-align: right;">
-                    <div id="preview-signature"></div> <!-- Tempat pratinjau tanda tangan -->
-                    <span id="preview-nama">Budi Santoso</span><br> <!-- Nama yang dipratinjau -->
-                </div>
-            </p>
-
-
-        </div>
-
+        <button onclick="downloadPDF()"><i class="fas fa-download"></i> Download PDF</button>
     </div>
 
-    <script>
-        function toggleForm() {
-            document.getElementById('form-section').style.display =
-                document.getElementById('form-section').style.display === 'none' ? 'block' : 'none';
-        }
-        let signatureImgSrc = ""; // Store the signature image data URL here
+    <div id="letter-preview" class="preview">
+        <div class="header">
+            <img src="{{ asset('img/logo_transparent.png') }}" alt="Logo Perusahaan">
+            <div style="text-align: center;">
 
-        function previewSignature() {
-        const file = document.getElementById('signatureInput').files[0];
-        const reader = new FileReader();
+                <h2><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROCKET MANAJEMEN</span></h2>
+                <p>Jl. Solo Km. 5,5 Sleman Yogyakarta<br>
+                   Telp (0271) 2424242, Fax (0127) 2424245<br>
+                   email: manajemenrocket@gmail.com, www.rocketmanajemen.com
+                </p>
+            </div>
+        </div>
+        <hr>
+        <p>Nomor: <span id="preview-nomor">SP-001/HRD/PT-RM/XI/2024</span><br>
+           Perihal: Surat Perintah Kerja
+        </p>
+        <p>Kepada Yth.<br>
+           Nama Pegawai: <span id="preview-pegawai">Andi Susanto</span><br>
+           Jabatan: <span id="preview-jabatan">Staff Marketing</span><br>
+           Di Tempat
+        </p>
+        <br><p>Dengan Hormat,</p>
+        <p class="indented">Sehubungan dengan kebutuhan perusahaan, melalui surat ini kami menugaskan Saudara/i <span id="preview-pegawai">Andi Susanto</span> yang menjabat sebagai <span id="preview-jabatan">Staff Marketing</span> untuk melaksanakan tugas <span id="preview-tugas">Mengelola proyek pemasaran baru</span>.</p>
+        <p class="indented">Tugas ini dimulai dari tanggal <span id="preview-tanggalMulai">15 November 2024</span> dan diharapkan selesai pada tanggal <span id="preview-tanggalSelesai">30 November 2024</span>. Kami berharap Saudara/i dapat melaksanakan tugas ini dengan penuh tanggung jawab dan dedikasi.</p>
+        <br><p>Demikian surat perintah ini kami sampaikan. Atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
+        <p class="signature">Hormat Kami,<br><br>
+            <div id="signature-right" style="text-align: right;">
+                <div id="preview-signature"></div>
+                <span id="preview-atasan">Budi Santoso</span><br>
+                Jabatan: <span id="preview-jabatanAtasan">HRD Manager</span>
+            </div>
+        </p>
+    </div>
+</div>
 
-        reader.onloadend = function () {
-            signatureImgSrc = reader.result; // Set the signature image data URL
-            const img = document.getElementById('signature-preview-img');
-            img.src = reader.result; // Set the image source to the loaded data URL
-            img.onload = () => updatePreview(); // Ensure the image is loaded before calling updatePreview
-        };
-
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            signatureImgSrc = ""; // Clear image if no file is selected
-            updatePreview();
-        }
+<script>
+    function toggleForm() {
+        document.getElementById('form-section').style.display =
+            document.getElementById('form-section').style.display === 'none' ? 'block' : 'none';
     }
+    let signatureImgSrc = ""; // Store the signature image data URL here
+
+function previewSignature() {
+const file = document.getElementById('signatureInput').files[0];
+const reader = new FileReader();
+
+reader.onloadend = function () {
+    signatureImgSrc = reader.result; // Set the signature image data URL
+    const img = document.getElementById('signature-preview-img');
+    img.src = reader.result; // Set the image source to the loaded data URL
+    img.onload = () => updatePreview(); // Ensure the image is loaded before calling updatePreview
+};
+
+if (file) {
+    reader.readAsDataURL(file);
+} else {
+    signatureImgSrc = ""; // Clear image if no file is selected
+    updatePreview();
+}
+}
 
     function updatePreview() {
-    // Update data surat di bagian utama
-    document.getElementById('preview-kepada').textContent = document.getElementById('kepada').value;
-    document.getElementById('preview-nama').textContent = document.getElementById('nama').value; // Nama di bagian atas
-    document.getElementById('preview-alamat').textContent = document.getElementById('alamat').value;
-    document.getElementById('preview-jabatan').textContent = document.getElementById('jabatan').value;
-    document.getElementById('preview-tanggal_mulai').textContent = document.getElementById('tanggal_mulai').value;
-    document.getElementById('preview-tanggal_selesai').textContent = document.getElementById('tanggal_selesai').value;
-    document.getElementById('preview-alasan').textContent = document.getElementById('alasan').value;
-
-    // Update nama di bagian tanda tangan
-    const nama = document.getElementById('nama').value;
-    document.getElementById('preview-nama').textContent = nama;
-
-    // Update tanda tangan
-    const signaturePreviewElement = document.getElementById('preview-signature');
+        document.getElementById('preview-nomor').textContent = document.getElementById('nomor').value;
+        document.getElementById('preview-pegawai').textContent = document.getElementById('pegawai').value;
+        document.getElementById('preview-jabatan').textContent = document.getElementById('jabatan').value;
+        document.getElementById('preview-tugas').textContent = document.getElementById('tugas').value;
+        document.getElementById('preview-tanggalMulai').textContent = document.getElementById('tanggalMulai').value;
+        document.getElementById('preview-tanggalSelesai').textContent = document.getElementById('tanggalSelesai').value;
+        document.getElementById('preview-atasan').textContent = document.getElementById('atasan').value;
+        document.getElementById('preview-jabatanAtasan').textContent = document.getElementById('jabatanAtasan').value;
+        const signaturePreviewElement = document.getElementById('preview-signature');
     if (signatureImgSrc) {
         signaturePreviewElement.innerHTML = `<img src="${signatureImgSrc}" alt="Signature" style="max-height: 50px;" />`;
     } else {
@@ -282,8 +290,7 @@
     }
 }
 
-
-function downloadPDF() {
+    function downloadPDF() {
     const element = document.getElementById("letter-preview");
 
     if (!element) {
@@ -322,7 +329,7 @@ function downloadPDF() {
         pdf.addImage(imgData, 'PNG', marginLeft, marginTop, imgWidth, imgHeight);
 
         // Save PDF file
-        pdf.save("Surat_Permohonan_Cuti.pdf");
+        pdf.save("Surat_Mutasi.pdf");
     });
 }
 </script>

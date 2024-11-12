@@ -39,6 +39,9 @@ class KaryawanController extends Controller
             // Total Surat Masuk dengan disposisi 'Selesai'
             $totalSuratMasukSelesai = Surat::whereIn('status', ['Masuk', 'Keluar'])
             ->where('status_disposisi', 'Selesai')
+            ->whereHas('pengirim', function ($query) {
+                $query->where('peran', 'Karyawan'); // Memastikan surat masuk dikirim oleh Karyawan
+            })
             ->count();
 
             // Total Surat Keluar dengan disposisi 'Selesai' yang tidak dibuat oleh Karyawan

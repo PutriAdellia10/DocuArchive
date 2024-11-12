@@ -60,7 +60,7 @@
 </style>
 
 <div class="sidebar">
-    <a href="{{ route('dashboard_pimpinan') }}"><i class="fa fa-home"></i> Dashboard</a>
+    <a href="{{ route('dashboard_karyawan') }}"><i class="fa fa-home"></i> Dashboard</a>
 
     <button id="toggle-surat">
         <i class="bi bi-envelope-fill"></i> Surat

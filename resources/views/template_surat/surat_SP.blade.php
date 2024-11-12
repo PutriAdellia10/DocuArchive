@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+'<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -155,6 +155,9 @@
     </style>
 </head>
 <body>
+    <a href="{{ route('generete') }}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 
     <div class="container">
         <div class="section">
@@ -229,7 +232,7 @@
                 <div id="signature-right" style="text-align: right;"> <!-- Wrap both elements in this div -->
                     <div id="preview-signature"></div> <!-- Placeholder for signature image -->
                 <span id="preview-signatureName">Manager HRD</span><br>
-                Jabatan: <span id="preview-signatureJabatan">Manager HRD</span>
+
             </div>
         </div>
     </div>
@@ -323,3 +326,4 @@ function downloadPDF() {
     </script>
 </body>
 </html>
+'

@@ -152,40 +152,9 @@
                 </thead>
                 <tbody>
                     <tr>
+
+                    <tr>
                         <td>1</td>
-                        <td>Permohonan Cuti kerja</td>
-                        <td>
-                            <form action="{{ route('permohonan_cuti') }}" method="GET" style="display: inline;">
-                                <button type="submit" class="btn-pilih">Pilih</button>
-                            </form>
-                                </button>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Surat Perjanjian Karyawan</td>
-                        <td>
-                            <form action="{{ route('perjanjian_karyawan') }}" method="GET">
-                                <button type="submit" class="btn-pilih">Pilih</button>
-
-                            </form>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Surat Undur Diri </td>
-                        <td>
-                            <form action="{{ route('surat_undurdiri') }}" method="GET">
-                                <button type="submit" class="btn-pilih">Pilih</button>
-
-                            </form>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>4</td>
                         <td>Surat Undangan </td>
                         <td>
                             <form action="{{ route('surat_undangan') }}" method="GET">
@@ -196,7 +165,7 @@
 
                     </tr>
                     <tr>
-                        <td>5</td>
+                        <td>1</td>
                         <td>Surat Peringatan </td>
                         <td>
                             <form action="{{ route('surat_SP') }}" method="GET">
@@ -207,7 +176,7 @@
 
                     </tr>
                     <tr>
-                        <td>6</td>
+                        <td>3</td>
                         <td>Surat Pemberitahuan </td>
                         <td>
                             <form action="{{ route('surat_pemberitahuan') }}" method="GET">
@@ -217,7 +186,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>7</td>
+                        <td>4</td>
                         <td>Surat Permohonan Kerja Sama </td>
                         <td>
                             <form action="{{ route('surat_permohonan_kerjasama') }}" method="GET">
@@ -228,7 +197,7 @@
 
                     </tr>
                     <tr>
-                        <td>8</td>
+                        <td>5</td>
                         <td>Surat Mutasi </td>
                         <td>
                             <form action="{{ route('surat_mutasi') }}" method="GET">
@@ -238,17 +207,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>9</td>
-                        <td>Surat Mutasi </td>
+                        <td>6</td>
+                        <td>Surat Perintah </td>
                         <td>
-                            <form action="{{ route('surat_mutasi') }}" method="GET">
+                            <form action="{{ route('surat_perintah') }}" method="GET">
                                 <button type="submit" class="btn-pilih">Pilih</button>
 
                             </form>
                         </td>
                     </tr>
                     <tr>
-                        <td>10</td>
+                        <td>7</td>
                         <td>Surat Mutasi </td>
                         <td>
                             <form action="{{ route('surat_mutasi') }}" method="GET">
@@ -257,6 +226,38 @@
                             </form>
                         </td>
                     </tr>
+                    <td>8</td>
+                    <td>Permohonan Cuti kerja</td>
+                    <td>
+                        <form action="{{ route('permohonan_cuti') }}" method="GET" style="display: inline;">
+                            <button type="submit" class="btn-pilih">Pilih</button>
+                        </form>
+                            </button>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Surat Perjanjian Karyawan</td>
+                    <td>
+                        <form action="{{ route('perjanjian_karyawan') }}" method="GET">
+                            <button type="submit" class="btn-pilih">Pilih</button>
+
+                        </form>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Surat Undur Diri </td>
+                    <td>
+                        <form action="{{ route('surat_undurdiri') }}" method="GET">
+                            <button type="submit" class="btn-pilih">Pilih</button>
+
+                        </form>
+                    </td>
+
+                </tr>
 
                 </tbody>
             </table>

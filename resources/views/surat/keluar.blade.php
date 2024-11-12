@@ -375,15 +375,9 @@
         <form id="modalForm" action="{{ route('surat.keluar.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label for="no_agenda">No Agenda *</label>
-                <input type="text" id="no_agenda" name="no_agenda" required>
-            </div>
-
-            <div class="form-group">
                 <label for="tanggal">Tanggal Keluar *</label>
-                <input type="date" id="tanggal" name="tanggal" required>
+                <input type="date" id="tanggal" name="tanggal" required value="{{ old('tanggal', now()->toDateString()) }}">
             </div>
-
             <div class="form-group" id="tujuanPenggunaField" style="display: none;">
                 <label for="tujuan_pengguna_id">Tujuan Pengguna *</label>
                 <select id="tujuan_pengguna_id" name="tujuan_pengguna_id">

@@ -322,7 +322,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($suratMasuk as $surat)
+                    @foreach($suratGabungan as $surat)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $surat->no_agenda }}</td>
@@ -394,11 +394,6 @@
         <h3 id="modalTitle">Tambah Surat Masuk</h3>
         <form id="modalForm" action="{{ route('surat.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="form-group">
-                <label for="no_agenda">No Agenda *</label>
-                <input type="text" id="no_agenda" name="no_agenda" required>
-            </div>
-
             <div class="form-group">
                 <label for="tanggal">Tanggal Masuk *</label>
                 <input type="date" id="tanggal" name="tanggal" required>

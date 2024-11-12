@@ -194,6 +194,11 @@ Route::get('/surat_permohonan_kerjasama', function () {
 Route::get('/surat_mutasi', function () {
     return view('template_surat.surat_mutasi');
 })->name('surat_mutasi');
+
+Route::get('/surat_perintah', function () {
+    return view('template_surat.surat_perintah');
+})->name('surat_perintah');
+
 // Route::get('/generate/{id}', [YourController::class, 'generate'])->name('generate');
 
 use App\Http\Controllers\NotifikasiController;
