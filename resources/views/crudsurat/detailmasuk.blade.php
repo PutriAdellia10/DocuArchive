@@ -81,11 +81,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Nomor Agenda:</label>
                                     <div class="col-sm-9">
-                                        @if(auth()->user()->peran === 'Pimpinan')
-                                            <p class="form-control-plaintext">{{ $surat->no_agenda }}</p>
-                                        @else
-                                            <input type="text" class="form-control" name="no_agenda" value="{{ $surat->no_agenda }}">
-                                        @endif
+                                           <p class="form-control-plaintext">{{ $surat->no_agenda }}</p>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -102,20 +98,42 @@
                                     <label class="col-sm-3 col-form-label">Pengirim</label>
                                     <div class="col-sm-9">
                                         @if(auth()->user()->peran === 'Pimpinan')
-                                        <p class="form-control-plaintext">{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}</p>
+                                            <!-- Jika Pimpinan, tampilkan pengirim eksternal atau jabatan dengan teks -->
+                                            <p class="form-control-plaintext">
+                                                {{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}
+                                            </p>
                                         @else
-                                        <input type="text" class="form-control" name="pengirim" value="{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}">
-                                    @endif
+                                            <!-- Jika bukan Pimpinan, tampilkan input berdasarkan jenis pengirim -->
+                                            @if($surat->pengirim_eksternal)
+                                                <input type="text" class="form-control" name="pengirim" value="{{ $surat->pengirim_eksternal }}">
+                                            @else
+                                                <p class="form-control-plaintext">{{ $surat->pengirim->jabatan }}</p>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Asal Surat:</label>
                                     <div class="col-sm-9">
                                         @if(auth()->user()->peran === 'Pimpinan')
-                                        <p class="form-control-plaintext">{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</p>
+                                            <!-- Jika Pimpinan, tampilkan nama instansi atau '--' jika tidak ada -->
+                                            <p class="form-control-plaintext">{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</p>
                                         @else
-                                        <input type="text" class="form-control" name="instansi" value="{{$surat->instansi ? $surat->instansi->nama_instansi : '--'  }}">
-                                    @endif
+                                            <!-- Jika bukan Pimpinan, cek apakah ada asal surat -->
+                                            @if($surat->instansi)
+                                                <!-- Jika ada instansi, tampilkan select untuk memilih instansi -->
+                                                <select class="form-control" name="tujuan_instansi_id" id="tujuan_instansi_id">
+                                                    <option value="">--Pilih Instansi--</option>
+                                                    @foreach($instansi as $inst)
+                                                        <option value="{{ $inst->id }}" {{ old('tujuan_instansi_id', $surat->tujuan_instansi_id) == $inst->id ? 'selected' : '' }}>
+                                                            {{ $inst->nama_instansi }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            @else
+                                                <p class="form-control-plaintext">--</p>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -134,7 +152,7 @@
                                         @if(auth()->user()->peran === 'Pimpinan')
                                             <p class="form-control-plaintext">{{ $surat->tanggal_surat }}</p>
                                         @else
-                                            <input type="date" class="form-control" name="tanggal" value="{{ $surat->tanggal_surat }}">
+                                            <input type="date" class="form-control" name="tanggal_surat" value="{{ $surat->tanggal_surat }}">
                                         @endif
                                     </div>
                                 </div>
@@ -175,13 +193,25 @@
                                     <p>Dokumen tidak tersedia.</p>
                                 @endif
                             </div>
+                            <div class="mt-3">
+                                <label for="dokumen">Upload Dokumen Baru (PDF, DOC, DOCX):</label>
+                                <input type="file" class="form-control" name="dokumen">
+                            </div>
                         </div>
                     </div>
-
                     <div class="card-footer text-end">
                         <button type="button" class="btn btn-secondary" onclick="history.back()">Tutup</button>
                         @if(auth()->user()->peran !== 'Pimpinan')
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-secondary">Update Surat</button>
+                            @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                         @endif
                     </div>
                 </form>

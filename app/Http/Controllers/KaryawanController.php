@@ -16,16 +16,17 @@ class KaryawanController extends Controller
     {
         // Ambil 5 surat masuk terbaru
         $recentSuratMasuk = Surat::where('status', 'Masuk')
-            ->orderBy('created_at', 'desc')
-            ->take(2)
-            ->get();
+        ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
+        ->orderBy('created_at', 'desc')
+        ->take(5)
+        ->get();
 
         // Ambil 5 surat keluar terbaru
-        $recentSuratKeluar = Surat::where('status', 'Keluar')
-            ->orderBy('created_at', 'desc')
-            ->take(2)
-            ->get();
-
+        $recentSuratKeluar =Surat::where('status', 'Masuk')
+        ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
+        ->orderBy('created_at', 'desc')
+        ->take(5)
+        ->get();
         // Ambil notifikasi terbaru
         $notifikasi = Notifikasi::orderBy('dibuat_pada', 'desc')
             ->take(5)
@@ -39,7 +40,7 @@ class KaryawanController extends Controller
             // Total Surat Masuk dengan disposisi 'Selesai'
             $totalSuratMasukSelesai = Surat::whereIn('status', ['Masuk', 'Keluar'])
             ->where('status_disposisi', 'Selesai')
-            ->whereHas('pengirim', function ($query) {
+            ->whereDoesntHave('pengirim', function($query) {
                 $query->where('peran', 'Karyawan'); // Memastikan surat masuk dikirim oleh Karyawan
             })
             ->count();

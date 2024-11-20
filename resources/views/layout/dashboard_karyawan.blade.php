@@ -206,6 +206,7 @@
                 <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
             </li>
         @empty
+
             <li><span>Tidak ada surat masuk terbaru</span></li>
         @endforelse
         </ul>

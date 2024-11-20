@@ -294,6 +294,7 @@
                         <th>Tanggal Masuk</th>
                         <th>Pengirim</th>
                         <th>Asal Surat</th>
+                        <th>Tujuan Surat</th>
                         <th>Nomor Surat</th>
                         <th>Tanggal Surat</th>
                         <th>Perihal</th>
@@ -316,6 +317,15 @@
                             @endif
                         </td>
                         <td>{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</td>
+                        <td>
+                            @if ($surat->tujuan_pengguna_id)
+                                {{ $surat->tujuanPengguna->jabatan ?? '--' }}
+                            @elseif ($surat->tujuan_instansi_id)
+                                {{ $surat->tujuanInstansi->nama_instansi ?? '--' }}
+                            @else
+                                --
+                            @endif
+                        </td>
                         <td>{{ $surat->no_surat }}</td>
                         <td>{{ \Carbon\Carbon::parse($surat->tanggal_surat)->format('d-m-Y') }}</td>
                         <td>{{ $surat->perihal }}</td>

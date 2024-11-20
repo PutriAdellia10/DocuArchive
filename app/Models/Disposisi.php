@@ -15,7 +15,6 @@ class Disposisi extends Model
     // Kolom-kolom yang dapat diisi
     protected $fillable = [
         'surat_id',
-        'tindakan',
         'kepada',
         'keterangan',
         'lampiran',

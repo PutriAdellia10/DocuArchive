@@ -17,7 +17,7 @@
         }
 
         .container {
-            max-width: 1200px;
+
             margin: auto;
             background-color: #fff;
             padding: 30px;
@@ -182,11 +182,6 @@
                     @csrf
                     <input type="hidden" name="surat_id" value="{{ $surat->id }}">
                     <h2>Disposisi</h2>
-                    <!-- Input untuk tindakan disposisi -->
-                    <div class="disposisi-options">
-                        <label for="tindakan" class="disposisi-label">Tindakan:</label>
-                        <input type="text" id="tindakan" name="tindakan" class="form-control">
-                    </div>
 
                     <div class="disposisi-options">
                         <label for="keterangan" class="disposisi-label">Keterangan:</label>
@@ -216,50 +211,50 @@
                         <button type="submit" class="btn-success">Kirim Disposisi</button>
                     </div>
             </div>
+     <!-- Right Section -->
+     <div class="right-section">
+        <h2>Daftar Disposisi</h2>
+        <!-- Tindak Lanjut Form -->
+        @if(auth()->user()->peran == 'Pimpinan')
+            <form action="{{ route('disposisi.submit', $surat->id) }}" method="POST">
+                @csrf
+                @method('POST')
+                <div class="form-group">
+                    <label for="catatan">Catatan:</label>
+                    <textarea name="catatan" id="catatan" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary mb-2">Tindak Lanjut</button>
+            </form>
+        @endif
 
-            <!-- Right Section -->
-            <div class="right-section">
-                <h2 class="mt-4">Daftar Disposisi</h2>
-                <!-- Tindak Lanjut Form -->
-                    @if(auth()->user()->peran == 'Pimpinan')
-                    <form action="{{ route('disposisi.submit', $surat->id) }}" method="POST">
-                        @csrf
-                        @method('POST')
-                        <div class="form-group">
-                            <label for="catatan">Catatan:</label>
-                            <textarea name="catatan" id="catatan" class="form-control" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-secondary mb-2">Tindak Lanjut</button>
-                    </form>
-                    @endif
-                <table>
-                    <thead>
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Surat</th>
+                    <th>Keterangan</th>
+                    <th>Lampiran</th>
+                    <th>Catatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($disposisiEntries->isEmpty())
+                    <tr>
+                        <td colspan="3" class="text-center">Belum ada disposisi yang dikirim.</td>
+                    </tr>
+                @else
+                    @foreach($disposisiEntries as $disposisi)
                         <tr>
-                            <th>Surat</th>
-                            <th>Tindakan</th>
-                            <th>Keterangan</th>
-                            <th>Catatan</th>
+                            <td>{{ $disposisi->surat_id }}</td>
+                            <td>{{ $disposisi->keterangan }}</td>
+                            <td>{{ $disposisi->lampiran }}</td>
+                            <td>{{ $disposisi->catatan }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @if($disposisiEntries->isEmpty())
-                            <tr>
-                                <td colspan="4" class="text-center">Belum ada disposisi yang dikirim.</td>
-                            </tr>
-                        @else
-                            @foreach($disposisiEntries as $disposisi)
-                                <tr>
-                                    <td>{{ $disposisi->surat_id }}</td> <!-- Assuming 'dari' is surat_id -->
-                                    <td>{{ $disposisi->tindakan }}</td>
-                                    <td>{{ $disposisi->keterangan }}</td>
-                                    <td>{{ $disposisi->catatan }}</td> <!-- Adjust based on how tindakan is stored -->
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+    </div>
+</div>
         <div class="card-footer text-end mt-4">
             <button type="button" class="btn btn-secondary" onclick="window.history.back()">Tutup</button>
         </div>

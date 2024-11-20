@@ -20,7 +20,6 @@ class DisposisiController extends Controller
     public function store(Request $request, $id)
     {
         $request->validate([
-            'tindakan' => 'required|string',
             'keterangan' => 'nullable|string',
             'kepada' => 'required|string',
             'lampiran' => 'nullable|string',
@@ -29,7 +28,6 @@ class DisposisiController extends Controller
 
         Disposisi::create([
             'surat_id' => $id,
-            'tindakan' => $request->tindakan,
             'keterangan' => $request->keterangan,
             'kepada' => $request->kepada,
             'lampiran' => $request->lampiran,
@@ -60,7 +58,6 @@ public function edit($id)
 public function update(Request $request, $id)
 {
     $request->validate([
-        'tindakan' => 'required|string',
         'kepada' => 'required|string|max:255',
         'keterangan' => 'nullable|string',
         'lampiran' => 'nullable|string',
@@ -69,7 +66,6 @@ public function update(Request $request, $id)
 
     $disposisi = Disposisi::findOrFail($id);
     $disposisi->update([
-        'tindakan' => $request->tindakan,
         'kepada' => $request->kepada,
         'keterangan' => $request->keterangan,
         'lampiran' => $request->lampiran,
@@ -99,7 +95,6 @@ public function update(Request $request, $id)
     }
 
     $request->validate([
-        'tindakan' => 'nullable|string',
         'keterangan' => 'nullable|string',
         'kepada' => 'nullable|string',
         'lampiran' => 'nullable|string',
@@ -109,7 +104,6 @@ public function update(Request $request, $id)
     // Menyimpan disposisi baru
     Disposisi::create([
         'surat_id' => $id,
-        'tindakan' => $request->tindakan,
         'keterangan' => $request->keterangan,
         'kepada' => $request->kepada,
         'lampiran' => $request->lampiran,

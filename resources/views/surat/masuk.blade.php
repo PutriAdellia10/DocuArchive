@@ -445,11 +445,8 @@
 
             <div class="form-group">
                 <label for="status">Status *</label>
-                <select id="status" name="status" required>
-                    <option value="">--Pilih--</option>
-                    <option value="Masuk">Masuk</option>
-                    <option value="Keluar">Keluar</option>
-                </select>
+                <input type="hidden" name="status" value="Masuk">
+                <p>Masuk</p>
             </div>
 
             <div class="form-group">

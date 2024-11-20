@@ -25,9 +25,11 @@ class SuratController extends Controller
         // Cek peran pengguna dan ambil surat keluar yang sesuai
         if ($user->peran == 'Karyawan') {
             $suratMasuk = Surat::where('status', 'Masuk')
+            ->whereIn('status_disposisi', ['Diproses','Selesai'])
             ->get();
             $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereHas('pengirim', function ($query) {
+            ->whereIn('status_disposisi', ['Diproses','Selesai'])
+            ->whereDoesntHave('pengirim', function($query) {
                 $query->where('peran', 'Karyawan');
             })
             ->get();
@@ -38,11 +40,10 @@ class SuratController extends Controller
             ->whereIn('status_disposisi', ['Diproses','Selesai'])
             ->get();
             $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereIn('status_disposisi', [ 'Diproses','Selesai'])
                 ->whereNotIn('pengirim_id', function($query) {
                     $query->select('id')
                         ->from('pengguna')
-                        ->where('peran', 'Sekretariat');
+                        ->whereIn('peran', ['Sekretariat', 'Admin']);
                 })
                 ->get();
                 $suratGabungan = $suratMasuk->merge($suratKeluar);
@@ -51,22 +52,24 @@ class SuratController extends Controller
             $suratMasuk = Surat::where('status', 'Masuk')
             ->get();
             $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereDoesntHave('pengirim', function($query) {
-                    $query->where('peran', 'Sekretariat');
-                })
-                ->get();
+            ->whereNotIn('pengirim_id', function($query) {
+                $query->select('id')
+                      ->from('pengguna')
+                      ->whereIn('peran', ['Sekretariat', 'Admin']);
+            })
+            ->get();
                 $suratGabungan = $suratMasuk->merge($suratKeluar);
             return view('surat.masuk', compact('suratGabungan','instansi', 'sifatSurat','pengguna')); // View untuk Sekretariat
         } elseif ($user->peran == 'Admin') {
             $suratMasuk = Surat::where('status', 'Masuk')
             ->get();
             $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereNotIn('pengirim_id', function($query) {
-                    $query->select('id')
-                        ->from('pengguna')
-                        ->where('peran', 'Sekretariat');
-                })
-                ->get();
+            ->whereNotIn('pengirim_id', function($query) {
+                $query->select('id')
+                      ->from('pengguna')
+                      ->whereIn('peran', ['Sekretariat', 'Admin']);
+            })
+            ->get();
                 $suratGabungan = $suratMasuk->merge($suratKeluar);
             return view('surat.masuk', compact('suratGabungan','instansi', 'sifatSurat','pengguna')); // View untuk Admin
         } else {
@@ -101,7 +104,7 @@ class SuratController extends Controller
             'konten' => 'required|string',
             'id_sifat_surat' => 'required|integer',
             'id_asal_surat' => 'required|integer',
-            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:51200',
             'status' => 'required|string|in:Masuk,Keluar',
             'pengirim_id' => 'nullable|integer',
             'pengirim_eksternal' => 'nullable|string',
@@ -151,66 +154,55 @@ class SuratController extends Controller
 
     public function update(Request $request, $id)
     {
-         // Validasi input
-    $request->validate([
-        'no_agenda' => 'required|string',
-        'tanggal' => 'required|date',
-        'no_surat' => 'required|string|max:255|unique:surat,no_surat,' . $id,
-        'tanggal_surat' => 'required|date',
-        'perihal' => 'required|string',
-        'konten' => 'required|string',
-        'id_sifat_surat' => 'required|integer',
-        'id_asal_surat' => 'required|integer',
-        'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-        'status' => 'required|string|in:Masuk,Keluar',
-        'pengirim_id' => 'nullable|integer',
-        'pengirim_eksternal' => 'nullable|string',
-        'tujuan_pengguna_id' => 'nullable|integer',
-        'tujuan_instansi_id' => 'nullable|integer',
-        'status_pengiriman' => 'nullable|string',
-        'status_disposisi' => 'nullable|string',
-    ]);
+        // Validasi input
+        $request->validate([
+            'tanggal' => 'required|date',
+            'no_surat' => 'required|string|max:255|unique:surat,no_surat,' . $id,
+            'tanggal_surat' => 'required|date',
+            'perihal' => 'required|string',
+            'konten' => 'required|string',
+            'id_sifat_surat' => 'nullable|integer',
+            'id_asal_surat' => 'nullable|integer',
+            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:51200', // Allow up to 50 MB
+            'status' => 'nullable|string|in:Masuk,Keluar',
+            'pengirim_eksternal' => 'nullable|string',
+            'tujuan_pengguna_id' => 'nullable|integer',
+            'tujuan_instansi_id' => 'nullable|integer',
+            'status_pengiriman' => 'nullable|string',
+            'status_disposisi' => 'nullable|string',
+        ]);
 
-    // Temukan surat yang ingin diperbarui
-    $surat = Surat::findOrFail($id);
+        // Temukan data yang akan diperbarui
+        $surat = Surat::findOrFail($id);
 
-     // Update data surat
-     $surat->update([
-        'no_agenda' => $request->no_agenda,
-        'tanggal' => $request->tanggal,
-        'no_surat' => $request->no_surat,
-        'tanggal_surat' => $request->tanggal_surat,
-        'perihal' => $request->perihal,
-        'konten' => $request->konten,
-        'id_sifat_surat' => $request->id_sifat_surat,
-        'id_asal_surat' => $request->id_asal_surat,
-        'dokumen' => $path,
-        'status' => $request->status,
-        'pengirim_id' => $request->pengirim_id,
-        'pengirim_eksternal' => $request->pengirim_eksternal,
-        'tujuan_pengguna_id' => $request->tujuan_pengguna_id,
-        'tujuan_instansi_id' => $request->tujuan_instansi_id,
-        'status_pengiriman' => $request->status_pengiriman,
-        'status_disposisi' => $request->status_disposisi,
-    ]);
+        // Set $path to current dokumen if no new file is uploaded
+        $path = $surat->dokumen;
 
         // Periksa jika ada file dokumen baru
         if ($request->hasFile('dokumen')) {
-            // Hapus file lama jika ada
-            if ($surat->dokumen) {
-                Storage::delete($surat->dokumen);
-            }
-
-            // Simpan file baru
-            $path = $request->file('dokumen')->store('dokumen_masuk', 'public');
-            $surat->dokumen = $path;
+            $dokumen = $request->file('dokumen');
+            // Mengganti dokumen yang baru diupload
+            $path = $dokumen->storeAs('dokumen_masuk', $dokumen->getClientOriginalName(), 'public');
         }
 
-        // Simpan perubahan ke database
-        $surat->save();
+        // Update data surat lainnya
+        $surat->update([
+            'tanggal' => $request->tanggal,
+            'no_surat' => $request->no_surat,
+            'tanggal_surat' => $request->tanggal_surat,
+            'perihal' => $request->perihal,
+            'konten' => $request->konten,
+            'id_asal_surat' => $request->id_asal_surat,
+            'dokumen' => $path, // Pastikan dokumen selalu diperbarui dengan path yang benar
+            'status' => $request->status ?? 'Masuk',
+            'pengirim_eksternal' => $request->pengirim_eksternal, // Menyimpan Pengirim Eksternal
+            'tujuan_pengguna_id' => $request->tujuan_pengguna_id, // Menyimpan ID Pengguna Tujuan
+            'tujuan_instansi_id' => $request->tujuan_instansi_id, // Menyimpan ID Instansi Tujuan
+        ]);
 
-        return redirect()->route('surat.index')->with('success', 'Data berhasil diperbarui');
+        return redirect()->route('surat.index')->with('success', 'Surat Keluar berhasil diperbarui.');
     }
+
 
     public function destroy($id)
     {
@@ -227,7 +219,8 @@ class SuratController extends Controller
         // Ambil data surat berdasarkan ID
         $surat = Surat::findOrFail($id);
         $user = Auth::user();
-
+        $pengguna = User::all(); // Get all pengguna from the database
+        $instansi = Instansi::all(); // Get all instansi from the database
         // Memastikan peran pengguna ada
         if (!$user) {
             return abort(403, 'Pengguna tidak teridentifikasi.');
@@ -236,12 +229,12 @@ class SuratController extends Controller
         // Menyaring akses berdasarkan peran
         if ($user->peran == 'Admin') {
             // Jika Admin, tampilkan semua informasi surat
-            return view('crudsurat.detailmasuk', compact('surat'));
+            return view('crudsurat.detailmasuk', compact('surat','pengguna','instansi'));
         } elseif ($user->peran == 'Sekretariat') {
             // Jika Sekretariat, tampilkan surat
-            return view('crudsurat.detailmasuk', compact('surat'));
+            return view('crudsurat.detailmasuk', compact('surat','pengguna','instansi'));
         } elseif ($user->peran == 'Pimpinan') {
-            return view('crudsurat.detailmasuk', compact('surat'));
+            return view('crudsurat.detailmasuk', compact('surat','pengguna','instansi'));
         } elseif ($user->peran == 'Karyawan') {
             // Jika Karyawan, tampilkan hanya status surat dan instruksi
             return view('crudsurat.detailmasuk_kar', compact('surat'));
@@ -292,10 +285,8 @@ class SuratController extends Controller
             return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat','pengguna')); // View untuk Sekretariat
         } elseif ($user->peran == 'Admin') {
             $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
             ->get();
             $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
                 ->whereNotIn('pengirim_id', function($query) {
                     $query->select('id')
                         ->from('pengguna')
@@ -309,8 +300,11 @@ class SuratController extends Controller
     }
     public function keluaredit($id)
 {
-    $surat = Surat::findOrFail($id); // Mengambil model surat berdasarkan ID
-    return view('surat.edit', compact('surat')); // Mengirim variabel $surat ke view
+    $surat = Surat::findOrFail($id);
+    $pengguna = User::all(); // or other related data
+    $instansi = Instansi::all(); // or other related data
+
+    return view('your.view.name', compact('surat', 'pengguna', 'instansi'));
 }
 
     public function keluarcreate()
@@ -332,7 +326,7 @@ class SuratController extends Controller
             'konten' => 'required|string',
             'id_sifat_surat' => 'required|integer',
             'id_asal_surat' => 'nullable|integer',
-            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:51200', // Allow up to 50 MB
             'status' => 'required|string|in:Masuk,Keluar',
             'pengirim_id' => 'nullable|integer',
             'pengirim_eksternal' => 'nullable|string',
@@ -343,26 +337,25 @@ class SuratController extends Controller
         ]);
 
         // Menentukan nomor agenda baru
-        $lastAgenda = Surat::latest('no_agenda')->first(); // Ambil surat terakhir berdasarkan no_agenda
-        $newNumber = 1; // Nilai default untuk agenda pertama
-
-        if ($lastAgenda) {
-            // Ambil angka terakhir dari no_agenda (misalnya AG007 -> 7)
-            $lastNumber = (int) substr($lastAgenda->no_agenda, 2); // Mengambil angka setelah 'AG'
-            $newNumber = $lastNumber + 1;
+        $lastSurat = Surat::where('no_agenda', 'like', 'AG%')->orderBy('no_agenda', 'desc')->first();
+        if ($lastSurat) {
+            $lastNumber = (int) substr($lastSurat->no_agenda, 2);
+            $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            $nextNumber = '001';
         }
+        $noAgenda = 'AG' . $nextNumber;
 
-        // Format nomor agenda baru, misalnya 'AG007'
-        $newAgenda = 'AG' . str_pad($newNumber, 3, '0', STR_PAD_LEFT); // Format menjadi AG007
-
-        // Simpan file dokumen jika ada
-        $path = $request->file('dokumen') ? $request->file('dokumen')->store('dokumen_keluar', 'public') : null;
+        $path = null; // Default value if no file is uploaded
+        if ($request->hasFile('dokumen')) {
+            $path = $request->file('dokumen')->store('dokumen_keluar', 'public');
+        }
 
         $user = auth()->user();
 
         // Simpan data surat dengan no_agenda yang sudah otomatis terisi
         Surat::create([
-            'no_agenda' => $newAgenda, // Menggunakan nomor agenda baru
+            'no_agenda' => $noAgenda, // Menggunakan nomor agenda baru
             'tanggal' => $request->tanggal,
             'no_surat' => $request->no_surat,
             'tanggal_surat' => $request->tanggal_surat,
@@ -383,22 +376,19 @@ class SuratController extends Controller
         return redirect()->route('surat.keluar.index')->with('success', 'Data berhasil disimpan');
     }
 
-
     public function keluarupdate(Request $request, $id)
     {
         // Validasi input
         $request->validate([
-            'no_agenda' => 'required|string',
-            'tanggal' => 'required|date',
-            'no_surat' => 'required|string|max:255|unique:surat,no_surat',
-            'tanggal_surat' => 'required|date',
+            'tanggal' => 'nullable|date',
+            'no_surat' => 'nullable|string|max:255|unique:surat,no_surat,' . $id,
+            'tanggal_surat' => 'nullable|date',
             'perihal' => 'required|string',
             'konten' => 'required|string',
-            'id_sifat_surat' => 'required|integer',
-            'id_asal_surat' => 'required|integer',
-            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-            'status' => 'required|string|in:Masuk,Keluar',
-            'pengirim_id' => 'nullable|integer',
+            'id_sifat_surat' => 'nullable|integer',
+            'id_asal_surat' => 'nullable|integer',
+            'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:51200', // Allow up to 50 MB
+            'status' => 'nullable|string|in:Masuk,Keluar',
             'pengirim_eksternal' => 'nullable|string',
             'tujuan_pengguna_id' => 'nullable|integer',
             'tujuan_instansi_id' => 'nullable|integer',
@@ -406,47 +396,39 @@ class SuratController extends Controller
             'status_disposisi' => 'nullable|string',
         ]);
 
-
         // Temukan data yang akan diperbarui
         $surat = Surat::findOrFail($id);
+        // Ambil nilai lama jika tidak ada nilai baru yang diisi
+        $tanggal = $request->tanggal ?? $surat->tanggal;
+        $no_surat = $request->no_surat ?? $surat->no_surat;
+        $tanggal_surat = $request->tanggal_surat ?? $surat->tanggal_surat;
+        // Set $path to current dokumen if no new file is uploaded
+        $path = $surat->dokumen;
 
-      // Simpan data surat
-      Surat::create([
-        'no_agenda' => $request->no_agenda,
-        'tanggal' => $request->tanggal,
-        'no_surat' => $request->no_surat,
-        'tanggal_surat' => $request->tanggal_surat,
-        'perihal' => $request->perihal,
-        'konten' => $request->konten,
-        'id_sifat_surat' => $request->id_sifat_surat,
-        'id_asal_surat' => $request->id_asal_surat,
-        'dokumen' => $path,
-        'status' => $request->status,
-        'pengirim_id' => $request->pengirim_id, // Menyimpan ID Pengirim
-        'pengirim_eksternal' => $request->pengirim_eksternal, // Menyimpan Pengirim Eksternal
-        'tujuan_pengguna_id' => $request->tujuan_pengguna_id, // Menyimpan ID Pengguna Tujuan
-        'tujuan_instansi_id' => $request->tujuan_instansi_id, // Menyimpan ID Instansi Tujuan
-        'status_pengiriman' => $request->status_pengiriman, // Menyimpan Status Pengiriman
-        'status_disposisi' => $request->status_disposisi, // Menyimpan Status Disposisi
-    ]);
-
-        // Periksa jika ada file dokumen baru
         if ($request->hasFile('dokumen')) {
-            // Hapus file lama jika ada
-            if ($surat->dokumen) {
-                Storage::delete($surat->dokumen);
-            }
-
-            // Simpan file baru
-            $path = $request->file('dokumen')->store('dokumen_keluar', 'public');
-            $surat->dokumen = $path;
+            $dokumen = $request->file('dokumen');
+            $path = $dokumen->storeAs('dokumen_keluar', $dokumen->getClientOriginalName(), 'public');
         }
 
-        // Simpan perubahan ke database
-        $surat->save();
+        // Update data surat lainnya
+        $surat->update([
+            'tanggal' => $tanggal,
+            'no_surat' => $no_surat,
+            'tanggal_surat' => $tanggal_surat,
+            'perihal' => $request->perihal,
+            'konten' => $request->konten,
+            'id_asal_surat' => $request->id_asal_surat,
+            'dokumen' => $path, // Pastikan dokumen selalu diperbarui dengan path yang benar
+            'status' => $request->status ?? 'Keluar',
+            'pengirim_eksternal' => $request->pengirim_eksternal, // Menyimpan Pengirim Eksternal
+            'tujuan_pengguna_id' => $request->tujuan_pengguna_id, // Menyimpan ID Pengguna Tujuan
+            'tujuan_instansi_id' => $request->tujuan_instansi_id, // Menyimpan ID Instansi Tujuan
+        ]);
 
-        return redirect()->route('surat.keluar.index')->with('success', 'Data berhasil diperbarui');
+        // Mengarahkan kembali dengan pesan sukses
+        return redirect()->route('surat.keluar.index')->with('success', 'Surat Keluar berhasil diperbarui.');
     }
+
 
     public function keluardestroy($id)
     {
@@ -463,6 +445,8 @@ class SuratController extends Controller
         // Ambil data surat berdasarkan ID
         $surat = Surat::findOrFail($id);
         $user = Auth::user();
+        $pengguna = User::all(); // Get all pengguna from the database
+        $instansi = Instansi::all(); // Get all instansi from the database
 
         // Memastikan peran pengguna ada
         if (!$user) {
@@ -472,12 +456,12 @@ class SuratController extends Controller
         // Menyaring akses berdasarkan peran
         if ($user->peran == 'Admin') {
             // Jika Admin, tampilkan semua informasi surat
-            return view('crudsurat.detailkeluar', compact('surat'));
+            return view('crudsurat.detailkeluar', compact('surat','pengguna','instansi'));
         } elseif ($user->peran == 'Sekretariat') {
             // Jika Sekretariat, tampilkan surat
-            return view('crudsurat.detailkeluar', compact('surat'));
+            return view('crudsurat.detailkeluar', compact('surat','pengguna','instansi'));
         } elseif ($user->peran == 'Pimpinan') {
-            return view('crudsurat.detailKeluar', compact('surat'));
+            return view('crudsurat.detailKeluar', compact('surat','pengguna','instansi'));
         } elseif ($user->peran == 'Karyawan') {
             // Jika Karyawan, tampilkan hanya status surat dan instruksi
             return view('crudsurat.detailkeluar_kar', compact('surat'));

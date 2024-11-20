@@ -62,10 +62,9 @@
                 <h4>{{ auth()->user()->peran === 'Pimpinan' ? 'Detail Data Surat Keluar' : 'Edit Data Surat Keluar' }}</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('surat.update', $surat->id) }}" method="POST">
+                <form action="{{ route('surat.keluar.update', $surat->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="data-surat-tab" data-bs-toggle="tab" data-bs-target="#data-surat" type="button" role="tab" aria-controls="data-surat" aria-selected="true">Data Surat</button>
@@ -81,11 +80,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Nomor Agenda:</label>
                                     <div class="col-sm-9">
-                                        @if(auth()->user()->peran === 'Pimpinan')
                                             <p class="form-control-plaintext">{{ $surat->no_agenda }}</p>
-                                        @else
-                                            <input type="text" class="form-control" name="no_agenda" value="{{ $surat->no_agenda }}">
-                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -101,17 +96,14 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Pengirim</label>
                                     <div class="col-sm-9">
-                                        @if(auth()->user()->peran === 'Pimpinan')
-                                        <p class="form-control-plaintext">{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}</p>
-                                        @else
-                                        <input type="text" class="form-control" name="pengirim" value="{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}">
-                                    @endif
+                                        <p class="form-control-plaintext ">{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}</p>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">Tujuan Surat:</label>
                                     <div class="col-sm-9">
                                         @if(auth()->user()->peran === 'Pimpinan')
+                                            <!-- Display tujuan in plain text for Pimpinan -->
                                             <p class="form-control-plaintext">
                                                 @if ($surat->tujuan_pengguna_id)
                                                     {{ $surat->tujuanPengguna->jabatan ?? '--' }}
@@ -122,14 +114,40 @@
                                                 @endif
                                             </p>
                                         @else
-                                            <input type="text" class="form-control" name="instansi" value="
-                                                @if ($surat->tujuan_pengguna_id)
-                                                    {{ $surat->tujuanPengguna->jabatan ?? '--' }}
-                                                @elseif ($surat->tujuan_instansi_id)
-                                                    {{ $surat->tujuanInstansi->nama_instansi ?? '--' }}
-                                                @else
-                                                    --
-                                                @endif">
+                                            <!-- Form elements for other roles to edit tujuan -->
+                                            <div class="form-group">
+                                                <label for="tujuan">Tujuan:</label>
+                                                <select class="form-control" name="tujuan_type" id="tujuan_type">
+                                                    <option value="pengguna" {{ old('tujuan_type', $surat->tujuan_pengguna_id ? 'pengguna' : ($surat->tujuan_instansi_id ? 'instansi' : 'eksternal')) == 'pengguna' ? 'selected' : '' }}>Pengguna</option>
+                                                    <option value="instansi" {{ old('tujuan_type', $surat->tujuan_instansi_id ? 'instansi' : ($surat->tujuan_pengguna_id ? 'pengguna' : 'eksternal')) == 'instansi' ? 'selected' : '' }}>Instansi</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Pilihan Pengguna -->
+                                            <div class="form-group" id="tujuan_pengguna_div" style="display: {{ old('tujuan_type', $surat->tujuan_pengguna_id ? 'pengguna' : '') == 'pengguna' ? 'block' : 'none' }}">
+                                                <label for="tujuan_pengguna_id">Pilih Pengguna:</label>
+                                                <select class="form-control" name="tujuan_pengguna_id" id="tujuan_pengguna_id">
+                                                    <option value="">--Pilih Pengguna--</option>
+                                                    @foreach($pengguna as $user)
+                                                        <option value="{{ $user->id }}" {{ old('tujuan_pengguna_id', $surat->tujuan_pengguna_id) == $user->id ? 'selected' : '' }}>
+                                                            {{ $user->jabatan }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <!-- Pilihan Instansi -->
+                                            <div class="form-group" id="tujuan_instansi_div" style="display: {{ old('tujuan_type', $surat->tujuan_instansi_id ? 'instansi' : '') == 'instansi' ? 'block' : 'none' }}">
+                                                <label for="tujuan_instansi_id">Pilih Instansi:</label>
+                                                <select class="form-control" name="tujuan_instansi_id" id="tujuan_instansi_id">
+                                                    <option value="">--Pilih Instansi--</option>
+                                                    @foreach($instansi as $inst)
+                                                        <option value="{{ $inst->id }}" {{ old('tujuan_instansi_id', $surat->tujuan_instansi_id) == $inst->id ? 'selected' : '' }}>
+                                                            {{ $inst->nama_instansi }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
@@ -137,19 +155,19 @@
                                     <label class="col-sm-3 col-form-label">Nomor Surat:</label>
                                     <div class="col-sm-9">
                                         @if(auth()->user()->peran === 'Pimpinan')
-                                        <p class="form-control-plaintext">{{ $surat->no_surat }}</p>
+                                        <p class="form-control-plaintext ">{{ $surat->no_surat }}</p>
                                         @else
                                         <input type="text" class="form-control" name="no_surat" value="{{ $surat->no_surat }}">
                                         @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label">Tanggal Masuk:</label>
+                                    <label class="col-sm-3 col-form-label">Tanggal Surat:</label>
                                     <div class="col-sm-9">
                                         @if(auth()->user()->peran === 'Pimpinan')
                                             <p class="form-control-plaintext">{{ $surat->tanggal_surat }}</p>
                                         @else
-                                            <input type="date" class="form-control" name="tanggal" value="{{ $surat->tanggal_surat }}">
+                                            <input type="date" class="form-control" name="tanggal_surat" value="{{ $surat->tanggal_surat }}">
                                         @endif
                                     </div>
                                 </div>
@@ -178,20 +196,63 @@
                         <div class="tab-pane fade" id="dokumen-elektronik" role="tabpanel" aria-labelledby="dokumen-elektronik-tab">
                             <div class="mt-3">
                                 <iframe src="{{ asset('storage/dokumen_keluar/' . basename($surat->dokumen)) }}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+
+
+                                @if(auth()->user()->peran != 'Pimpinan')
+                                <div class="mt-3">
+                                    <label for="dokumen">Upload Dokumen Baru (PDF, DOC, DOCX):</label>
+                                    <input type="file" class="form-control" name="dokumen">
+                                </div>
+                                @endif
                             </div>
                         </div>
-                    </div>
+
                     <div class="card-footer text-end">
                         <button type="button" class="btn btn-secondary" onclick="history.back()">Tutup</button>
                         @if(auth()->user()->peran !== 'Pimpinan')
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-secondary">Update Surat</button>
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                         @endif
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to toggle the visibility of tujuan fields
+            function toggleTujuanFields() {
+                let tujuanType = document.getElementById('tujuan_type').value;
+                let penggunaDiv = document.getElementById('tujuan_pengguna_div');
+                let instansiDiv = document.getElementById('tujuan_instansi_div');
+
+                if (tujuanType === 'pengguna') {
+                    penggunaDiv.style.display = 'block';
+                    instansiDiv.style.display = 'none';
+                } else if (tujuanType === 'instansi') {
+                    instansiDiv.style.display = 'block';
+                    penggunaDiv.style.display = 'none';
+                } else {
+                    penggunaDiv.style.display = 'none';
+                    instansiDiv.style.display = 'none';
+                }
+            }
+
+            // Initialize visibility on page load
+            toggleTujuanFields();
+
+            // Attach event listener to the tujuan_type select field
+            document.getElementById('tujuan_type').addEventListener('change', toggleTujuanFields);
+        });
+    </script>
 </body>
 </html>
