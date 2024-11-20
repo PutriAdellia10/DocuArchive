@@ -216,8 +216,16 @@
                             <input type="text" class="form-control" id="nama_pengguna" name="nama_pengguna" required>
                         </div>
                         <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="kata_sandi" class="form-label">Kata Sandi</label>
                             <input type="password" class="form-control" id="kata_sandi" name="kata_sandi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jabatan" class="form-label">Jabatan</label>
+                            <input type="text" class="form-control" id="jabatan" name="jabatan" required>
                         </div>
                         <div class="mb-3">
                             <label for="peran" class="form-label">Peran</label>
@@ -253,8 +261,16 @@
                             <input type="text" class="form-control" id="edit_nama_pengguna" name="nama_pengguna" required>
                         </div>
                         <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="edit_kata_sandi" class="form-label">Kata Sandi</label>
                             <input type="text" class="form-control" id="edit_kata_sandi" name="kata_sandi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jabatan" class="form-label">Jabatan</label>
+                            <input type="text" class="form-control" id="jabatan" name="jabatan" required>
                         </div>
                         <div class="mb-3">
                             <label for="edit_peran" class="form-label">Peran</label>

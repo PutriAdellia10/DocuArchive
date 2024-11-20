@@ -131,16 +131,6 @@
                         <input type="password" class="form-control" id="login-kata_sandi" name="kata_sandi" placeholder="Kata Sandi" required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="peran">Pilih Peran <span class="text-danger"></span></label>
-                    <select id="peran" name="peran" required>
-                        <option value="" disabled selected>Pilih Peran</option>
-                        <option value="Admin">Admin</option>
-                        <option value="Karyawan">Karyawan</option>
-                        <option value="Sekretariat">Sekretariat</option>
-                        <option value="Pimpinan">Pimpinan</option>
-                    </select>
-                </div>
                 <button type="submit" class="login-button">Login</button>
             </form>
             <div class="register-text">
