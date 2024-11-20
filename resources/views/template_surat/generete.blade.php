@@ -145,7 +145,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Nomor</th>
                         <th>Nama Template</th>
                         <th>Aksi</th>
                     </tr>
@@ -165,7 +165,7 @@
 
                     </tr>
                     <tr>
-                        <td>1</td>
+                        <td>2</td>
                         <td>Surat Peringatan </td>
                         <td>
                             <form action="{{ route('surat_SP') }}" method="GET">
