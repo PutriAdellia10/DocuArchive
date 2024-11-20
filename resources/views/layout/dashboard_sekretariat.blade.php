@@ -220,7 +220,7 @@
         <div class="statistics">
             <div class="card">
                 <h5>Total Surat Masuk</h5>
-                <p>{{ $totalSuratMasukSelesai }}</p>
+                <p>{{ $total_surat_gabungan }}</p>
                 <i class="fas fa-envelope card-icon"></i>
             </div>
             <div class="card">

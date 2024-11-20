@@ -36,19 +36,25 @@ class SekretariatController extends Controller
         $totalSuratPerTahun = Surat::whereYear('tanggal_surat', date('Y'))
             ->count();
 
-        // Total Surat Masuk dengan disposisi 'Selesai'
-        $totalSuratMasukSelesai = Surat::where('status', 'Masuk')
-            ->where('status_disposisi', 'Selesai')
-            ->count();
+         // Ambil koleksi surat masuk
+         $suratMasuk = Surat::where('status', 'Masuk')
+         ->whereIn('status_disposisi', ['Selesai'])
+         ->get();
 
-        // Total Surat Keluar dengan disposisi 'Selesai' yang tidak dibuat oleh Karyawan
-        $totalSuratKeluarSelesai = Surat::where('status', 'Keluar')
-            ->where('status_disposisi', 'Selesai')
-            ->whereDoesntHave('pengirim', function($query) {
-                $query->where('peran', 'Karyawan');
-            })
-            ->count();
+     // Ambil koleksi surat keluar
+     $suratKeluar = Surat::where('status', 'Keluar')
+         ->whereIn('status_disposisi', ['Selesai'])
+         ->whereNotIn('pengirim_id', function ($query) {
+             $query->select('id')
+                   ->from('pengguna')
+                   ->whereIn('peran', ['Sekretariat', 'Admin']);
+         })
+         ->get();
 
+     // Gabungkan koleksi surat masuk dan surat keluar
+     $suratGabungan = $suratMasuk->merge($suratKeluar);
+
+     $totalSuratKeluarSelesai = $suratKeluar->count();
        // Total Disposisi Aktif (status 'Masuk' atau 'Keluar' dan disposisi 'Belum Diproses' atau 'Diproses')
             $totalDisposisiAktif = Surat::whereIn('status', ['Masuk', 'Keluar'])
             ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses'])
@@ -63,8 +69,8 @@ class SekretariatController extends Controller
             'recentSuratMasuk' => $recentSuratMasuk,
             'recentSuratKeluar' => $recentSuratKeluar,
             'notifikasi' => $notifikasi,
-            'totalSuratMasukSelesai' => $totalSuratMasukSelesai,
             'totalSuratKeluarSelesai' => $totalSuratKeluarSelesai,
+            'total_surat_gabungan' => $suratGabungan->count(),
             'totalDisposisiAktif' => $totalDisposisiAktif,
             'totalSuratPerTahun' => $totalSuratPerTahun,
         ];

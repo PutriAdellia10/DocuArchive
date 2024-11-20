@@ -4,107 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil Perusahaan</title>
-    <link href="{{ asset('css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         body {
-            background-color: #d1e7dd;
+            background-color: #d4f1f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
         }
-
-        .card-header {
-            background-color: #a0d3d1;
-            color: #333;
-            font-size: 20px; /* Slightly larger font size for better readability */
-            font-weight: bold;
-        }
-
-        .table th, .table td {
-            border: none;
-            padding: 12px; /* Increase padding for better spacing */
-            vertical-align: middle; /* Align text to the middle of cells */
-        }
-
-        .table th {
-            width: 180px; /* Adjust width for better alignment */
-        }
-
-        .btn-primary {
-            background-color: #6c757d;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #5a6268;
-        }
-        .modal-header {
-            background-color: #a0d3d1;
-        }
-
-        .modal-content {
-            border-radius: 0.5rem;
-        }
-
         .content-wrapper {
+            margin-left: 300px;
+            margin-top: 60px; /* Adjusted for top navbar height */
             padding: 20px;
-            margin-left: 250px; /* Adjust margin to create space from the sidebar */
-            margin-top: 20px;  /* Add top margin for space from the navbar */
-        }
-
-        .center-card {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh; /* Ensures the card is vertically centered */
         }
 
         .card {
-            max-width: 900px; /* Increase the maximum width of the card */
-            width: 100%; /* Make the card responsive */
+            background-color: #d4f1f4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
 
-        @media (max-width: 768px) {
-            .content-wrapper {
-                margin-left: 0;
-            }
-            .card {
-                max-width: 100%; /* Make the card full width on smaller screens */
-            }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #00b4d8;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .table-container {
+            margin-top: 20px;
+            border: 1px solid #00b4d8;
+            border-radius: 8px;
+            background-color: #e9f1f7;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-container th, .table-container td {
+            border: 1px solid #00b4d8;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .table-container th {
+            background-color: #00b4d8;
+            color: black;
+        }
+
+        .table-container tbody tr:nth-child(even) {
+            background-color: #f1f1f1; /* Light Gray */
+        }
+
+        .table-container tbody tr:hover {
+            background-color: #e0f7fa; /* Very Light Blue */
+        }
+
+        .actions a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #00b4d8;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .pagination button {
+            background-color: #00b4d8;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            color: rgb(3, 3, 3);
+            margin-left: 5px;
+        }
+
+        .pagination button:disabled {
+            background-color: #33a393;
+        }
+
+        .modal-content {
+            background-color: #f9f9f9;
         }
     </style>
 </head>
 <body>
+
     @include('components.navbar')
 
     @if(auth()->check())
-    @if(auth()->user()->peran == 'Admin')
-        @include('components.sidebaradmin')
-    @elseif(auth()->user()->peran == 'Sekretariat')
-        @include('components.sidebarsekre')
-    @elseif(auth()->user()->peran == 'Karyawan')
-        @include('components.sidebarkaryawan')
-    @elseif(auth()->user()->peran == 'Pimpinan')
-        @include('components.sidebarpim')
+        @if(auth()->user()->peran == 'Admin')
+            @include('components.sidebaradmin')
+        @elseif(auth()->user()->peran == 'Sekretariat')
+            @include('components.sidebarsekre')
+        @elseif(auth()->user()->peran == 'Karyawan')
+            @include('components.sidebarkaryawan')
+        @elseif(auth()->user()->peran == 'Pimpinan')
+            @include('components.sidebarpim')
+        @else
+            <p>Peran tidak dikenali.</p>
+        @endif
     @else
-        <p>Peran tidak dikenali.</p>
+        <p>Anda belum login. Silakan login untuk melanjutkan.</p>
     @endif
-@else
-    <p>Anda belum login. Silakan login untuk melanjutkan.</p>
-@endif
 
-    <!-- Main Content -->
     <div class="content-wrapper">
         <div class="center-card">
-            <div class="col-md-9">
                 <div class="card mt-4">
                     <div class="card-header">
                         <i class="bi bi-house-door"></i> Profil Perusahaan
                     </div>
                     <div class="card-body">
-                        <!-- Success and Error Messages -->
                         @if(session('success'))
                             <div class="alert alert-success">
                                 {{ session('success') }}
@@ -121,7 +142,6 @@
                             </div>
                         @endif
 
-                        <!-- Company Profile Details -->
                         @if ($perusahaan)
                             <table class="table">
                                 <tr>
@@ -151,8 +171,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <!-- Edit Profile Button -->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfilModal">
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editProfilModal">
                                 Ubah
                             </button>
                         @else
@@ -207,5 +226,10 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const myModal = new bootstrap.Modal(document.getElementById('editProfilModal'), {
+            keyboard: false
+        });
+    </script>
 </body>
 </html>

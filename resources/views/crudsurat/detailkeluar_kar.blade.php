@@ -62,36 +62,50 @@
                 <h4>Detail Data Surat Keluar</h4>
             </div>
             <div class="card-body">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="data-surat-tab" data-bs-toggle="tab" data-bs-target="#data-surat" type="button" role="tab" aria-controls="data-surat" aria-selected="true">Data Surat</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="dokumen-elektronik-tab" data-bs-toggle="tab" data-bs-target="#dokumen-elektronik" type="button" role="tab" aria-controls="dokumen-elektronik" aria-selected="false">Dokumen Elektronik</button>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="data-surat" role="tabpanel" aria-labelledby="data-surat-tab">
-                        <div class="mt-3">
-                            <form action="{{ route('surat.update', $surat->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                            <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label">Nomor Agenda:</label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->no_agenda }}</p>
+                <form action="{{ route('surat.keluar.update', $surat->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="data-surat-tab" data-bs-toggle="tab" data-bs-target="#data-surat" type="button" role="tab" aria-controls="data-surat" aria-selected="true">Data Surat</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="dokumen-elektronik-tab" data-bs-toggle="tab" data-bs-target="#dokumen-elektronik" type="button" role="tab" aria-controls="dokumen-elektronik" aria-selected="false">Dokumen Elektronik</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="data-surat" role="tabpanel" aria-labelledby="data-surat-tab">
+                            <div class="mt-3">
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Nomor Agenda:</label>
+                                    <div class="col-sm-9">
+                                            <p class="form-control-plaintext">{{ $surat->no_agenda }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label">Tanggal Keluar:</label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->tanggal }}</p>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Tanggal Keluar:</label>
+                                    <div class="col-sm-9">
+                                            <p class="form-control-plaintext">{{ $surat->tanggal }}</p>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Pengirim</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-plaintext ">{{ $surat->pengirim_eksternal ?? $surat->pengirim->jabatan }}</p>
+                                    </div>
+                                </div>
                             <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label">Asal Surat:</label>
+                                <label class="col-sm-3 col-form-label">Tujuan Surat:</label>
                                 <div class="col-sm-9">
-                                    <p class="form-control-plaintext">{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</p>
+                                        <p class="form-control-plaintext ">
+                                            @if ($surat->tujuan_pengguna_id)
+                                                {{ $surat->tujuanPengguna->jabatan ?? '--' }}
+                                            @elseif ($surat->tujuan_instansi_id)
+                                                {{ $surat->tujuanInstansi->nama_instansi ?? '--' }}
+                                            @else
+                                                --
+                                            @endif
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -124,16 +138,34 @@
                     <div class="tab-pane fade" id="dokumen-elektronik" role="tabpanel" aria-labelledby="dokumen-elektronik-tab">
                         <div class="mt-3">
                             <iframe src="{{ asset('storage/dokumen_keluar/' . basename($surat->dokumen)) }}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+
+                            <!-- Form for updating the document -->
+                            <div class="mt-3">
+                                <label for="dokumen">Upload Dokumen Baru (PDF, DOC, DOCX):</label>
+                                <input type="file" class="form-control" name="dokumen">
+                            </div>
                         </div>
                     </div>
+
+                <div class="card-footer text-end">
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">Tutup</button>
+                    @if(auth()->user()->peran !== 'Pimpinan')
+                    <button type="submit" class="btn btn-secondary">Update Surat</button>
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                    @endif
                 </div>
-            <div class="card-footer text-end">
-                <button type="button" class="btn btn-secondary" onclick="history.back()">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
+            </form>
         </div>
     </div>
-
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -144,8 +144,32 @@
     </style>
 </head>
 <body>
-    @include('components.navbar')
-    @include('components.sidebaradmin')
+    @if(auth()->check())
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.navbar')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.navbarsekre')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.navbarpim')
+    @else
+        <p>Peran tidak dikenali.</p>
+    @endif
+
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.sidebaradmin')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.sidebarsekre')
+    @elseif(auth()->user()->peran == 'Karyawan')
+        @include('components.sidebarkaryawan')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.sidebarpim')
+    @else
+        <p>Peran tidak dikenali.</p>
+    @endif
+@else
+    <p>Anda belum login. Silakan login untuk melanjutkan.</p>
+@endif
+
     <div class="container">
         <div class="header">
             <h2>Rekapitulasi Surat</h2>
@@ -184,7 +208,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $rekap->bulan}}</td>
-                            <td>{{ $rekap->total_surat_masuk }}</td>
+                            <td>{{ $rekap->total_surat_gabungan}}</td>
                             <td>{{ $rekap->total_surat_keluar }}</td>
                         </tr>
                     @empty
@@ -226,12 +250,6 @@ function printTable() {
     // Kembalikan tampilan seperti semula
     document.body.innerHTML = originalContents;
 }
-
-
-        function toggleDropdown() {
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('show');
-        }
 
         document.getElementById('rekapitulasiForm').addEventListener('submit', function() {
             document.getElementById('tableContainer').classList.add('show');

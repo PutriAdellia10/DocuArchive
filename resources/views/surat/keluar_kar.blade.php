@@ -376,7 +376,7 @@
             </div>
 
             <div class="form-group" id="tujuanInstansiField" style="display: none;">
-                <label for="tujuan_instansi_id">Tujuan Instansi *</label>
+                <label for="tujuan_instansi_id">Tujuan *</label>
                 <select id="tujuan_instansi_id" name="tujuan_instansi_id">
                     <option value="">--Pilih--</option>
                     @foreach($instansi as $inst)
@@ -406,12 +406,10 @@
 
             <div class="form-group">
                 <label for="status">Status *</label>
-                <select id="status" name="status" required>
-                    <option value="">--Pilih--</option>
-                    <option value="Masuk">Masuk</option>
-                    <option value="Keluar">Keluar</option>
-                </select>
+                <input type="hidden" name="status" value="Keluar">
+                <p>Keluar</p>
             </div>
+
             <div class="form-group">
                 <label for="status_pengiriman">Status Pengiriman *</label>
                 <input type="hidden" id="status_pengiriman" name="status_pengiriman" value="Draft" />
@@ -424,7 +422,7 @@
                 <p class="file-info">
                     Keterangan: <br>
                     - Tipe file yang bisa diunggah adalah *.pdf. <br>
-                    - Ukuran file yang bisa diunggah maksimal 10 Mb.
+                    - Ukuran file yang bisa diunggah maksimal 50 Mb.
                 </p>
             </div>
 

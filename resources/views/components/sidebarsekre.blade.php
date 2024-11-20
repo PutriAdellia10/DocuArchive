@@ -60,7 +60,7 @@
 </style>
 
 <div class="sidebar">
-    <a href="{{ route('dashboard_pimpinan') }}"><i class="fa fa-home"></i> Dashboard</a>
+    <a href="{{ route('dashboard_sekretariat') }}"><i class="fa fa-home"></i> Dashboard</a>
 
     <button id="toggle-surat">
         <i class="bi bi-envelope-fill"></i> Surat
@@ -78,6 +78,7 @@
     <div class="submenu" id="submenu-laporan">
         <a href="{{ route('laporan.masuk') }}"><i class="bi bi-inbox"></i> Laporan Masuk</a>
         <a href="{{ route('laporan.keluar') }}"><i class="bi bi-send"></i> Laporan Keluar</a>
+        <a href="{{ route('rekapitulasi.index') }}"><i class="bi bi-send"></i>Rekapitulasi</a>
     </div>
 </div>
 

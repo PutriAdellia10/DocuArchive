@@ -78,6 +78,8 @@
     <div class="submenu" id="submenu-laporan">
         <a href="{{ route('laporan.masuk') }}"><i class="bi bi-inbox"></i> Laporan Masuk</a>
         <a href="{{ route('laporan.keluar') }}"><i class="bi bi-send"></i> Laporan Keluar</a>
+        <a href="{{ route('rekapitulasi.index') }}"><i class="bi bi-send"></i> Rekapitulasi</a>
+
     </div>
 </div>
 

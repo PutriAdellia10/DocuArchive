@@ -133,9 +133,9 @@
             <form action="{{ route('register') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="nama_lengkap">Nama Lengkap <span class="required">*</span></label>
-                    <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Nama Lengkap" value="{{ old('nama_lengkap') }}" required>
-                    @error('nama_lengkap')
+                    <label for="nama_pengguna">Nama Pengguna <span class="required">*</span></label>
+                    <input type="text" id="nama_pengguna" name="nama_pengguna" placeholder="Nama Pengguna" value="{{ old('nama_pengguna') }}" required>
+                    @error('nama_pengguna')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -168,17 +168,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="peran">Peran <span class="required">*</span></label>
-                    <select id="peran" name="peran" required>
-                        <option value="" disabled selected>Pilih Peran</option>
-                        <option value="Admin" {{ old('peran') == 'Admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="Karyawan" {{ old('peran') == 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
-                        <option value="Sekretariat" {{ old('peran') == 'Sekretariat' ? 'selected' : '' }}>Sekretariat</option>
-                        <option value="Pimpinan" {{ old('peran') == 'Pimpinan' ? 'selected' : '' }}>Pimpinan</option>
-                    </select>
-                    @error('peran')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                    <input type="hidden" id="peran" name="peran" value="Karyawan">
                 </div>
                 <button type="submit" class="btn-submit">Daftar</button>
             </form>
