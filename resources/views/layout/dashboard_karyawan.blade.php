@@ -201,14 +201,25 @@
         <h5>Recent Activities</h5>
         <ul class="activity-list">
             @forelse($recentSuratMasuk as $suratmasuk)
-            <li>
-                <span>Surat Masuk dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
-                <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
-            </li>
-        @empty
+                <li>
+                    <span>Surat Masuk Dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                    <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
+                </li>
+            @empty
+                <li><span>Tidak ada surat masuk terbaru</span></li>
+            @endforelse
+        </ul>
 
-            <li><span>Tidak ada surat masuk terbaru</span></li>
-        @endforelse
+        <ul class="activity-list">
+            @forelse($recentSuratKeluar as $suratkeluar)
+                <li>
+                    <span>Surat Keluar Ke {{ $suratkeluar->instansi ? $suratkeluar->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                    <time>{{ $suratkeluar->created_at->format('d-m-Y H:i') }}</time>
+                </li>
+            @empty
+                <li><span>Tidak ada surat keluar terbaru</span></li>
+            @endforelse
+
         </ul>
     </div>
 

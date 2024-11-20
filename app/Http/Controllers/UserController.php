@@ -7,22 +7,27 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function store(Request $request)
-    {
-        $request->validate([
-            'nama_pengguna' => 'required|string|max:255|unique:pengguna',
-            'kata_sandi' => 'required|string|min:8',
-            'peran' => 'required|string|in:admin,karyawan,sekretariat,pimpinan',
-        ]);
+{
+    $request->validate([
+        'nama_pengguna' => 'required|string|max:255|unique:pengguna',
+        'email' => 'required|email|unique:pengguna',
+        'kata_sandi' => 'required|string|min:8',
+        'peran' => 'required|string|in:admin,karyawan,sekretariat,pimpinan',
+        'jabatan' => 'nullable|string|max:255',
+    ]);
 
-        // Buat dan simpan user baru
-        User::create([
-            'nama_pengguna' => $request->nama_pengguna,
-            'kata_sandi' => bcrypt($request->kata_sandi),
-            'peran' => $request->peran,
-        ]);
+    // Buat dan simpan user baru
+    User::create([
+        'nama_pengguna' => $request->nama_pengguna,
+        'email' => $request->email,
+        'kata_sandi' => bcrypt($request->kata_sandi),
+        'peran' => $request->peran,
+        'jabatan' => $request->jabatan,
+    ]);
 
-        return redirect()->route('user.profil')->with('success', 'User berhasil ditambahkan');
-    }
+    return redirect()->route('user.profil')->with('success', 'User berhasil ditambahkan');
+}
+
 
     public function show()
     {

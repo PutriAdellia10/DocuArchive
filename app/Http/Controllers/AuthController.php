@@ -33,6 +33,9 @@ class AuthController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        // Set peran berdasarkan input jabatan
+        $peran = $request->input('jabatan') ? 'Karyawan' : $request->input('peran');
+
         // Buat pengguna baru dengan password yang di-hash
         $pengguna = User::create([
             'nama_pengguna' => $request->input('nama_pengguna'),
@@ -59,13 +62,10 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email|string', // Mengganti nama_pengguna dengan email
             'kata_sandi' => 'required|string',
-            'peran' => 'required|string|in:Admin,Karyawan,Sekretariat,Pimpinan',
         ]);
 
         // Mencari pengguna berdasarkan email dan peran
-        $user = User::where('email', $request->email) // Mengganti nama_pengguna dengan email
-                    ->where('peran', $request->peran)
-                    ->first();
+        $user = User::where('email', $request->email)->first();
 
         // Jika pengguna ditemukan dan password cocok
         if ($user && Hash::check($request->kata_sandi, $user->kata_sandi)) {

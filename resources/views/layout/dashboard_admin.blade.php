@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f4f8; /* Light background */
+            background-color: #f0f4f8;
             margin: 0;
             padding: 0;
         }
@@ -23,7 +23,6 @@
             margin-left: 240px;
             padding: 80px 20px 20px;
         }
-
         .header {
             background: linear-gradient(180deg, #90e0ef, #caf0f8);
             padding: 20px;
@@ -34,13 +33,11 @@
             border-bottom: 2px solid #0077b6;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
         .header img {
             width: 50px;
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-
         .header h2 {
             margin: 0;
             padding-left: 10px;
@@ -49,113 +46,84 @@
             display: flex;
             align-items: center;
         }
-
         .statistics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.card {
-    background-color: #ffffff;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    padding-top: 60px; /* Ruang untuk icon */
-}
-
-.card h5 {
-    font-size: 18px;
-    color: #0077b6;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.card p {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
-    color: #333;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Icon centered on top */
-.card-icon {
-    font-size: 50px;
-    color: #00b4d8;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%); /* Menggeser icon ke tengah */
-}
-
-
-    /* Container for Recent Activities and Notifications */
-.card-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-/* Container for Recent Activities and Notifications */
-.card-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-/* Recent Activities and Notifications */
-.recent-activities, .notifications {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 48%; /* Adjust width to fit side by side */
-    margin-right: 20px; /* Add right margin to the first card */
-}
-
-.notifications {
-    margin-right: 0; /* No margin on the rightmost card */
-}
-
-.recent-activities h5, .notifications h5 {
-    margin: 0 0 10px 0;
-    font-weight: bold;
-}
-
-.activity-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.activity-list li span {
-    flex-grow: 1;
-    margin-right: 10px;
-}
-
-.activity-list li time {
-    color: #030303;
-    white-space: nowrap; /* Pastikan tanggal tidak terpotong */
-}
-
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            padding-top: 60px;
+        }
+        .card h5 {
+            font-size: 18px;
+            color: #0077b6;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .card p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .card-icon {
+            font-size: 50px;
+            color: #00b4d8;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        .recent-activities, .notifications, .statistik-disposisi {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex: 1; /* Ensure equal width */
+        }
+        .recent-activities h5, .notifications h5, .statistik-disposisi h5 {
+            margin: 0 0 10px 0;
+            font-weight: bold;
+        }
+        .activity-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .activity-list li span {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .activity-list li time {
+            color: #030303;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
-
-@include('components.navbar')
-@include('components.sidebaradmin')
+    @include('components.navbar')
+    @include('components.sidebaradmin')
     <div class="content">
         <div class="header" style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
             <h1 class="h2" style="margin: 0; font-size: 40px; color: #0077b6; margin: 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Dashboard Admin</h1>
@@ -165,8 +133,6 @@
                     <h3 style="font-size: 40px; color: #0077b6; margin: 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Selamat Datang di DocuArchive</h3>
                     <p style="font-size: 30px; color: #0077b6; margin: 5px 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Atur dan Arsipkan Dokumen</p>
                     <p style="font-size: 30px; color: #0077b6; margin: 5px 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Anda dengan Mudah dan Aman</p>
-
-                    <!-- Buttons for Surat Masuk and Surat Keluar -->
                     <div class="button-container" style="margin-top: 10px; display: flex; justify-content: flex-start; gap: 10px;">
                         <a href="{{ route('surat.index') }}" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #0077b6;">Surat Masuk</a>
                         <a href="{{ route('surat.keluar.index') }}" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 5px; text-decoration: none; color: #fff; background-color: #00b4d8;">Surat Keluar</a>
@@ -179,7 +145,7 @@
 <div class="statistics">
     <div class="card">
         <h5>Total Surat Masuk</h5>
-        <p>{{  $total_surat_gabungan }}</p>
+        <p>{{$total_surat_gabungan }}</p>
         <i class="fas fa-envelope card-icon"></i>
     </div>
     <div class="card">
@@ -250,12 +216,53 @@
                             <span class="badge badge-secondary">Dibaca</span>
                         @endif
                     </div>
-                </li>
-            @empty
-                <li class="list-group-item">Tidak ada notifikasi</li>
-            @endforelse
-        </ul>
+                    <p>Rata-rata waktu disposisi: <strong>2 jam 30 menit</strong></p>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Surat</th>
+                                <th>Tanggal Disposisi</th>
+                                <th>Waktu Penyelesaian</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Surat Masuk #123</td>
+                                <td>19-11-2024</td>
+                                <td>3 Jam</td>
+                                <td><span class="badge bg-success">Selesai</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Surat Keluar #456</td>
+                                <td>18-11-2024</td>
+                                <td>1 Jam 45 Menit</td>
+                                <td><span class="badge bg-warning">Proses</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Surat Masuk #789</td>
+                                <td>17-11-2024</td>
+                                <td>2 Jam</td>
+                                <td><span class="badge bg-success">Selesai</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Surat Keluar #101</td>
+                                <td>16-11-2024</td>
+                                <td>Belum Selesai</td>
+                                <td><span class="badge bg-danger">Tertunda</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-
 </body>
 </html>

@@ -376,7 +376,7 @@
             </div>
 
             <div class="form-group" id="tujuanInstansiField" style="display: none;">
-                <label for="tujuan_instansi_id">Tujuan Instansi *</label>
+                <label for="tujuan_instansi_id">Tujuan *</label>
                 <select id="tujuan_instansi_id" name="tujuan_instansi_id">
                     <option value="">--Pilih--</option>
                     @foreach($instansi as $inst)
