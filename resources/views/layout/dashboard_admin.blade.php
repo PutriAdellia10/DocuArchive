@@ -140,81 +140,54 @@
                 </div>
             </div>
         </div>
+        <div class="statistics">
+            <div class="card">
+                <h5>Total Surat Masuk</h5>
+                <p>{{ $total_surat_gabungan }}</p>
+                <i class="fas fa-envelope card-icon"></i>
+            </div>
+            <div class="card">
+                <h5>Total Surat Keluar</h5>
+                <p>{{ $totalSuratKeluarSelesai }}</p>
+                <i class="fas fa-paper-plane card-icon"></i>
+            </div>
+            <div class="card">
+                <h5>Total Surat</h5>
+                <p>{{$totalSuratPerTahun}}</p>
+                <i class="fas fa-calendar-alt card-icon"></i>
+            </div>
+            <div class="card">
+                <h5>Total Instansi</h5>
+                <p>{{ $totalInstansi }}</p>
+                <i class="fas fa-building card-icon"></i>
+            </div>
+            <div class="card">
+                <h5>Total Disposisi Aktif</h5>
+                <p>10</p>
+                <i class="bi bi-file-earmark-check-fill card-icon"></i>
+            </div>
+        </div>
+        <div class="card-container">
+            <div class="recent-activities">
+                <h5>Recent Activities</h5>
+                <ul class="activity-list">
+                    @forelse($recentSuratMasuk as $suratmasuk)
+                    <li>
+                        <span>Surat Masuk dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
+                        <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
+                    </li>
+                    @empty
+                        <li><span>Tidak ada surat masuk terbaru</span></li>
+                    @endforelse
+                </ul>
+            </div>
 
-       <!-- Statistics Cards -->
-<div class="statistics">
-    <div class="card">
-        <h5>Total Surat Masuk</h5>
-        <p>{{$total_surat_gabungan }}</p>
-        <i class="fas fa-envelope card-icon"></i>
-    </div>
-    <div class="card">
-        <h5>Total Surat Keluar</h5>
-        <p>{{ $totalSuratKeluarSelesai }}</p>
-        <i class="fas fa-paper-plane card-icon"></i>
-    </div>
-    <div class="card">
-        <h5>Total Surat</h5>
-        <p>{{$totalSuratPerTahun}}</p>
-        <i class="fas fa-calendar-alt card-icon"></i>
-    </div>
-    <div class="card">
-        <h5>Total Instansi</h5>
-        <p>{{ $totalInstansi }}</p>
-        <i class="fas fa-building card-icon"></i>
-    </div>
-    <div class="card">
-        <h5>Total Disposisi Aktif</h5>
-        <p>10</p>
-        <i class="bi bi-file-earmark-check-fill card-icon"></i>
-    </div>
-</div>
-
-       <!-- Container for Recent Activities and Notifications -->
-<div class="card-container">
-    <!-- Recent Activities -->
-    <div class="recent-activities">
-        <h5>Recent Activities</h5>
-        <ul class="activity-list">
-            @forelse($recentSuratMasuk as $suratmasuk)
-            <li>
-                <span>Surat Masuk dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
-                <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
-            </li>
-        @empty
-            <li><span>Tidak ada surat masuk terbaru</span></li>
-        @endforelse
-
-        @forelse($recentSuratKeluar as $suratkeluar)
-            <li>
-                <span>Surat Keluar ke {{ $suratkeluar->instansi ? $suratkeluar->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
-                <time>{{ $suratkeluar->created_at->format('d-m-Y H:i') }}</time>
-            </li>
-        @empty
-            <li><span>Tidak ada surat keluar terbaru</span></li>
-        @endforelse
-
-        </ul>
-    </div>
-
-    <!-- Notifications -->
-    <div class="notifications">
-        <h5>Notifications</h5>
-        <ul class="notification-list">
-            @forelse($notifikasi as $notif)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>
-                        {{ $notif->pesan }}
-                        <small class="text-muted d-block">{{ $notif->dibuat_pada->diffForHumans() }}</small>
-                    </span>
-                    <div>
-                        @if(!$notif->sudah_dibaca)
-                            <a href="{{ route('notifikasi.markAsRead', $notif->id) }}" class="btn btn-sm btn-success">
-                                Tandai sebagai dibaca
-                            </a>
-                        @else
-                            <span class="badge badge-secondary">Dibaca</span>
-                        @endif
+            <div class="statistik-disposisi">
+                <h5>Statistik Waktu Disposisi</h5>
+                <div class="mb-4">
+                    <h6>Rata-rata Waktu Disposisi</h6>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
                     </div>
                     <p>Rata-rata waktu disposisi: <strong>2 jam 30 menit</strong></p>
                 </div>
