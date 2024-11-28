@@ -20,15 +20,16 @@ class Disposisi extends Model
         'lampiran',
         'catatan',
     ];
+   public function surat()
+{
+    return $this->belongsTo(Surat::class, 'surat_id', 'id');
+}
 
-    public function surat()
-    {
-        return $this->belongsTo(Surat::class, 'surat_id');
-    }
 
     /**
      * Customisasi timestamps jika diperlukan.
      * Jika tidak perlu, Anda bisa menghapus atau mengubahnya sesuai keperluan.
      */
     public $timestamps = true;
+
 }

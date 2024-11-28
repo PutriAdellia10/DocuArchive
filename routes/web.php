@@ -76,6 +76,14 @@ Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update'); // Hanya gunakan yang ini untuk update
 Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 
+//Route untuk edit profil
+use App\Http\Controllers\ProfileController;
+
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+
+
 // Routes untuk dashboard berdasarkan role
 Route::get('/dashboard_admin', [AdminController::class, 'index'])->name('dashboard_admin');
 Route::get('/dashboard_sekretariat', [SekretariatController::class, 'index'])->name('dashboard_sekretariat');

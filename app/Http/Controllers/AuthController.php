@@ -86,7 +86,7 @@ class AuthController extends Controller
             }
         } else {
             // Jika login gagal
-            return redirect()->back()->with('error', 'Login gagal. Periksa kembali email, kata sandi, dan peran Anda.');
+            return redirect()->back()->with('error', 'Login gagal. Periksa kembali email dan kata sandi Anda.');
         }
     }
 
