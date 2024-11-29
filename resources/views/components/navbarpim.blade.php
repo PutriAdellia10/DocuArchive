@@ -109,6 +109,10 @@
             <div class="user-info">
                 <span>Pimpinan</span>
             </div>
+            <!-- Button Edit Profil -->
+            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                <i class="bi bi-person-circle"></i> Edit Profil
+            </a>
             <!-- Button Logout -->
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
@@ -119,6 +123,10 @@
         </div>
     </div>
 </div>
+
+@include('profile.edit')
+<!-- Menambahkan Bootstrap JS di bagian bawah -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     function toggleDropdown() {

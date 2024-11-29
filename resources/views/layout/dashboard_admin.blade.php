@@ -181,7 +181,6 @@
                     @endforelse
                 </ul>
             </div>
-
             <div class="statistik-disposisi">
                 <h5>Statistik Waktu Disposisi</h5>
                 <div class="mb-4">
@@ -196,41 +195,21 @@
                         <thead class="table-light">
                             <tr>
                                 <th>No</th>
-                                <th>Nama Surat</th>
+                                <th>Perihal Surat</th>
                                 <th>Tanggal Disposisi</th>
                                 <th>Waktu Penyelesaian</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Surat Masuk #123</td>
-                                <td>19-11-2024</td>
-                                <td>3 Jam</td>
-                                <td><span class="badge bg-success">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Surat Keluar #456</td>
-                                <td>18-11-2024</td>
-                                <td>1 Jam 45 Menit</td>
-                                <td><span class="badge bg-warning">Proses</span></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Surat Masuk #789</td>
-                                <td>17-11-2024</td>
-                                <td>2 Jam</td>
-                                <td><span class="badge bg-success">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Surat Keluar #101</td>
-                                <td>16-11-2024</td>
-                                <td>Belum Selesai</td>
-                                <td><span class="badge bg-danger">Tertunda</span></td>
-                            </tr>
+                            @foreach ($disposisiData as $index => $disposisi)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $disposisi->surat_id }}</td>
+                                    <td>{{ date('d-m-Y', strtotime($disposisi->created_at)) }}</td>
+                                    <td>{{ $disposisi->waktu_penyelesaian ?? 'Belum Selesai' }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
