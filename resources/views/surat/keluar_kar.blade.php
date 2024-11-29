@@ -73,38 +73,50 @@
         }
 
         .table-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border: 1px solid #90e0ef; /* Light Blue Border */
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Table Shadow */
-        }
+    background-color: #ffffff; /* Background kontainer */
+    padding: 20px;
+    border: 1px solid #90e0ef; /* Light Blue Border */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Table Shadow */
+    overflow-x: auto; /* Menambahkan scroll horizontal jika diperlukan */
+    max-width: 100%; /* Membatasi lebar kontainer hingga 100% */
+}
 
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.table-container table {
+    min-width: 120%; /* Pastikan tabel lebih lebar dari kontainer */
+    border-collapse: collapse;
+    table-layout: auto; /* Ukuran kolom disesuaikan otomatis */
+}
+.table-container th,
+.table-container td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    white-space: nowrap; /* Mencegah teks dibungkus */
+}
 
-        .table-container th,
-        .table-container td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
+.table-container th {
+    background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Header */
+    color: #ffffff; /* White Text */
+    font-weight: bold;
+}
 
-        .table-container th {
-            background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Header */
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-        }
+.table-container tbody tr:nth-child(even) {
+    background-color: #f1f1f1; /* Light Gray */
+}
 
-        .table-container tbody tr:nth-child(even) {
-            background-color: #f1f1f1; /* Light Gray */
-        }
+.table-container tbody tr:hover {
+    background-color: #e0f7fa; /* Very Light Blue */
+}
 
-        .table-container tbody tr:hover {
-            background-color: #e0f7fa; /* Very Light Blue */
-        }
+/* Menambahkan properti untuk kolom aksi agar menyatu */
+.table-container td:last-child,
+.table-container th:last-child {
+    background-color: inherit; /* Ikuti warna row atau header */
+}
+
+
+
 
         .actions i {
             width: 20px;
@@ -245,6 +257,8 @@
         .cancel-button:hover {
             background-color: #d62839; /* Darker Red Hover */
         }
+
+
     </style>
 </head>
 <body>
@@ -288,65 +302,128 @@
         <div class="table-container">
             <table>
                 <thead>
-                     <tr>
-                    <th>No</th>
-                    <th>Nomor Agenda</th>
-                    <th>Tanggal Keluar</th>
-                    <th>Nomor Surat</th>
-                    <th>Tanggal Surat</th>
-                    <th>Perihal</th>
-                    <th>Sifat Surat</th>
-                    <th>Status Disposisi</th>
-                    <th>Aksi</th>
-                </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>Nomor Agenda</th>
+                        <th>Tanggal Keluar</th>
+                        <th>Nomor Surat</th>
+                        <th>Tanggal Surat</th>
+                        <th>Perihal</th>
+                        <th>Sifat Surat</th>
+                        <th>Status Disposisi</th>
+                        <th>Aksi</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach($suratKeluar as $surat)
-                        <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $surat->no_agenda }}</td>
-                <td>{{ \Carbon\Carbon::parse($surat->tanggal)->format('d-m-Y') }}</td>
-                <td>{{ $surat->no_surat }}</td>
-                <td>{{ \Carbon\Carbon::parse($surat->tanggal_surat)->format('d-m-Y') }}</td>
-                <td>{{ $surat->perihal }}</td>
-                <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
-                <td>{{ $surat->status_disposisi }}</td>
-                <td>
-                    <div class="action-buttons d-flex align-items-center">
-                        <!-- Button Lihat Detail -->
-                        <form action="{{ route('surat.keluar.show', $surat->id) }}" method="GET" class="view-form">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-primary d-flex align-items-center btn-sm" title="Lihat Detail Surat">
-                                <i class="fas fa-eye me-2"></i> Lihat dan edit
-                            </button>
-                        </form>
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $surat->no_agenda }}</td>
+                        <td>{{ \Carbon\Carbon::parse($surat->tanggal)->format('d-m-Y') }}</td>
+                        <td>{{ $surat->no_surat }}</td>
+                        <td>{{ \Carbon\Carbon::parse($surat->tanggal_surat)->format('d-m-Y') }}</td>
+                        <td>{{ $surat->perihal }}</td>
+                        <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
+                        <td>{{ $surat->status_disposisi }}</td>
+                        <td>
+                            <div class="action-buttons d-flex align-items-center">
+                                <!-- Button Lihat Detail -->
+                                <form action="{{ route('surat.keluar.show', $surat->id) }}" method="GET" class="view-form">
+                                    @csrf
+                                    <button type="submit" class="btn btn-custom-primary d-flex align-items-center btn-sm" title="Lihat Detail Surat">
+                                        <i class="fas fa-eye me-2"></i> Lihat dan edit
+                                    </button>
+                                </form>
 
-                        <!-- Button Hapus -->
-                        <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form ms-2">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger d-flex align-items-center btn-sm" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?');">
-                                <i class="fas fa-trash-alt me-2"></i> Hapus
-                            </button>
-                        </form>
+                                <!-- Button Hapus -->
+                                <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form ms-2">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-custom-danger d-flex align-items-center btn-sm" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?');">
+                                        <i class="fas fa-trash-alt me-2"></i> Hapus
+                                    </button>
+                                </form>
 
-                        <!-- Button Kirim -->
-                        @if($surat->status_pengiriman == 'Draft')
-                            <form action="{{ route('surat.kirimKeSekretariat', $surat->id) }}" method="POST" class="send-form ms-2">
-                                @csrf
-                                <button type="submit" class="btn btn-outline-success d-flex align-items-center btn-sm" title="Kirim ke Sekretariat">
-                                    <i class="fas fa-paper-plane me-2"></i> Kirim
-                                </button>
-                            </form>
-                        @else
-                            <span class="text-secondary ms-2">{{ $surat->status_pengiriman }}</span>
-                        @endif
-                    </div>
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
+                                <!-- Button Kirim -->
+                                @if($surat->status_pengiriman == 'Draft')
+                                    <form action="{{ route('surat.kirimKeSekretariat', $surat->id) }}" method="POST" class="send-form ms-2">
+                                        @csrf
+                                        <button type="submit" class="btn btn-custom-success d-flex align-items-center btn-sm" title="Kirim ke Sekretariat">
+                                            <i class="fas fa-paper-plane me-2"></i> Kirim
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="text-secondary ms-2">{{ $surat->status_pengiriman }}</span>
+                                @endif
+                            </div>
+
+                            <style>
+                                .btn-custom-primary {
+                                    background-color: #007bff;
+                                    color: white;
+                                    border: none;
+                                    transition: all 0.3s ease;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    padding: 0.5rem 1.25rem;
+                                    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+                                }
+
+                                .btn-custom-primary:hover {
+                                    background-color: #0056b3;
+                                    color: white;
+                                    transform: translateY(-3px);
+                                    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
+                                }
+
+                                .btn-custom-danger {
+                                    background-color: #dc3545;
+                                    color: white;
+                                    border: none;
+                                    transition: all 0.3s ease;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    padding: 0.5rem 1.25rem;
+                                    box-shadow: 0 4px 6px rgba(220, 53, 69, 0.3);
+                                }
+
+                                .btn-custom-danger:hover {
+                                    background-color: #c82333;
+                                    color: white;
+                                    transform: translateY(-3px);
+                                    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.4);
+                                }
+
+                                .btn-custom-success {
+                                    background-color: #28a745;
+                                    color: white;
+                                    border: none;
+                                    transition: all 0.3s ease;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    padding: 0.5rem 1.25rem;
+                                    box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+                                }
+
+                                .btn-custom-success:hover {
+                                    background-color: #218838;
+                                    color: white;
+                                    transform: translateY(-3px);
+                                    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
+                                }
+                            </style>
+
+
+
+
+
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
         </div>
         <div class="pagination">
             <a href="#" class="pagination-button">Previous</a>

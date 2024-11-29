@@ -73,38 +73,43 @@
         }
 
         .table-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border: 1px solid #90e0ef; /* Light Blue Border */
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Table Shadow */
-        }
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #90e0ef; /* Light Blue Border */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Table Shadow */
+    max-width: 100%;
+    overflow-x: auto; /* Scroll horizontal */
+}
 
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.table-container table {
+    width: 150%; /* Pastikan tabel lebih lebar dari kontainer jika perlu scroll */
+}
 
-        .table-container th,
-        .table-container td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
 
-        .table-container th {
-            background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Header */
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-        }
+.table-container th,
+.table-container td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    white-space: nowrap; /* Mencegah teks dibungkus */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Menambahkan elipsis jika teks terlalu panjang */
+}
 
-        .table-container tbody tr:nth-child(even) {
-            background-color: #f1f1f1; /* Light Gray */
-        }
+.table-container th {
+    background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Header */
+    color: #ffffff; /* White Text */
+    font-weight: bold;
+}
 
-        .table-container tbody tr:hover {
-            background-color: #e0f7fa; /* Very Light Blue */
-        }
+.table-container tbody tr:nth-child(even) {
+    background-color: #f1f1f1; /* Light Gray */
+}
+
+.table-container tbody tr:hover {
+    background-color: #e0f7fa; /* Very Light Blue */
+}
 
         .actions i {
             width: 20px;
@@ -245,6 +250,7 @@
         .cancel-button:hover {
             background-color: #d62839; /* Darker Red Hover */
         }
+
     </style>
 </head>
 <body>
@@ -336,15 +342,43 @@
                                 <!-- Button Lihat Detail -->
                                 <form action="{{ route('surat.show', $surat->id) }}" method="GET" class="view-form">
                                     @csrf
-                                    <button type="submit" class="btn btn-outline-primary d-flex align-items-center btn-sm" title="Lihat Detail Surat">
+                                    <button type="submit" class="btn custom-btn d-flex align-items-center btn-sm" title="Lihat Detail Surat">
                                         <i class="fas fa-eye me-2"></i> Lihat
                                     </button>
+
+                                    <style>
+                                        .custom-btn {
+                                            background-color: #007bff; /* Blue background */
+                                            color: white; /* White text */
+                                            border: none; /* No border */
+                                            padding: 8px 16px; /* Padding to make the button bigger */
+                                            border-radius: 25px; /* Rounded corners */
+                                            font-size: 14px; /* Font size */
+                                            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow */
+                                            transition: all 0.3s ease; /* Smooth transition */
+                                        }
+
+                                        .custom-btn:hover {
+                                            background-color: #0056b3; /* Darker blue on hover */
+                                            transform: scale(1.1); /* Slightly increase size on hover */
+                                            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3); /* Shadow intensifies on hover */
+                                            cursor: pointer; /* Change cursor on hover */
+                                        }
+
+                                        .custom-btn:focus {
+                                            outline: none; /* Remove focus outline */
+                                        }
+                                    </style>
                                 </form>
+
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+
         </div>
         <div class="pagination">
             <a href="#" class="pagination-button">Previous</a>
