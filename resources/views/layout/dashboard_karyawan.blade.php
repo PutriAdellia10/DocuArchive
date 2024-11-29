@@ -13,9 +13,9 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body {
+     body {
             font-family: Arial, sans-serif;
-            background-color: #f0f4f8; /* Light background */
+            background-color: #f0f4f8;
             margin: 0;
             padding: 0;
         }
@@ -23,7 +23,6 @@
             margin-left: 240px;
             padding: 80px 20px 20px;
         }
-
         .header {
             background: linear-gradient(180deg, #90e0ef, #caf0f8);
             padding: 20px;
@@ -34,13 +33,11 @@
             border-bottom: 2px solid #0077b6;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
         .header img {
             width: 50px;
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-
         .header h2 {
             margin: 0;
             padding-left: 10px;
@@ -49,106 +46,185 @@
             display: flex;
             align-items: center;
         }
-
         .statistics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            padding-top: 60px;
+        }
+        .card h5 {
+            font-size: 18px;
+            color: #0077b6;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .card p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .card-icon {
+            font-size: 50px;
+            color: #00b4d8;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 20px;
+        }
 
-.card {
+        .statistik-disposisi {
     background-color: #ffffff;
-    border-radius: 15px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    padding-top: 60px; /* Ruang untuk icon */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 100%;
+    box-sizing: border-box; /* Memastikan padding termasuk dalam width */
 }
 
-.card h5 {
-    font-size: 18px;
+.statistik-disposisi h5 {
+    font-size: 1.5em;
     color: #0077b6;
+    border-bottom: 2px solid #0077b6;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.statistik-disposisi h6 {
+    font-size: 1.2em;
+    color: #264653;
+}
+
+.progress {
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    text-align: center;
+    line-height: 20px;
+    font-size: 0.9em;
+    color: #ffffff;
+}
+
+.progress-bar.bg-success {
+    background-color: #00b4d8;
+}
+
+p {
+    font-size: 1em;
+    color: #6c757d;
     margin-bottom: 10px;
-    font-weight: bold;
 }
 
-.card p {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
-    color: #333;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Icon centered on top */
-.card-icon {
-    font-size: 50px;
-    color: #00b4d8;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%); /* Menggeser icon ke tengah */
-}
-
-
-    /* Container for Recent Activities and Notifications */
-.card-container {
-    display: flex;
-    justify-content: space-between;
+/* Table */
+.table-responsive {
     margin-top: 20px;
 }
 
-/* Container for Recent Activities and Notifications */
-.card-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
 }
 
-/* Recent Activities and Notifications */
-.recent-activities, .notifications {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 48%; /* Adjust width to fit side by side */
-    margin-right: 20px; /* Add right margin to the first card */
+.table th,
+.table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #dee2e6;
 }
 
-.notifications {
-    margin-right: 0; /* No margin on the rightmost card */
-}
-
-.recent-activities h5, .notifications h5 {
-    margin: 0 0 10px 0;
+.table th {
+    background-color: #00b4d8;
+    color: #ffffff;
     font-weight: bold;
 }
 
-.activity-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #f1f1f1;
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
 }
 
-.activity-list li span {
-    flex-grow: 1;
-    margin-right: 10px;
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
 }
 
-.activity-list li time {
-    color: #030303;
-    white-space: nowrap; /* Pastikan tanggal tidak terpotong */
+.table-dark {
+    background-color: #264653;
+    color: #ffffff;
 }
+
+.table-dark th {
+    border-color: #2a9d8f;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .statistik-disposisi {
+        padding: 15px;
+    }
+
+    .table {
+        font-size: 0.9em;
+    }
+}
+        .recent-activities, .notifications, .statistik-disposisi {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex: 1; /* Ensure equal width */
+        }
+        .recent-activities h5, .notifications h5, .statistik-disposisi h5 {
+            margin: 0 0 10px 0;
+            font-weight: bold;
+        }
+        .activity-list {
+    list-style-type: none; /* Menghilangkan bullet points jika diperlukan */
+    padding: 0; /* Menghapus padding bawaan */
+    margin: 0; /* Menghapus margin bawaan */
+    text-align: left; /* Memastikan teks sejajar ke kiri */
+}
+        .activity-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .activity-list li span {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .activity-list li time {
+            color: #030303;
+            white-space: nowrap;
+        }
 
     </style>
 </head>
@@ -194,60 +270,88 @@
         </div>
     </div>
 
-       <!-- Container for Recent Activities and Notifications -->
-<div class="card-container">
-    <!-- Recent Activities -->
-    <div class="recent-activities">
-        <h5>Recent Activities</h5>
-        <ul class="activity-list">
-            @forelse($recentSuratMasuk as $suratmasuk)
-                <li>
-                    <span>Surat Masuk Dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
-                    <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
-                </li>
-            @empty
-                <li><span>Tidak ada surat masuk terbaru</span></li>
-            @endforelse
-        </ul>
-
-        <ul class="activity-list">
-            @forelse($recentSuratKeluar as $suratkeluar)
-                <li>
-                    <span>Surat Keluar Ke {{ $suratkeluar->instansi ? $suratkeluar->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
-                    <time>{{ $suratkeluar->created_at->format('d-m-Y H:i') }}</time>
-                </li>
-            @empty
-                <li><span>Tidak ada surat keluar terbaru</span></li>
-            @endforelse
-
-        </ul>
-    </div>
-
-    <!-- Notifications -->
-    <div class="notifications">
-        <h5>Notifications</h5>
-        <ul class="notification-list">
-            @forelse($notifikasi as $notif)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>
-                        {{ $notif->pesan }}
-                        <small class="text-muted d-block">{{ $notif->dibuat_pada->diffForHumans() }}</small>
+    <div class="card-container">
+        <!-- Recent Surat Masuk -->
+        <div class="recent-activities card">
+            <h5 class="card-title">Recent Surat Masuk Karyawan</h5>
+            <ul class="activity-list">
+                @forelse($recentGabungan as $suratmasuk)
+                <li class="activity-item">
+                    <span class="activity-description">
+                        Surat Masuk dari
+                        @if($suratmasuk->pengirim_eksternal)
+                        <strong>{{ $suratmasuk->pengirim_eksternal }} </strong>
+                    @else
+                       <strong> {{ $suratmasuk->pengirim->jabatan }}</strong>
+                    @endif
                     </span>
-                    <div>
-                        @if(!$notif->sudah_dibaca)
-                            <a href="{{ route('notifikasi.markAsRead', $notif->id) }}" class="btn btn-sm btn-success">
-                                Tandai sebagai dibaca
-                            </a>
-                        @else
-                            <span class="badge badge-secondary">Dibaca</span>
-                        @endif
-                    </div>
+                    <time class="activity-time">{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
                 </li>
-            @empty
-                <li class="list-group-item">Tidak ada notifikasi</li>
-            @endforelse
-        </ul>
+                @empty
+                    <li class="activity-item">
+                        <span class="no-activities">Tidak ada surat masuk terbaru</span>
+                    </li>
+                @endforelse
+            </ul>
+        </div>
+        <!-- Recent Surat Keluar -->
+        <div class="recent-activities card">
+            <h5 class="card-title">Recent Surat Keluar</h5>
+            <ul class="activity-list">
+                @forelse($recentSurat as $suratkeluar)
+    <li class="activity-item">
+        <span class="activity-description">
+            Surat Keluar ke
+            @if($suratkeluar->tujuan_pengguna_id)
+            <strong>{{ $suratkeluar->tujuanPengguna->jabatan ?? 'Pengguna Tidak Diketahui' }}</strong>
+        @elseif($suratkeluar->tujuan_instansi_id)
+            <strong>{{ $suratkeluar->tujuanInstansi->nama_instansi ?? 'Instansi Tidak Diketahui' }}</strong>
+        @else
+            <strong>Tidak Ada Tujuan</strong>
+        @endif
+    </span>
+        <time class="activity-time">{{ \Carbon\Carbon::parse($suratkeluar->created_at)->format('d-m-Y H:i') }}</time>
+    </li>
+    @empty
+    <li class="activity-item">
+        <span class="no-activities">Tidak ada surat keluar terbaru</span>
+    </li>
+    @endforelse
+            </ul>
+        </div>
     </div>
-
+        <div class="statistik-disposisi">
+            <h5>Statistik Waktu Disposisi</h5>
+            <div class="mb-4">
+                <h6>Rata-rata Waktu Penyelesaian</h6>
+                <div class="progress mb-2">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{$persenPenyelesaianFormat}}</div>
+                </div>
+                <p>Rata-rata waktu penyelesaiian: <strong>{{$rataWaktuPenyelesaian}}</strong></p>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>No</th>
+                            <th>Perihal</th>
+                            <th>Tanggal Disposisi</th>
+                            <th>Waktu Penyelesaian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($disposisiData as $index => $disposisi)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $disposisi->perihal }}</td> <!-- Menampilkan perihal surat -->
+                                <td>{{ $disposisi->pimpinan_updated_at ? \Carbon\Carbon::parse($disposisi->pimpinan_updated_at)->format('d-m-Y') : 'Belum Disposisi' }}</td>
+                                <td>{{ $disposisi->waktu_penyelesaian }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

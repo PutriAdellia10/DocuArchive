@@ -107,7 +107,7 @@
         <i class="fa fa-user"></i>
         <div class="dropdown-menu" id="user-dropdown">
             <div class="user-info">
-                <span>Pimpinan</span>
+                <span>Bagian Administrasi</span>
             </div>
             <!-- Button Edit Profil -->
             <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editProfileModal">
