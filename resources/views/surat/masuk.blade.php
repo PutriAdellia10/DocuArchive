@@ -435,6 +435,7 @@
         </div>
     </div>
 
+
  <!-- Modal tambah surat-->
 <div class="modal" id="modal">
     <div class="modal-content">
@@ -538,7 +539,7 @@
     function openEditModal(surat) {
         console.log(surat.status);
     const form = document.getElementById('modalFormEdit');
-    form.action = /surat-masuk/${surat.id};  // Sesuaikan URL ini dengan route update Anda
+    form.action = `/surat-masuk/${surat.id}`;  // Sesuaikan URL ini dengan route update Anda
 
     // Mengisi data ke dalam field modal form
     document.getElementById('edit_no_agenda').value = surat.no_agenda;
@@ -593,6 +594,3 @@ document.onkeydown = function(event) {
         });
     });
 </script>
-
-</body>
-</html>
