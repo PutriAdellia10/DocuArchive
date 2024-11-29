@@ -73,38 +73,53 @@
         }
 
         .table-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border: 1px solid #90e0ef; /* Light Blue Border */
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Table Shadow */
-        }
+    background-color: #ffffff; /* Background kontainer */
+    padding: 20px;
+    border: 1px solid #90e0ef; /* Light Blue Border */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Table Shadow */
+    overflow-x: auto; /* Menambahkan scroll horizontal jika diperlukan */
+    max-width: 100%; /* Membatasi lebar kontainer hingga 100% */
+}
 
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.table-container table {
+    min-width: 120%; /* Pastikan tabel lebih lebar dari kontainer */
+    border-collapse: collapse;
+    table-layout: auto; /* Ukuran kolom disesuaikan otomatis */
+}
+.table-container th,
+.table-container td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    white-space: nowrap; /* Mencegah teks dibungkus */
+}
 
-        .table-container th,
-        .table-container td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
+.table-container th {
+    background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Header */
+    color: #ffffff; /* White Text */
+    font-weight: bold;
+}
 
-        .table-container th {
-            background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Header */
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-        }
+.table-container tbody tr:nth-child(even) {
+    background-color: #f1f1f1; /* Light Gray */
+}
 
-        .table-container tbody tr:nth-child(even) {
-            background-color: #f1f1f1; /* Light Gray */
-        }
+.table-container tbody tr:hover {
+    background-color: #e0f7fa; /* Very Light Blue */
+}
 
-        .table-container tbody tr:hover {
-            background-color: #e0f7fa; /* Very Light Blue */
-        }
+/* Menambahkan properti untuk kolom aksi agar menyatu */
+.table-container td:last-child,
+.table-container th:last-child {
+    background-color: inherit; /* Ikuti warna row atau header */
+}
+.table-container .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 
         .actions i {
             width: 20px;
@@ -245,6 +260,60 @@
         .cancel-button:hover {
             background-color: #d62839; /* Darker Red Hover */
         }
+/* Update for Action Buttons */
+/* Action Button Styles */
+.action-buttons button {
+    background-color: #0077b6; /* Default Blue */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Hover Effects for Action Buttons */
+.action-buttons button:hover {
+    background-color: #005f73; /* Darker Blue Hover */
+    transform: scale(1.05); /* Slightly Enlarge on Hover */
+}
+
+/* Different colors for each button */
+.action-buttons .view-button {
+    background-color: #00b4d8; /* Light Blue for View */
+}
+
+.action-buttons .view-button:hover {
+    background-color: #0077b6; /* Darker Blue for View */
+}
+
+/* Updated: Yellow for Disposisi */
+.action-buttons .disposisi-button {
+    background-color: #f1c40f; /* Yellow for Disposisi */
+}
+
+.action-buttons .disposisi-button:hover {
+    background-color: #f39c12; /* Darker Yellow for Disposisi */
+}
+
+/* Red for Delete */
+.action-buttons .delete-button {
+    background-color: #e63946; /* Red for Delete */
+}
+
+.action-buttons .delete-button:hover {
+    background-color: #d62839; /* Darker Red for Delete */
+}
+
+/* Optional: Disabled Button Style */
+.action-buttons .disabled-button {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+
     </style>
 </head>
 <body>
@@ -332,35 +401,40 @@
                         <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
                         <td>{{ $surat->status_disposisi }}</td>
                         <td>
-                                <div class="action-buttons d-flex align-items-center">
-                                    <!-- Button Disposisi -->
-                                    <a href="{{ route('disposisi.show', $surat->id) }}" title="Disposisi" class="btn btn-outline-secondary btn-sm d-flex align-items-center mx-2">
-                                       <i class="fas fa-folder me-2"></i> Disposisi
-                                   </a>
+                            <div class="action-buttons">
+                                <!-- Button Disposisi -->
+                                <form action="{{ route('disposisi.show', $surat->id) }}" title="Disposisi" class="btn btn-outline-secondary btn-sm disposisi-button">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm disposisi-button" title="Disposisi">
+                                        <i class="fas fa-folder me-2"></i> Disposisi
+                                    </button>
+                                </form>
 
-                                   <!-- Button Lihat Detail -->
-                                   <form action="{{ route('surat.keluar.show', $surat->id) }}" method="GET" class="view-form">
-                                       @csrf
-                                       <button type="submit" class="btn btn-outline-primary btn-sm d-flex align-items-center" title="Lihat Detail Surat">
-                                           <i class="fas fa-eye me-2"></i> Lihat
-                                       </button>
-                                   </form>
+                                <!-- Button Lihat Detail -->
+                                <form action="{{ route('surat.keluar.show', $surat->id) }}" method="GET" class="view-form">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-primary btn-sm view-button" title="Lihat Detail Surat">
+                                        <i class="fas fa-eye me-2"></i> Lihat
+                                    </button>
+                                </form>
 
-                                   <!-- Form untuk menghapus surat -->
-                                   <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form">
-                                       @csrf
-                                       @method('DELETE') <!-- Menggunakan metode DELETE untuk penghapusan -->
-                                       <button type="submit" class="btn btn-outline-danger d-flex align-items-center btn-sm" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?');">
-                                           <i class="fas fa-trash-alt me-2"></i> Hapus
-                                       </button>
-                                   </form>
-                               </div>
-                           </td>
-                       </tr>
-                       @endforeach
-                   </tbody>
-               </table>
-           </div>
+                                <!-- Form untuk menghapus surat -->
+                                <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm delete-button" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?');">
+                                        <i class="fas fa-trash-alt me-2"></i> Hapus
+                                    </button>
+                                </form>
+                            </div>
+
+                        </td>
+
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
         <div class="pagination">
             <a href="#" class="pagination-button">Previous</a>
             <a href="#" class="pagination-button">1</a>

@@ -499,6 +499,28 @@ public function disposisi(Request $request, $id)
 
     return redirect()->route('surat.index')->with('success', 'Disposisi berhasil dikirim.');
 }
+public function updateDisposisi(Request $request, $id)
+{
+    // Validasi input status disposisi
+    $request->validate([
+        'status_disposisi' => 'required|string|in:Belum Diproses,Diproses,Selesai',
+    ]);
 
+    // Ambil surat berdasarkan ID
+    $surat = Surat::findOrFail($id);
+
+    // Perbarui status disposisi
+    $surat->status_disposisi = $request->status_disposisi;
+
+    // Jika status disposisi berubah menjadi 'Diproses' atau 'Selesai', ubah status pengiriman
+    if (in_array($request->status_disposisi, ['Diproses', 'Selesai'])) {
+        $surat->status_pengiriman = 'Diterima';
+    }
+
+    // Simpan perubahan
+    $surat->save();
+
+    return redirect()->back()->with('success', 'Status disposisi dan pengiriman berhasil diperbarui.');
+}
     }
 

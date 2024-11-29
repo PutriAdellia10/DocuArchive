@@ -73,65 +73,54 @@
         }
 
         .table-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border: 1px solid #90e0ef; /* Light Blue Border */
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Table Shadow */
-        }
+    background-color: #ffffff; /* Background kontainer */
+    padding: 20px;
+    border: 1px solid #90e0ef; /* Light Blue Border */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Table Shadow */
+    overflow-x: auto; /* Menambahkan scroll horizontal jika diperlukan */
+    max-width: 100%; /* Membatasi lebar kontainer hingga 100% */
+}
 
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.table-container table {
+    min-width: 120%; /* Pastikan tabel lebih lebar dari kontainer */
+    border-collapse: collapse;
+    table-layout: auto; /* Ukuran kolom disesuaikan otomatis */
+}
+.table-container th,
+.table-container td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    white-space: nowrap; /* Mencegah teks dibungkus */
+}
 
-        .table-container th,
-        .table-container td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
+.table-container th {
+    background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Header */
+    color: #ffffff; /* White Text */
+    font-weight: bold;
+}
 
-        .table-container th {
-            background: linear-gradient(180deg, #0077b6, #00b4d8); /* Gradient Header */
-            color: #ffffff; /* White Text */
-            font-weight: bold;
-        }
+.table-container tbody tr:nth-child(even) {
+    background-color: #f1f1f1; /* Light Gray */
+}
 
-        .table-container tbody tr:nth-child(even) {
-            background-color: #f1f1f1; /* Light Gray */
-        }
+.table-container tbody tr:hover {
+    background-color: #e0f7fa; /* Very Light Blue */
+}
 
-        .table-container tbody tr:hover {
-            background-color: #e0f7fa; /* Very Light Blue */
-        }
-
-        .actions i {
-            width: 20px;
-            cursor: pointer;
-            margin-right: 10px;
-            color: #0077b6; /* Dark Blue Icon Color */
-        }
-        .action-buttons {
+/* Menambahkan properti untuk kolom aksi agar menyatu */
+.table-container td:last-child,
+.table-container th:last-child {
+    background-color: inherit; /* Ikuti warna row atau header */
+}
+.table-container .action-buttons {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-}
-
-.action-buttons .btn {
-    margin-right: 10px; /* Beri jarak antar tombol */
+    gap: 10px;
 }
 
 
-.action-link {
-    margin-right: 15px; /* Add some space between the link and the button */
-    text-decoration: none; /* Remove underline from link */
-    color: #007bff; /* Set color to match button color */
-}
-
-.delete-form {
-    margin: 0; /* Remove default margin from the form */
-}
 
         .pagination {
             display: flex;
@@ -251,6 +240,61 @@
         .cancel-button:hover {
             background-color: #d62839; /* Darker Red Hover */
         }
+
+        /* Update for Action Buttons */
+
+
+/* Different colors for each button */
+.action-buttons button {
+    background-color: #0077b6; /* Default Blue */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Hover Effects for Action Buttons */
+.action-buttons button:hover {
+    background-color: #005f73; /* Darker Blue Hover */
+    transform: scale(1.05); /* Slightly Enlarge on Hover */
+}
+
+/* Different colors for each button */
+.action-buttons .view-button {
+    background-color: #00b4d8; /* Light Blue for View */
+}
+
+.action-buttons .view-button:hover {
+    background-color: #0077b6; /* Darker Blue for View */
+}
+
+/* Updated: Yellow for Disposisi */
+.action-buttons .disposisi-button {
+    background-color: #f1c40f; /* Yellow for Disposisi */
+}
+
+.action-buttons .disposisi-button:hover {
+    background-color: #f39c12; /* Darker Yellow for Disposisi */
+}
+
+/* Red for Delete */
+.action-buttons .delete-button {
+    background-color: #e63946; /* Red for Delete */
+}
+
+.action-buttons .delete-button:hover {
+    background-color: #d62839; /* Darker Red for Delete */
+}
+
+/* Optional: Disabled Button Style */
+.action-buttons .disabled-button {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
     </style>
 </head>
 <body>
@@ -309,16 +353,16 @@
                     <tr>
                         <th>No</th>
                         <th>Nomor Agenda</th>
-                        <th>Tanggal Masuk</th>
+                        <th class="date-column">Tanggal Masuk</th>
                         <th>Pengirim</th>
-                        <th>Asal Surat</th>
+                        <th class="origin-column">Asal Surat</th>
                         <th>Tujuan Surat</th>
                         <th>Nomor Surat</th>
-                        <th>Tanggal Surat</th>
+                        <th class="date-column">Tanggal Surat</th>
                         <th>Perihal</th>
                         <th>Sifat Surat</th>
                         <th>Status Disposisi</th>
-                        <th>Aksi</th>
+                        <th class="aksi-column">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -326,15 +370,15 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $surat->no_agenda }}</td>
-                        <td>{{ \Carbon\Carbon::parse($surat->tanggal)->format('d-m-Y') }}</td>
+                        <td class="date-column">{{ \Carbon\Carbon::parse($surat->tanggal)->format('d-m-Y') }}</td>
                         <td>
                             @if($surat->pengirim_eksternal)
-                                {{ $surat->pengirim_eksternal }} <!-- Menampilkan pengirim eksternal -->
+                                {{ $surat->pengirim_eksternal }}
                             @else
-                                {{ $surat->pengirim->jabatan }} <!-- Menampilkan jabatan pengirim internal -->
+                                {{ $surat->pengirim->jabatan }}
                             @endif
                         </td>
-                        <td>{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</td>
+                        <td class="origin-column">{{ $surat->instansi ? $surat->instansi->nama_instansi : '--' }}</td>
                         <td>
                             @if ($surat->tujuan_pengguna_id)
                                 {{ $surat->tujuanPengguna->jabatan ?? '--' }}
@@ -345,36 +389,39 @@
                             @endif
                         </td>
                         <td>{{ $surat->no_surat }}</td>
-                        <td>{{ \Carbon\Carbon::parse($surat->tanggal_surat)->format('d-m-Y') }}</td>
+                        <td class="date-column">{{ \Carbon\Carbon::parse($surat->tanggal_surat)->format('d-m-Y') }}</td>
                         <td>{{ $surat->perihal }}</td>
                         <td>{{ $surat->sifatSurat ? $surat->sifatSurat->nama_sifat : 'Tidak Diketahui' }}</td>
-                        <td>{{ $surat->status_disposisi }}</td>
-                        <td>
+                        <td>{{ $surat->status_disposisi }}
 
-                            <div class="action-buttons d-flex align-items-center">
-                                 <!-- Button Disposisi -->
-                                 <a href="{{ route('disposisi.show', $surat->id) }}" title="Disposisi" class="btn btn-outline-secondary btn-sm d-flex align-items-center mx-2">
-                                    <i class="fas fa-folder me-2"></i> Disposisi
-                                </a>
-
-                                <!-- Button Lihat Detail -->
-                                <form action="{{ route('surat.show', $surat->id) }}" method="GET" class="view-form">
-                                    @csrf
-                                    <button type="submit" class="btn btn-outline-primary d-flex align-items-center btn-sm" title="Lihat Detail Surat">
-                                        <i class="fas fa-eye me-2"></i> Lihat
-                                    </button>
-                                </form>
-
-                                <!-- Form untuk menghapus surat -->
-                                <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form">
-                                    @csrf
-                                    @method('DELETE') <!-- Menggunakan metode DELETE untuk penghapusan -->
-                                    <button type="submit" class="btn btn-outline-danger d-flex align-items-center btn-sm" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?');">
-                                        <i class="fas fa-trash-alt me-2"></i> Hapus
-                                    </button>
-                                </form>
-                            </div>
                         </td>
+                       <td class="aksi-column">
+                        <div class="action-buttons">
+                            <!-- Button Disposisi -->
+                            <form action="{{ route('disposisi.show', $surat->id) }}" title="Disposisi" class="btn btn-outline-secondary btn-sm disposisi-button">
+                                <button type="submit" class="btn btn-outline-primary btn-sm disposisi-button" title="Disposisi">
+                                    <i class="fas fa-folder me-2"></i> Disposisi
+                                </button>
+                            </form>
+
+                            <!-- Button Lihat Detail -->
+                            <form action="{{ route('surat.keluar.show', $surat->id) }}" method="GET" class="view-form">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-primary btn-sm view-button" title="Lihat Detail Surat">
+                                    <i class="fas fa-eye me-2"></i> Lihat
+                                </button>
+                            </form>
+
+                            <!-- Form untuk menghapus surat -->
+                            <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger btn-sm delete-button" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?');">
+                                    <i class="fas fa-trash-alt me-2"></i> Hapus
+                                </button>
+                            </form>
+                        </div>
+</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -491,7 +538,7 @@
     function openEditModal(surat) {
         console.log(surat.status);
     const form = document.getElementById('modalFormEdit');
-    form.action = `/surat-masuk/${surat.id}`;  // Sesuaikan URL ini dengan route update Anda
+    form.action = /surat-masuk/${surat.id};  // Sesuaikan URL ini dengan route update Anda
 
     // Mengisi data ke dalam field modal form
     document.getElementById('edit_no_agenda').value = surat.no_agenda;
