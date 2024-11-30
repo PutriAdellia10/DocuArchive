@@ -403,15 +403,24 @@
                                     <i class="fas fa-folder me-2"></i> Disposisi
                                 </button>
                             </form>
-
-                            <!-- Button Lihat Detail -->
-                            <form action="{{ route('surat.keluar.show', $surat->id) }}" method="GET" class="view-form">
-                                @csrf
-                                <button type="submit" class="btn btn-outline-primary btn-sm view-button" title="Lihat Detail Surat">
-                                    <i class="fas fa-eye me-2"></i> Lihat
-                                </button>
-                            </form>
-
+                    <!-- Button Lihat Detail -->
+                    @if(auth()->user()->peran == 'Pimpinan')
+                    <!-- Tombol untuk Pimpinan: hanya Lihat -->
+                    <form action="{{ route('surat.show', $surat->id) }}" method="GET" class="view-form">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-primary btn-sm view-button" title="Lihat Detail Surat">
+                            <i class="fas fa-eye me-2"></i> Lihat
+                        </button>
+                    </form>
+                    @else
+                    <!-- Tombol untuk selain Pimpinan: Lihat dan Edit -->
+                    <form action="{{ route('surat.show', $surat->id) }}" method="GET" class="view-form">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-primary btn-sm view-button" title="Lihat dan Edit Surat">
+                            <i class="fas fa-eye me-2"></i> Lihat dan Edit
+                        </button>
+                    </form>
+                    @endif
                             <!-- Form untuk menghapus surat -->
                             <form action="{{ route('surat.destroy', $surat->id) }}" method="POST" class="delete-form">
                                 @csrf
