@@ -137,7 +137,7 @@
 
     <div class="content">
         <div class="header">
-            <h2>Daftar Template Surat</h2>
+            <h2>Daftar Format Surat</h2>
             <a href="{{ route('tanda_tangan') }}" class="btn-add"> Buat Tanda Tangan</a>
         </div>
 

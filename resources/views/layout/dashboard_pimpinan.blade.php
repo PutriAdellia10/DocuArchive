@@ -232,7 +232,7 @@ p {
     @include('components.sidebarpim')
     <div class="content">
         <div class="header" style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
-            <h1 class="h2" style="margin: 0; font-size: 40px; color: #0077b6; margin: 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Dashboard Admin</h1>
+            <h1 class="h2" style="margin: 0; font-size: 40px; color: #0077b6; margin: 0; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Dashboard Pimpinan</h1>
             <div class="welcome-section" style="display: flex; align-items: center; margin-top: 10px;">
                 <img src="{{ asset('img/bg3.jpg') }}" alt="Welcome" style="margin-right: 40px; border-radius: 10px; width: 500px; height: auto;">
                 <div style="margin-left: 90px;">
