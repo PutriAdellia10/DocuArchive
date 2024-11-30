@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #d4f1f4;
@@ -94,6 +95,15 @@
             background-color: #33a393;
         }
 
+        /* Perbaikan untuk memastikan backdrop dan modal tampil dengan benar */
+        .modal-backdrop {
+            z-index: 1040 !important;  /* Pastikan backdrop berada di bawah modal */
+        }
+
+        .modal {
+            z-index: 1050 !important;   /* Pastikan modal muncul di atas backdrop */
+        }
+
         .modal-content {
             background-color: #f9f9f9;
         }
@@ -101,23 +111,31 @@
 </head>
 <body>
 
-    @include('components.navbar')
-
     @if(auth()->check())
-        @if(auth()->user()->peran == 'Admin')
-            @include('components.sidebaradmin')
-        @elseif(auth()->user()->peran == 'Sekretariat')
-            @include('components.sidebarsekre')
-        @elseif(auth()->user()->peran == 'Karyawan')
-            @include('components.sidebarkaryawan')
-        @elseif(auth()->user()->peran == 'Pimpinan')
-            @include('components.sidebarpim')
-        @else
-            <p>Peran tidak dikenali.</p>
-        @endif
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.navbar')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.navbarsekre')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.navbarpim')
     @else
-        <p>Anda belum login. Silakan login untuk melanjutkan.</p>
+        <p>Peran tidak dikenali.</p>
     @endif
+
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.sidebaradmin')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.sidebarsekre')
+    @elseif(auth()->user()->peran == 'Karyawan')
+        @include('components.sidebarkaryawan')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.sidebarpim')
+    @else
+        <p>Peran tidak dikenali.</p>
+    @endif
+@else
+    <p>Anda belum login. Silakan login untuk melanjutkan.</p>
+@endif
 
     <div class="content-wrapper">
         <div class="center-card">

@@ -99,27 +99,47 @@
         .pagination button:disabled {
             background-color: #33a393;
         }
+          /* Perbaikan untuk memastikan backdrop dan modal tampil dengan benar */
+          .modal-backdrop {
+            z-index: 1040 !important;  /* Pastikan backdrop berada di bawah modal */
+        }
+
+        .modal {
+            z-index: 1050 !important;   /* Pastikan modal muncul di atas backdrop */
+        }
+
+        .modal-content {
+            background-color: #f9f9f9;
+        }
     </style>
 </head>
 
 <body>
-   @include('components.navbar')
-   @if(auth()->check())
-   @if(auth()->user()->peran == 'Admin')
-       @include('components.sidebaradmin')
-   @elseif(auth()->user()->peran == 'Sekretariat')
-       @include('components.sidebarpimdansekre')
-   @elseif(auth()->user()->peran == 'Karyawan')
-       @include('components.sidebarkaryawan')
-   @elseif(auth()->user()->peran == 'Pimpinan')
-       @include('components.sidebarpimdansekre')
-   @else
-       <p>Peran tidak dikenali.</p>
-   @endif
-@else
-   <p>Anda belum login. Silakan login untuk melanjutkan.</p>
-@endif
+    @if(auth()->check())
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.navbar')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.navbarsekre')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.navbarpim')
+    @else
+        <p>Peran tidak dikenali.</p>
+    @endif
 
+    @if(auth()->user()->peran == 'Admin')
+        @include('components.sidebaradmin')
+    @elseif(auth()->user()->peran == 'Sekretariat')
+        @include('components.sidebarsekre')
+    @elseif(auth()->user()->peran == 'Karyawan')
+        @include('components.sidebarkaryawan')
+    @elseif(auth()->user()->peran == 'Pimpinan')
+        @include('components.sidebarpim')
+    @else
+        <p>Peran tidak dikenali.</p>
+    @endif
+@else
+    <p>Anda belum login. Silakan login untuk melanjutkan.</p>
+@endif
     <div class="content">
         <!-- Menampilkan pesan sukses -->
         @if (session('success'))

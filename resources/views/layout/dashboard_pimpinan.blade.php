@@ -263,11 +263,6 @@ p {
                 <i class="fas fa-calendar-alt card-icon"></i>
             </div>
             <div class="card">
-                <h5>Total Instansi</h5>
-                <p>{{ $totalInstansi }}</p>
-                <i class="fas fa-building card-icon"></i>
-            </div>
-            <div class="card">
                 <h5>Total Disposisi Aktif</h5>
                 <p>{{ $totalDisposisiAktif }}</p>
                 <i class="bi bi-file-earmark-check-fill card-icon"></i>
