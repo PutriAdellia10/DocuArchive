@@ -99,7 +99,6 @@
     </button>
     <div class="submenu" id="submenu-pengaturan">
         <a href="{{ route('user.profil') }}"><i class="bi bi-people-fill"></i> Manajemen User</a>
-        <a href="{{ route('notifikasi.index') }}"><i class="bi bi-bell-fill"></i> Notifikasi</a>
     </div>
 </div>
 

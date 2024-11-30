@@ -71,7 +71,6 @@
         <a href="{{ route('surat.keluar.index') }}"><i class="bi bi-envelope-arrow-down-fill"></i> Surat Keluar</a>
     </div>
     <a href="{{ route('generete') }}"><i class="bi bi-card-text"></i>Format Surat </a>
-    <a href="surat_keluar.html"><i class="bi bi-database-fill"></i>Notifikasi </a>
     </div>
 </div>
 

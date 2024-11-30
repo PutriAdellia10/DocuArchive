@@ -108,7 +108,7 @@
         <i class="fa fa-user"></i>
         <div class="dropdown-menu" id="user-dropdown">
             <div class="user-info">
-                <span>Pimpinan</span>
+                <span>Karyawan</span>
             </div>
             <!-- Button Edit Profil -->
             <form id="edit.profile-form" action="{{route('profile.edit')}}" method="POST" style="display: none;">

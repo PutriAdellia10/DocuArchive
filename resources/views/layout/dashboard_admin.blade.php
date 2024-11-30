@@ -93,6 +93,106 @@
             margin-top: 20px;
             gap: 20px;
         }
+
+        .statistik-disposisi {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 100%;
+    box-sizing: border-box; /* Memastikan padding termasuk dalam width */
+}
+
+.statistik-disposisi h5 {
+    font-size: 1.5em;
+    color: #0077b6;
+    border-bottom: 2px solid #0077b6;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.statistik-disposisi h6 {
+    font-size: 1.2em;
+    color: #264653;
+}
+
+.progress {
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    text-align: center;
+    line-height: 20px;
+    font-size: 0.9em;
+    color: #ffffff;
+}
+
+.progress-bar.bg-success {
+    background-color: #00b4d8;
+}
+
+p {
+    font-size: 1em;
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+
+/* Table */
+.table-responsive {
+    margin-top: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.table th,
+.table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+}
+
+.table th {
+    background-color: #00b4d8;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.table-dark {
+    background-color: #264653;
+    color: #ffffff;
+}
+
+.table-dark th {
+    border-color: #2a9d8f;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .statistik-disposisi {
+        padding: 15px;
+    }
+
+    .table {
+        font-size: 0.9em;
+    }
+}
         .recent-activities, .notifications, .statistik-disposisi {
             background: #ffffff;
             border-radius: 10px;
@@ -104,6 +204,12 @@
             margin: 0 0 10px 0;
             font-weight: bold;
         }
+        .activity-list {
+    list-style-type: none; /* Menghilangkan bullet points jika diperlukan */
+    padding: 0; /* Menghapus padding bawaan */
+    margin: 0; /* Menghapus margin bawaan */
+    text-align: left; /* Memastikan teks sejajar ke kiri */
+}
         .activity-list li {
             display: flex;
             justify-content: space-between;
@@ -142,12 +248,12 @@
         </div>
         <div class="statistics">
             <div class="card">
-                <h5>Total Surat Masuk</h5>
+                <h5>Total Surat Masuk Selesai</h5>
                 <p>{{ $total_surat_gabungan }}</p>
                 <i class="fas fa-envelope card-icon"></i>
             </div>
             <div class="card">
-                <h5>Total Surat Keluar</h5>
+                <h5>Total Surat Keluar Selesai</h5>
                 <p>{{ $totalSuratKeluarSelesai }}</p>
                 <i class="fas fa-paper-plane card-icon"></i>
             </div>
@@ -163,56 +269,91 @@
             </div>
             <div class="card">
                 <h5>Total Disposisi Aktif</h5>
-                <p>10</p>
+                <p>{{ $totalDisposisiAktif }}</p>
                 <i class="bi bi-file-earmark-check-fill card-icon"></i>
             </div>
         </div>
         <div class="card-container">
-            <div class="recent-activities">
-                <h5>Recent Activities</h5>
+            <!-- Recent Surat Masuk -->
+            <div class="recent-activities card">
+                <h5 class="card-title">Recent Surat Masuk</h5>
                 <ul class="activity-list">
-                    @forelse($recentSuratMasuk as $suratmasuk)
-                    <li>
-                        <span>Surat Masuk dari {{ $suratmasuk->instansi ? $suratmasuk->instansi->nama_instansi : 'Instansi Tidak Diketahui' }}</span>
-                        <time>{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
+                    @forelse($recentGabungan as $suratmasuk)
+                    <li class="activity-item">
+                        <span class="activity-description">
+                            Surat Masuk dari
+                            @if($suratmasuk->pengirim_eksternal)
+                            <strong>{{ $suratmasuk->pengirim_eksternal }} </strong>
+                        @else
+                           <strong> {{ $suratmasuk->pengirim->jabatan }}</strong>
+                        @endif
+                        </span>
+                        <time class="activity-time">{{ $suratmasuk->created_at->format('d-m-Y H:i') }}</time>
                     </li>
                     @empty
-                        <li><span>Tidak ada surat masuk terbaru</span></li>
+                        <li class="activity-item">
+                            <span class="no-activities">Tidak ada surat masuk terbaru</span>
+                        </li>
                     @endforelse
                 </ul>
             </div>
+
+            <!-- Recent Surat Keluar -->
+            <div class="recent-activities card">
+                <h5 class="card-title">Recent Surat Keluar</h5>
+                <ul class="activity-list">
+                    @forelse($recentSurat as $suratkeluar)
+        <li class="activity-item">
+            <span class="activity-description">
+                Surat Keluar ke
+                @if($suratkeluar->tujuan_pengguna_id)
+                <strong>{{ $suratkeluar->tujuanPengguna->jabatan ?? 'Pengguna Tidak Diketahui' }}</strong>
+            @elseif($suratkeluar->tujuan_instansi_id)
+                <strong>{{ $suratkeluar->tujuanInstansi->nama_instansi ?? 'Instansi Tidak Diketahui' }}</strong>
+            @else
+                <strong>Tidak Ada Tujuan</strong>
+            @endif
+        </span>
+            <time class="activity-time">{{ \Carbon\Carbon::parse($suratkeluar->created_at)->format('d-m-Y H:i') }}</time>
+        </li>
+        @empty
+        <li class="activity-item">
+            <span class="no-activities">Tidak ada surat keluar terbaru</span>
+        </li>
+        @endforelse
+                </ul>
+            </div>
+        </div>
             <div class="statistik-disposisi">
                 <h5>Statistik Waktu Disposisi</h5>
                 <div class="mb-4">
-                    <h6>Rata-rata Waktu Disposisi</h6>
+                    <h6>Rata-rata Waktu Penyelesaian</h6>
                     <div class="progress mb-2">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{$persenPenyelesaianFormat}}</div>
                     </div>
-                    <p>Rata-rata waktu disposisi: <strong>2 jam 30 menit</strong></p>
+                    <p>Rata-rata waktu penyelesaiian: <strong>{{$rataWaktuPenyelesaian}}</strong></p>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="table-dark">
                             <tr>
                                 <th>No</th>
-                                <th>Perihal Surat</th>
+                                <th>Perihal</th>
                                 <th>Tanggal Disposisi</th>
                                 <th>Waktu Penyelesaian</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($disposisiData as $index => $disposisi)
+                            @foreach($disposisiData as $index => $disposisi)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $disposisi->surat_id }}</td>
-                                    <td>{{ date('d-m-Y', strtotime($disposisi->created_at)) }}</td>
-                                    <td>{{ $disposisi->waktu_penyelesaian ?? 'Belum Selesai' }}</td>
+                                    <td>{{ $disposisi->perihal }}</td> <!-- Menampilkan perihal surat -->
+                                    <td>{{ $disposisi->pimpinan_updated_at ? \Carbon\Carbon::parse($disposisi->pimpinan_updated_at)->format('d-m-Y') : 'Belum Disposisi' }}</td>
+                                    <td>{{ $disposisi->waktu_penyelesaian }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                </div>
             </div>
         </div>
     </div>
