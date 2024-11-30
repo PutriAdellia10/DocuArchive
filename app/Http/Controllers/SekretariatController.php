@@ -118,7 +118,15 @@ class SekretariatController extends Controller
 
         // Gabungkan koleksi surat masuk dan surat keluar
         $suratGabungan = $suratMasuk->merge($suratKeluar);
-        $totalSuratKeluarSelesai = $suratKeluar->count();
+        $surat = Surat::where('status', 'Keluar')
+        ->whereIn('status_disposisi', ['Selesai'])
+        ->whereNotIn('pengirim_id', function ($query) {
+            $query->select('id')
+                ->from('pengguna')
+                ->where('peran', 'karyawan'); // Corrected query for single role
+        })
+        ->get();
+        $totalSuratKeluarSelesai = $surat->count();
 
         // Total Disposisi Aktif (status 'Masuk' atau 'Keluar' dan disposisi 'Belum Diproses' atau 'Diproses')
         $totalDisposisiAktif = Surat::whereIn('status', ['Masuk', 'Keluar'])

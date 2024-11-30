@@ -90,8 +90,8 @@
         .form-group-inline {
             display: flex;
             align-items: center;
-            gap: 20px; /* Space between filters and buttons */
-            margin-bottom: 20px;
+            gap: 50px; /* Space between filters and buttons */
+
         }
 
         .form-group-inline .form-group {
