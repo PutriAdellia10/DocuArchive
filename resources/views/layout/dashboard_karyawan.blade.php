@@ -294,31 +294,24 @@ p {
                 @endforelse
             </ul>
         </div>
-        <!-- Recent Surat Keluar -->
-        <div class="recent-activities card">
-            <h5 class="card-title">Recent Surat Keluar</h5>
-            <ul class="activity-list">
-                @forelse($recentSurat as $suratkeluar)
-    <li class="activity-item">
-        <span class="activity-description">
-            Surat Keluar ke
-            @if($suratkeluar->tujuan_pengguna_id)
-            <strong>{{ $suratkeluar->tujuanPengguna->jabatan ?? 'Pengguna Tidak Diketahui' }}</strong>
-        @elseif($suratkeluar->tujuan_instansi_id)
-            <strong>{{ $suratkeluar->tujuanInstansi->nama_instansi ?? 'Instansi Tidak Diketahui' }}</strong>
-        @else
-            <strong>Tidak Ada Tujuan</strong>
-        @endif
-    </span>
-        <time class="activity-time">{{ \Carbon\Carbon::parse($suratkeluar->created_at)->format('d-m-Y H:i') }}</time>
-    </li>
-    @empty
-    <li class="activity-item">
-        <span class="no-activities">Tidak ada surat keluar terbaru</span>
-    </li>
-    @endforelse
-            </ul>
-        </div>
+       <!-- Recent Surat Keluar -->
+<div class="recent-activities card">
+    <h5 class="card-title">Recent Surat Keluar</h5>
+    <ul class="activity-list">
+        @forelse($recentSurat as $suratkeluar)
+            <li class="activity-item">
+                <span class="activity-description">
+                    {{ $suratkeluar->perihal }}
+                    <strong>{{ $suratkeluar->status_pengiriman }}</strong>
+                </span>
+            </li>
+        @empty
+            <li class="activity-item">
+                <span class="no-activities">Tidak ada surat keluar terbaru dengan status yang dipilih</span>
+            </li>
+        @endforelse
+    </ul>
+</div>
     </div>
         <div class="statistik-disposisi">
             <h5>Statistik Waktu Disposisi</h5>

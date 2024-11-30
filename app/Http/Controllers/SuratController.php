@@ -255,7 +255,7 @@ class SuratController extends Controller
         // Cek peran pengguna dan ambil surat keluar yang sesuai
         if ($user->peran == 'Karyawan') {
             $suratKeluar = Surat::where('status', 'Keluar')->get();
-            $suratKeluar = Surat::whereIn('status_pengiriman', ['Draft', 'Dikirim'])->get();
+            $suratKeluar = Surat::whereIn('status_pengiriman', ['Draft', 'Dikirim','Diterima'])->get();
             return view('surat.keluar_kar', compact('suratKeluar', 'instansi', 'sifatSurat')); // View untuk Karyawan
         } elseif ($user->peran == 'Pimpinan') {
             $suratKeluar = Surat::where('status', 'Keluar')
@@ -471,19 +471,31 @@ class SuratController extends Controller
         }
     }
     public function kirimKeSekretariat($id)
-{
-    // Cari surat berdasarkan ID
-    $surat = Surat::findOrFail($id);
-    // Perbarui status pengiriman surat
-    $surat->status_pengiriman = 'Dikirim'; // Mengubah status menjadi 'Dikirim'
+    {
+        // Cari surat berdasarkan ID
+        $surat = Surat::findOrFail($id);
 
-    // Simpan perubahan ke database
-    $surat->save();
+        // Perbarui status pengiriman surat jika status pengiriman masih Draft
+        if ($surat->status_pengiriman == 'Draft') {
+            $surat->status_pengiriman = 'Dikirim';
 
-    // Tambahkan logika lain jika diperlukan, seperti mengirim email
+            if ($surat->status_pengiriman == 'Dikirim' && in_array($surat->status_disposisi, ['Diproses', 'Selesai'])) {
+                $surat->status_pengiriman = 'Diterima';
+                $surat->save();
+                \Log::info('Surat status pengiriman diperbarui', ['id' => $surat->id, 'status_pengiriman' => $surat->status_pengiriman]);
+            }
 
-    return redirect()->back()->with('success', 'Surat berhasil dikirim ke Sekretariat.');
-}
+            // Simpan perubahan ke database
+            $surat->save();
+
+            // Redirect kembali dengan pesan sukses
+            return redirect()->back()->with('success', 'Surat berhasil dikirim ke Sekretariat.');
+        }
+
+        // Jika status pengiriman sudah bukan Draft, tidak perlu diproses lagi
+        return redirect()->back()->with('warning', 'Surat sudah dikirim sebelumnya.');
+    }
+
 public function disposisi(Request $request, $id)
 {
     $surat = Surat::findOrFail($id);  // Ensure surat exists

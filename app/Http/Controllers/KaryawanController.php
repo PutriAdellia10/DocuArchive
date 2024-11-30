@@ -87,7 +87,11 @@ class KaryawanController extends Controller
            // Gabungkan Surat Masuk dan Surat Keluar
            $resentGabungan = $recentSuratMasuk->merge($recentsuratKeluar);
            // Ambil 5 surat keluar terbaru
-           $recentSurat = Surat::latest()->limit(5)->get();
+           $recentSurat = Surat::whereIn('status_pengiriman', ['Dikirim', 'Diterima']) // Memeriksa status pengiriman
+           ->orderBy('id', 'desc')  // Mengurutkan berdasarkan id surat (dari yang terbaru)
+           ->take(5) // Ambil 5 surat keluar terbaru
+           ->get();
+
             // query untuk menghitung total surat
             $totalSuratPerTahun = DB::table('surat')
             ->whereYear('tanggal_surat', date('Y')) // Menghitung surat per tahun ini

@@ -343,19 +343,20 @@
                                         <i class="fas fa-trash-alt me-2"></i> Hapus
                                     </button>
                                 </form>
-
-                                <!-- Button Kirim -->
-                                @if($surat->status_pengiriman == 'Draft')
-                                    <form action="{{ route('surat.kirimKeSekretariat', $surat->id) }}" method="POST" class="send-form ms-2">
-                                        @csrf
-                                        <button type="submit" class="btn btn-custom-success d-flex align-items-center btn-sm" title="Kirim ke Sekretariat">
-                                            <i class="fas fa-paper-plane me-2"></i> Kirim
-                                        </button>
-                                    </form>
-                                @else
-                                    <span class="text-secondary ms-2">{{ $surat->status_pengiriman }}</span>
-                                @endif
-                            </div>
+                                    <!-- Button Kirim atau Diterima -->
+                                    @if($surat->status_pengiriman == 'Draft')
+                                        <form action="{{ route('surat.kirimKeSekretariat', $surat->id) }}" method="POST" class="send-form ms-2">
+                                            @csrf
+                                            <button type="submit" class="btn btn-custom-success d-flex align-items-center btn-sm" title="Kirim ke Sekretariat">
+                                                <i class="fas fa-paper-plane me-2"></i> Kirim
+                                            </button>
+                                        </form>
+                                    @elseif($surat->status_pengiriman == 'Dikirim' && in_array($surat->status_disposisi, ['Diproses', 'Selesai']))
+                                        <span class="text-success ms-2">Diterima</span>
+                                    @else
+                                        <span class="text-secondary ms-2">{{ $surat->status_pengiriman }}</span>
+                                    @endif
+                                </div>
 
                             <style>
                                 .btn-custom-primary {
