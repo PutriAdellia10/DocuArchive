@@ -30,11 +30,6 @@ class RekapitulasiSuratController extends Controller
                 ->whereYear('tanggal', $tahun)
                 ->whereMonth('tanggal', $bulanKe)
                 ->whereIn('status_disposisi', ['Selesai'])
-                ->whereNotIn('pengirim_id', function ($query) {
-                    $query->select('id')
-                          ->from('pengguna')
-                          ->whereIn('peran', ['Sekretariat', 'Admin']);
-                })
                 ->get();
 
             // Ambil koleksi surat keluar
@@ -51,14 +46,20 @@ class RekapitulasiSuratController extends Controller
 
             // Gabungkan koleksi surat masuk dan surat keluar
             $suratGabungan = $suratMasuk->merge($suratKeluar);
-
-            // Hitung total surat masuk dan keluar setelah digabung
-            $totalSuratMasuk = $suratMasuk->count();
-            $totalSuratKeluar = $suratKeluar->count();
+            $surat = Surat::where('status', 'Keluar')
+                ->whereYear('tanggal', $tahun)
+                ->whereMonth('tanggal', $bulanKe)
+                ->whereIn('status_disposisi', ['Selesai'])
+                ->whereNotIn('pengirim_id', function ($query) {
+                    $query->select('id')
+                        ->from('pengguna')
+                        ->where('peran', 'karyawan'); // Corrected query for single role
+                })
+                ->get();
+            $totalSuratKeluar = $surat->count();
 
             $rekapitulasi[] = (object)[
                 'bulan' => $namaBulan,
-                'total_surat_masuk' => $totalSuratMasuk,
                 'total_surat_keluar' => $totalSuratKeluar,
                 'total_surat_gabungan' => $suratGabungan->count(), // jika ingin total gabungan
             ];
