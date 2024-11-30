@@ -111,6 +111,9 @@
                 <span>Pimpinan</span>
             </div>
             <!-- Button Edit Profil -->
+            <form id="edit.profile-form" action="{{route('profile.edit')}}" method="POST" style="display: none;">
+                @csrf
+            </form>
             <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                 <i class="bi bi-person-circle"></i> Edit Profil
             </a>

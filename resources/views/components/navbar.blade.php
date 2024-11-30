@@ -107,9 +107,12 @@
         <i class="fa fa-user"></i>
         <div class="dropdown-menu" id="user-dropdown">
             <div class="user-info">
-                <span>Pimpinan</span>
+                <span>Admin</span>
             </div>
             <!-- Button Edit Profil -->
+            <form id="edit.profile-form" action="{{route('profile.edit')}}" method="POST" style="display: none;">
+                @csrf
+            </form>
             <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                 <i class="bi bi-person-circle"></i> Edit Profil
             </a>
