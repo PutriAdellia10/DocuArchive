@@ -347,9 +347,7 @@
     <div class="content">
         <div class="header">
             <h2>Data Surat Keluar</h2>
-            @if(auth()->check() && auth()->user()->peran != 'Pimpinan')
             <button class="add-button" onclick="openModal()">Tambah Surat Keluar</button>
-            @endif
         </div>
         <div class="card-body">
             <div class="table-controls">
