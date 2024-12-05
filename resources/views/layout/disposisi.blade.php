@@ -170,6 +170,16 @@
             color: #555;
         }
 
+        /* Kartu Disposisi untuk Pimpinan */
+    .tindak-lanjut {
+        max-width: 600px; /* Membatasi lebar maksimal kartu */
+        margin: 20px auto; /* Mengatur margin agar kartu berada di tengah */
+        padding: 15px; /* Mengurangi padding untuk membuat kartu lebih kecil */
+        background-color: #fff; /* Memberikan latar belakang putih */
+        border-radius: 8px; /* Menambahkan border radius untuk sudut melengkung */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Memberikan sedikit bayangan untuk efek depth */
+    }
+
     </style>
 </head>
 <body>
@@ -177,44 +187,47 @@
         <h1>Disposisi</h1>
         <div class="content">
             <!-- Left Section -->
-            <div class="left-section">
-                <form action="{{ route('disposisi.submit', $surat->id) }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="surat_id" value="{{ $surat->id }}">
-                    <h2>Disposisi</h2>
+@if(auth()->user()->peran != 'Pimpinan')
+    <div class="left-section">
+        <form action="{{ route('disposisi.submit', $surat->id) }}" method="POST">
+            @csrf
+            <input type="hidden" name="surat_id" value="{{ $surat->id }}">
+            <h2>Disposisi</h2>
 
-                    <div class="disposisi-options">
-                        <label for="keterangan" class="disposisi-label">Keterangan:</label>
-                        <textarea id="keterangan" name="keterangan" class="form-control"></textarea>
-                    </div>
-
-                    <div class="disposisi-options">
-                        <label for="kepada" class="disposisi-label">Kepada:</label>
-                        <select id="kepada" name="kepada" class="form-select" required>
-                            @if(auth()->user()->peran == 'Sekretariat')
-                            <option value="Pimpinan" selected>Pimpinan</option>
-                            @elseif(auth()->user()->peran == 'Pimpinan')
-                                <option value="Sekretariat" selected>Sekretariat</option>
-                            @else
-                                <option value="Pimpinan" selected>Pimpinan</option>
-                                <option value="Sekretariat">Sekretariat</option>
-                            @endif
-                        </select>
-                    </div>
-
-                    <div class="disposisi-options">
-                        <label for="lampiran" class="disposisi-label">Lampiran:</label>
-                        <select id="lampiran" name="lampiran" class="form-select">
-                            <option value="ada">Ada</option>
-                            <option value="tidak_ada">Tidak Ada</option>
-                        </select>
-                    </div>
-
-
-                    <div class="card-footer text-end mt-4">
-                        <button type="submit" class="btn-success">Kirim Disposisi</button>
-                    </div>
+            <div class="disposisi-options">
+                <label for="keterangan" class="disposisi-label">Keterangan:</label>
+                <textarea id="keterangan" name="keterangan" class="form-control"></textarea>
             </div>
+
+            <div class="disposisi-options">
+                <label for="kepada" class="disposisi-label">Kepada:</label>
+                <select id="kepada" name="kepada" class="form-select" required>
+                    @if(auth()->user()->peran == 'Sekretariat')
+                        <option value="Pimpinan" selected>Pimpinan</option>
+                    @elseif(auth()->user()->peran == 'Pimpinan')
+                        <option value="Sekretariat" selected>Sekretariat</option>
+                    @else
+                        <option value="Pimpinan" selected>Pimpinan</option>
+                        <option value="Sekretariat">Sekretariat</option>
+                    @endif
+                </select>
+            </div>
+
+            <div class="disposisi-options">
+                <label for="lampiran" class="disposisi-label">Lampiran:</label>
+                <select id="lampiran" name="lampiran" class="form-select">
+                    <option value="ada">Ada</option>
+                    <option value="tidak_ada">Tidak Ada</option>
+                </select>
+            </div>
+
+            <div class="card-footer text-end mt-4">
+                <button type="submit" class="btn-success">Kirim Disposisi</button>
+            </div>
+        </form>
+    </div>
+@endif
+
      <!-- Right Section -->
      <div class="right-section">
         <h2>Daftar Disposisi</h2>
