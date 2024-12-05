@@ -204,8 +204,12 @@
 
                     <div class="disposisi-options">
                         <label for="lampiran" class="disposisi-label">Lampiran:</label>
-                        <input type="text" id="lampiran" name="lampiran" class="form-control">
+                        <select id="lampiran" name="lampiran" class="form-select">
+                            <option value="ada">Ada</option>
+                            <option value="tidak_ada">Tidak Ada</option>
+                        </select>
                     </div>
+
 
                     <div class="card-footer text-end mt-4">
                         <button type="submit" class="btn-success">Kirim Disposisi</button>

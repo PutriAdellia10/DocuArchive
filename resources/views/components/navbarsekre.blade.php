@@ -51,26 +51,28 @@
 
     .dropdown-menu {
         display: none;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        background: linear-gradient(180deg, #0077b6, #00b4d8);
-        border: 1px solid #005f73;
-        border-radius: 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        padding: 10px;
-        width: 250px;
-        z-index: 1000;
-        color: #ffffff;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        opacity: 0;
-        visibility: hidden;
+    position: absolute;
+    top: 50px; /* Geser ke atas dengan mengurangi nilai top */
+    right: 0;
+    background: linear-gradient(180deg, #0077b6, #00b4d8);
+    border: 1px solid #005f73;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    width: 180px;
+    z-index: 1000;
+    color: #ffffff;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px); /* Tambahkan efek transisi untuk kesan halus */
     }
 
     .dropdown-menu.show {
         display: block;
-        opacity: 1; /* Fade-in effect */
-        visibility: visible; /* Make visible */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); /* Transisi ke posisi default */
     }
 
     .dropdown-item {
@@ -80,6 +82,16 @@
         display: flex;
         align-items: center;
         transition: background 0.3s, color 0.3s;
+
+        font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 8px;
+    color: #ffffff;
+
+        font-size: 14px; /* Ubah ukuran font menjadi lebih kecil */
+        line-height: 1.2; /* Atur tinggi baris untuk proporsi lebih baik */
+        padding: 8px; /* Sesuaikan padding agar lebih ramping */
     }
 
     .dropdown-item i {
@@ -92,10 +104,13 @@
     }
 
     .user-info {
-        font-weight: bold;
-        margin-bottom: 10px; /* Spacing below user info */
-    }
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: bold;
+}
 </style>
+
 
 <!-- Navbar -->
 <div class="navbar-top">
