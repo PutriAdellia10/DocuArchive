@@ -16,66 +16,82 @@ class SuratController extends Controller
 {
     // Surat Masuk Methods
 
-     public function indexMasuk()
-    {
-        $user = Auth::user();
-        $instansi = Instansi::all(); // Ambil semua instansi
-        $sifatSurat = SifatSurat::all(); // Ambil semua sifat surat
-        $pengguna = User::all();
-        // Cek peran pengguna dan ambil surat keluar yang sesuai
-        if ($user->peran == 'Karyawan') {
-            $suratMasuk = Surat::where('status', 'Masuk')
-            ->whereIn('status_disposisi', ['Diproses','Selesai'])
+    public function indexMasuk()
+{
+    $user = Auth::user();
+    $instansi = Instansi::all(); // Ambil semua instansi
+    $sifatSurat = SifatSurat::all(); // Ambil semua sifat surat
+    $pengguna = User::all();
+
+    if ($user->peran == 'Karyawan') {
+        $suratMasuk = Surat::where('status', 'Masuk')
+            ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan waktu pembuatan
             ->get();
-            $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereIn('status_disposisi', ['Diproses','Selesai'])
-            ->whereDoesntHave('pengirim', function($query) {
+
+        $suratKeluar = Surat::where('status', 'Keluar')
+            ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
+            ->whereDoesntHave('pengirim', function ($query) {
                 $query->where('peran', 'Karyawan');
             })
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan waktu pembuatan
             ->get();
-            $suratGabungan = $suratMasuk->merge($suratKeluar);
+
+        $suratGabungan = $suratMasuk->merge($suratKeluar)->sortByDesc('created_at'); // Gabungkan dan urutkan
         return view('surat.masuk_kar', compact('suratGabungan', 'instansi', 'sifatSurat', 'pengguna'));
-        } elseif ($user->peran == 'Pimpinan') {
-            $suratMasuk = Surat::where('status', 'Masuk')
-            ->whereIn('status_disposisi', ['Diproses','Selesai'])
+    } elseif ($user->peran == 'Pimpinan') {
+        $suratMasuk = Surat::where('status', 'Masuk')
+            ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
+            ->orderBy('created_at', 'desc')
             ->get();
-            $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereNotIn('pengirim_id', function($query) {
-                    $query->select('id')
-                        ->from('pengguna')
-                        ->whereIn('peran', ['Sekretariat', 'Admin']);
-                })
-                ->get();
-                $suratGabungan = $suratMasuk->merge($suratKeluar);
-            return view('surat.masuk', compact('suratGabungan', 'instansi', 'sifatSurat','pengguna'));
-        } elseif ($user->peran == 'Sekretariat') {
-            $suratMasuk = Surat::where('status', 'Masuk')
-            ->get();
-            $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereNotIn('pengirim_id', function($query) {
+
+        $suratKeluar = Surat::where('status', 'Keluar')
+            ->whereNotIn('pengirim_id', function ($query) {
                 $query->select('id')
-                      ->from('pengguna')
-                      ->whereIn('peran', ['Sekretariat', 'Admin']);
+                    ->from('pengguna')
+                    ->whereIn('peran', ['Sekretariat', 'Admin']);
             })
+            ->orderBy('created_at', 'desc')
             ->get();
-                $suratGabungan = $suratMasuk->merge($suratKeluar);
-            return view('surat.masuk', compact('suratGabungan','instansi', 'sifatSurat','pengguna')); // View untuk Sekretariat
-        } elseif ($user->peran == 'Admin') {
-            $suratMasuk = Surat::where('status', 'Masuk')
+
+        $suratGabungan = $suratMasuk->merge($suratKeluar)->sortByDesc('created_at');
+        return view('surat.masuk', compact('suratGabungan', 'instansi', 'sifatSurat', 'pengguna'));
+    } elseif ($user->peran == 'Sekretariat') {
+        $suratMasuk = Surat::where('status', 'Masuk')
+            ->orderBy('created_at', 'desc')
             ->get();
-            $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereNotIn('pengirim_id', function($query) {
+
+        $suratKeluar = Surat::where('status', 'Keluar')
+            ->whereNotIn('pengirim_id', function ($query) {
                 $query->select('id')
-                      ->from('pengguna')
-                      ->whereIn('peran', ['Sekretariat', 'Admin']);
+                    ->from('pengguna')
+                    ->whereIn('peran', ['Sekretariat', 'Admin']);
             })
+            ->orderBy('created_at', 'desc')
             ->get();
-                $suratGabungan = $suratMasuk->merge($suratKeluar);
-            return view('surat.masuk', compact('suratGabungan','instansi', 'sifatSurat','pengguna')); // View untuk Admin
-        } else {
-            return abort(403); // Akses ditolak jika peran tidak dikenali
-        }
+
+        $suratGabungan = $suratMasuk->merge($suratKeluar)->sortByDesc('created_at');
+        return view('surat.masuk', compact('suratGabungan', 'instansi', 'sifatSurat', 'pengguna'));
+    } elseif ($user->peran == 'Admin') {
+        $suratMasuk = Surat::where('status', 'Masuk')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $suratKeluar = Surat::where('status', 'Keluar')
+            ->whereNotIn('pengirim_id', function ($query) {
+                $query->select('id')
+                    ->from('pengguna')
+                    ->whereIn('peran', ['Sekretariat', 'Admin']);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $suratGabungan = $suratMasuk->merge($suratKeluar)->sortByDesc('created_at');
+        return view('surat.masuk', compact('suratGabungan', 'instansi', 'sifatSurat', 'pengguna'));
+    } else {
+        return abort(403); // Akses ditolak jika peran tidak dikenali
     }
+}
     public function create()
     {
         $instansi = Instansi::all();
@@ -252,48 +268,50 @@ class SuratController extends Controller
         $instansi = Instansi::all(); // Ambil semua instansi
         $sifatSurat = SifatSurat::all(); // Ambil semua sifat surat
         $pengguna = User::all();
+
         // Cek peran pengguna dan ambil surat keluar yang sesuai
         if ($user->peran == 'Karyawan') {
-            $suratKeluar = Surat::where('status', 'Keluar')->get();
-            $suratKeluar = Surat::whereIn('status_pengiriman', ['Draft', 'Dikirim','Diterima'])->get();
+            $suratKeluar = Surat::where('status', 'Keluar')
+                ->whereIn('status_pengiriman', ['Draft', 'Dikirim', 'Diterima'])
+                ->orderBy('created_at', 'desc') // Urutkan berdasarkan waktu terbaru
+                ->get();
+
             return view('surat.keluar_kar', compact('suratKeluar', 'instansi', 'sifatSurat')); // View untuk Karyawan
         } elseif ($user->peran == 'Pimpinan') {
             $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereIn('status_disposisi', ['Diproses','Selesai'])
-            ->get();
-            $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereIn('status_disposisi', [ 'Diproses','Selesai'])
-                ->whereNotIn('pengirim_id', function($query) {
+                ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
+                ->whereNotIn('pengirim_id', function ($query) {
                     $query->select('id')
                         ->from('pengguna')
                         ->where('peran', 'Karyawan');
                 })
+                ->orderBy('created_at', 'desc') // Urutkan berdasarkan waktu terbaru
                 ->get();
-            return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat','pengguna'));
+
+            return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat', 'pengguna'));
         } elseif ($user->peran == 'Sekretariat') {
             $suratKeluar = Surat::where('status', 'Keluar')
-            ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
-            ->get();
-            $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses','Selesai'])
-                ->whereNotIn('pengirim_id', function($query) {
+                ->whereIn('status_disposisi', ['Belum Diproses', 'Diproses', 'Selesai'])
+                ->whereNotIn('pengirim_id', function ($query) {
                     $query->select('id')
                         ->from('pengguna')
                         ->where('peran', 'Karyawan');
                 })
+                ->orderBy('created_at', 'desc') // Urutkan berdasarkan waktu terbaru
                 ->get();
-            return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat','pengguna')); // View untuk Sekretariat
+
+            return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat', 'pengguna')); // View untuk Sekretariat
         } elseif ($user->peran == 'Admin') {
             $suratKeluar = Surat::where('status', 'Keluar')
-            ->get();
-            $suratKeluar = Surat::where('status', 'Keluar')
-                ->whereNotIn('pengirim_id', function($query) {
+                ->whereNotIn('pengirim_id', function ($query) {
                     $query->select('id')
                         ->from('pengguna')
                         ->where('peran', 'Karyawan');
                 })
+                ->orderBy('created_at', 'desc') // Urutkan berdasarkan waktu terbaru
                 ->get();
-            return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat','pengguna')); // View untuk Admin
+
+            return view('surat.keluar', compact('suratKeluar', 'instansi', 'sifatSurat', 'pengguna')); // View untuk Admin
         } else {
             return abort(403); // Akses ditolak jika peran tidak dikenali
         }
