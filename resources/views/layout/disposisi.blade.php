@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -198,21 +200,6 @@
                 <label for="keterangan" class="disposisi-label">Keterangan:</label>
                 <textarea id="keterangan" name="keterangan" class="form-control"></textarea>
             </div>
-
-            <div class="disposisi-options">
-                <label for="kepada" class="disposisi-label">Kepada:</label>
-                <select id="kepada" name="kepada" class="form-select" required>
-                    @if(auth()->user()->peran == 'Sekretariat')
-                        <option value="Pimpinan" selected>Pimpinan</option>
-                    @elseif(auth()->user()->peran == 'Pimpinan')
-                        <option value="Sekretariat" selected>Sekretariat</option>
-                    @else
-                        <option value="Pimpinan" selected>Pimpinan</option>
-                        <option value="Sekretariat">Sekretariat</option>
-                    @endif
-                </select>
-            </div>
-
             <div class="disposisi-options">
                 <label for="lampiran" class="disposisi-label">Lampiran:</label>
                 <select id="lampiran" name="lampiran" class="form-select">
@@ -233,15 +220,14 @@
         <h2>Daftar Disposisi</h2>
         <!-- Tindak Lanjut Form -->
         @if(auth()->user()->peran == 'Pimpinan')
-            <form action="{{ route('disposisi.submit', $surat->id) }}" method="POST">
-                @csrf
-                @method('POST')
-                <div class="form-group">
-                    <label for="catatan">Catatan:</label>
-                    <textarea name="catatan" id="catatan" class="form-control" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-secondary mb-2">Tindak Lanjut</button>
-            </form>
+        <form action="{{ route('disposisi.submit', $surat->id) }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="catatan">Catatan:</label>
+                <textarea name="catatan" id="catatan" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-secondary mb-2">Tindak Lanjut</button>
+        </form>
         @endif
 
         <table class="table table-bordered mt-4">
@@ -256,7 +242,7 @@
             <tbody>
                 @if($disposisiEntries->isEmpty())
                     <tr>
-                        <td colspan="3" class="text-center">Belum ada disposisi yang dikirim.</td>
+                        <td colspan="4" class="text-center">Belum ada disposisi yang dikirim.</td>
                     </tr>
                 @else
                     @foreach($disposisiEntries as $disposisi)
@@ -264,7 +250,14 @@
                             <td>{{ $disposisi->surat_id }}</td>
                             <td>{{ $disposisi->keterangan }}</td>
                             <td>{{ $disposisi->lampiran }}</td>
-                            <td>{{ $disposisi->catatan }}</td>
+                            <td>
+
+                                @if($disposisi->catatan)
+                                    {{ $disposisi->catatan }}
+                                @else
+                                    --
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 @endif
@@ -272,10 +265,76 @@
         </table>
     </div>
 </div>
-        <div class="card-footer text-end mt-4">
-            <button type="button" class="btn btn-secondary" onclick="window.history.back()">Tutup</button>
-        </div>
-    </div>
+<div class="card-footer text-end mt-4">
+    <button type="button" class="btn btn-secondary" onclick="goBack()">Tutup</button>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+       function goBack() {
+    // Mendapatkan halaman sebelumnya
+    const previousPage = document.referrer;
+
+    // Tentukan URL untuk Surat Masuk dan Surat Keluar
+    const suratMasukUrl = '/surat-masuk';
+    const suratKeluarUrl = '/surat-keluar';
+
+    // Periksa apakah halaman sebelumnya adalah Surat Masuk atau Surat Keluar
+    if (previousPage.includes('surat-masuk')) {
+        window.location.href = suratMasukUrl;
+    } else if (previousPage.includes('surat-keluar')) {
+        window.location.href = suratKeluarUrl;
+    } else {
+        window.location.href = suratMasukUrl; // Default ke Surat Masuk jika halaman sebelumnya tidak ditemukan
+    }
+}
+
+        // Tampilkan notifikasi sukses jika ada pesan dari session
+        @if(session('success'))
+        Swal.fire({
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+        @endif
+
+        document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        // Periksa apakah form memiliki elemen "catatan" (khusus Pimpinan)
+        const catatan = this.querySelector('#catatan')?.value.trim();
+
+        // Periksa apakah form memiliki elemen "keterangan" dan "lampiran" (khusus Sekretariat)
+        const keterangan = this.querySelector('#keterangan')?.value.trim();
+        const lampiran = this.querySelector('#lampiran')?.value.trim();
+
+        // Validasi khusus untuk Pimpinan
+        if (catatan !== undefined && (!catatan || catatan === '')) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Error!',
+                text: 'Harap isi catatan sebelum mengirim.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Validasi khusus untuk Sekretariat
+        if (keterangan !== undefined && lampiran !== undefined) {
+            if (!keterangan || !lampiran) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Harap isi semua data (keterangan dan lampiran) sebelum mengirim.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+        }
+    });
+});
+    </script>
+
 </body>
 </html>

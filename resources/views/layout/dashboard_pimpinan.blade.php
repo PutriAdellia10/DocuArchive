@@ -334,7 +334,7 @@ p {
                             <tr>
                                 <th>No</th>
                                 <th>Perihal</th>
-                                <th>Tanggal Disposisi</th>
+                                <th>Waktu Disposisi</th>
                                 <th>Waktu Penyelesaian</th>
                             </tr>
                         </thead>
@@ -343,7 +343,7 @@ p {
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $disposisi->perihal }}</td> <!-- Menampilkan perihal surat -->
-                                    <td>{{ $disposisi->pimpinan_updated_at ? \Carbon\Carbon::parse($disposisi->pimpinan_updated_at)->format('d-m-Y') : 'Belum Disposisi' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($disposisi->created_at)->format('d-m-Y H:i') }}</td>
                                     <td>{{ $disposisi->waktu_penyelesaian }}</td>
                                 </tr>
                             @endforeach

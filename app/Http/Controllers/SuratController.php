@@ -46,6 +46,7 @@ class SuratController extends Controller
             ->get();
 
         $suratKeluar = Surat::where('status', 'Keluar')
+        ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
             ->whereNotIn('pengirim_id', function ($query) {
                 $query->select('id')
                     ->from('pengguna')
@@ -119,7 +120,7 @@ class SuratController extends Controller
             'perihal' => 'required|string',
             'konten' => 'required|string',
             'id_sifat_surat' => 'required|integer',
-            'id_asal_surat' => 'required|integer',
+            'id_asal_surat' => 'nullable|integer',
             'dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:51200',
             'status' => 'required|string|in:Masuk,Keluar',
             'pengirim_id' => 'nullable|integer',
@@ -268,6 +269,7 @@ class SuratController extends Controller
         $instansi = Instansi::all(); // Ambil semua instansi
         $sifatSurat = SifatSurat::all(); // Ambil semua sifat surat
         $pengguna = User::all();
+        $pengguna = User::where('peran', 'Karyawan')->get();
 
         // Cek peran pengguna dan ambil surat keluar yang sesuai
         if ($user->peran == 'Karyawan') {
@@ -391,7 +393,7 @@ class SuratController extends Controller
             'status_disposisi' => $request->status_disposisi ?? 'Belum Diproses',
         ]);
 
-        return redirect()->route('surat.keluar.index')->with('success', 'Data berhasil disimpan');
+        return redirect()->route('surat.keluar.index')->with('success', 'Surat berhasil ditambahkan.');
     }
 
     public function keluarupdate(Request $request, $id)
@@ -551,6 +553,20 @@ public function updateDisposisi(Request $request, $id)
     $surat->save();
 
     return redirect()->back()->with('success', 'Status disposisi dan pengiriman berhasil diperbarui.');
+}
+public function updateStatus(Request $request, $id)
+{
+    // Temukan surat berdasarkan ID
+    $surat = Surat::findOrFail($id);
+
+    // Perbarui status disposisi berdasarkan keterangan dan lampiran
+    $status = $request->input('status_disposisi');
+    $surat->status_disposisi = $status;
+
+    // Simpan perubahan
+    $surat->save();
+
+    return response()->json(['success' => true]);
 }
     }
 

@@ -21,15 +21,13 @@ class DisposisiController extends Controller
     {
         $request->validate([
             'keterangan' => 'nullable|string',
-            'kepada' => 'required|string',
             'lampiran' => 'nullable|string',
-            'catatan' => 'nullable|string', // If only Pimpinan can add catatan
+            'catatan' => 'nullable|string', // Catatan hanya diisi oleh pimpinan
         ]);
 
         Disposisi::create([
             'surat_id' => $id,
             'keterangan' => $request->keterangan,
-            'kepada' => $request->kepada,
             'lampiran' => $request->lampiran,
             'catatan' => $request->catatan,
         ]);
@@ -58,15 +56,13 @@ public function edit($id)
 public function update(Request $request, $id)
 {
     $request->validate([
-        'kepada' => 'required|string|max:255',
         'keterangan' => 'nullable|string',
         'lampiran' => 'nullable|string',
-        'catatan' => 'nullable|string', // If only Pimpinan can add catatan
+        'catatan' => 'nullable|string', // Catatan hanya diisi oleh pimpinan
     ]);
 
     $disposisi = Disposisi::findOrFail($id);
     $disposisi->update([
-        'kepada' => $request->kepada,
         'keterangan' => $request->keterangan,
         'lampiran' => $request->lampiran,
         'catatan' => $request->catatan,
@@ -85,41 +81,53 @@ public function update(Request $request, $id)
     }
 
     // Mengirim disposisi untuk status 'Diproses'
-    public function submitDisposition(Request $request, $id)
+    public function submitDisposition(Request $request, $suratId)
 {
-    $surat = Surat::findOrFail($id);
+    // Mencari surat yang sesuai dengan ID
+    $surat = Surat::findOrFail($suratId);
 
     // Update status disposisi menjadi 'Diproses' jika surat belum diproses
     if ($surat->status_disposisi != 'Selesai') {
         $surat->status_disposisi = 'Diproses';
     }
 
+    // Validasi input dari form
     $request->validate([
-        'keterangan' => 'nullable|string',
-        'kepada' => 'nullable|string',
-        'lampiran' => 'nullable|string',
-        'catatan' => 'nullable|string', // Catatan hanya diisi oleh pimpinan
+        'keterangan' => 'nullable|string',  // Keterangan oleh Sekretariat
+        'lampiran' => 'nullable|string',    // Lampiran yang relevan
+        'catatan' => 'nullable|string',     // Catatan hanya diisi oleh Pimpinan
     ]);
 
-    // Menyimpan disposisi baru
-    Disposisi::create([
-        'surat_id' => $id,
-        'keterangan' => $request->keterangan,
-        'kepada' => $request->kepada,
-        'lampiran' => $request->lampiran,
-        'catatan' => $request->catatan,
-    ]);
+    // Jika disposisi sudah ada, ambil data disposisi sebelumnya, jika belum ada, buat yang baru
+    $disposisi = Disposisi::where('surat_id', $suratId)->first();
 
-    // Periksa apakah catatan sudah diisi dan ubah status menjadi 'Selesai'
-    if ($request->has('catatan') && !empty($request->catatan)) {
-        $surat->status_disposisi = 'Selesai';  // Set status menjadi 'Selesai' jika catatan sudah ada
+    // Jika belum ada disposisi, buat disposisi baru
+    if (!$disposisi) {
+        $disposisi = new Disposisi;
+        $disposisi->surat_id = $suratId;
     }
 
-    $surat->save();  // Simpan perubahan pada surat
+    // Simpan keterangan, kepada, dan lampiran oleh Sekretariat
+    if (auth()->user()->peran != 'Pimpinan') {
+        $disposisi->keterangan = $request->keterangan;
+        $disposisi->lampiran = $request->lampiran;
+    }
 
-    return redirect()->back()->with('success', 'Disposisi berhasil dikirim dan status diubah.');
+    // Simpan catatan oleh Pimpinan
+    if (auth()->user()->peran == 'Pimpinan' && $request->has('catatan')) {
+        $disposisi->catatan = $request->catatan;
+        // Periksa apakah catatan sudah diisi dan ubah status menjadi 'Selesai'
+        $surat->status_disposisi = 'Selesai';
+    }
+
+    // Simpan perubahan pada disposisi
+    $disposisi->save();
+
+    // Simpan perubahan status pada surat jika diperlukan
+    $surat->save();
+
+    // Menyimpan pesan sukses dalam session flash
+    return redirect()->route('disposisi.show', $suratId)
+                     ->with('success', 'Disposisi berhasil dikirim dan status diubah.');
 }
-
-
-
 }

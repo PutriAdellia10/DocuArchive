@@ -312,7 +312,19 @@
     background-color: #ddd;
     cursor: not-allowed;
 }
-
+/* Notification container style */
+.notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+    }
 
     </style>
 </head>
@@ -446,6 +458,9 @@
             <a href="#" class="pagination-button">Next</a>
         </div>
     </div>
+    <div id="successNotification" class="notification">
+        <p>{{ session('success') }}</p>
+    </div>
 <!-- The Modal -->
 <div class="modal" id="modal">
     <div class="modal-content">
@@ -531,6 +546,16 @@
 </div>
 
 <script>
+    @if(session('success'))
+        // Show notification if session has success message
+        var notification = document.getElementById("successNotification");
+        notification.style.display = "block";
+
+        // Hide the notification after 5 seconds
+        setTimeout(function() {
+            notification.style.display = "none";
+        }, 5000);
+    @endif
    function openModal(type = 'add') {
     const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modalTitle');

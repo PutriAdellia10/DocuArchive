@@ -11,11 +11,13 @@ class Disposisi extends Model
 
     // Nama tabel dalam database
     protected $table = 'disposisi';
+    const CREATED_AT = 'created_at'; // Nama kolom created_at
+    const UPDATED_AT = 'updated_at'; // Nama kolom updated_at
+
 
     // Kolom-kolom yang dapat diisi
     protected $fillable = [
         'surat_id',
-        'kepada',
         'keterangan',
         'lampiran',
         'catatan',

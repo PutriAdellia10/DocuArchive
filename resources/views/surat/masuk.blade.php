@@ -295,6 +295,19 @@
     background-color: #ddd;
     cursor: not-allowed;
 }
+ /* Notification container style */
+ .notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+    }
     </style>
 </head>
 <body>
@@ -442,7 +455,9 @@
         </div>
     </div>
 
-
+    <div id="successNotification" class="notification">
+        <p>{{ session('success') }}</p>
+    </div>
  <!-- Modal tambah surat-->
 <div class="modal" id="modal">
     <div class="modal-content">
@@ -455,8 +470,8 @@
             </div>
 
             <div class="form-group">
-                <label for="id_asal_surat">Asal Surat *</label>
-                <select id="id_asal_surat" name="id_asal_surat" required>
+                <label for="id_asal_surat">Asal Surat</label>
+                <select id="id_asal_surat" name="id_asal_surat">
                     <option value="">--Pilih--</option>
                     @foreach($instansi as $inst)
                         <option value="{{ $inst->id }}">{{ $inst->nama_instansi }}</option>
@@ -524,6 +539,22 @@
 
 
 <script>
+   @if(session('success'))
+        // Show notification if session has success message
+        var notification = document.getElementById("successNotification");
+        notification.style.display = "block";
+
+        // Hide the notification after 5 seconds
+        setTimeout(function() {
+            notification.style.display = "none";
+        }, 5000);
+    @endif
+
+    // Function to manually close the notification
+    function closeNotification() {
+        var notification = document.getElementById("successNotification");
+        notification.classList.remove("show");
+    }
     function openModal(type = 'add') {
         const modal = document.getElementById('modal');
         const modalTitle = document.getElementById('modalTitle');
@@ -543,40 +574,6 @@
             closeModal();
         }
     };
-    function openEditModal(surat) {
-        console.log(surat.status);
-    const form = document.getElementById('modalFormEdit');
-    form.action = `/surat-masuk/${surat.id}`;  // Sesuaikan URL ini dengan route update Anda
-
-    // Mengisi data ke dalam field modal form
-    document.getElementById('edit_no_agenda').value = surat.no_agenda;
-    document.getElementById('edit_tanggal').value = surat.tanggal;  // pastikan field ini tipe "date"
-    document.getElementById('edit_id_asal_surat').value = surat.id_asal_surat;  // ini adalah dropdown
-    document.getElementById('edit_no_surat').value = surat.no_surat;
-    document.getElementById('edit_tanggal_surat').value = surat.tanggal_surat;  // pastikan field ini tipe "date"
-    document.getElementById('edit_perihal').value = surat.perihal;
-    document.getElementById('edit_konten').value = surat.konten;  // konten sebaiknya berupa textarea
-    document.getElementById('edit_id_sifat_surat').value = surat.id_sifat_surat;  // ini adalah dropdown
-    document.getElementById('edit_status').value = surat.status;  // status ini bisa berupa select dropdown
-
-    // Menampilkan modal edit
-    const modal = document.getElementById('modalEdit');
-    modal.style.display = 'flex';  // Menampilkan modal dengan display flex
-}
-
-// Function to close the modal
-function closeModaledit() {
-    const modal = document.getElementById('modalEdit');
-    modal.style.display = 'none'; // Hide the modal
-}
-
-// Optional: Close the modal when clicking outside of it
-window.onclick = function(event) {
-    const modal = document.getElementById('modalEdit');
-    if (event.target == modal) {
-        closeModal();
-    }
-}
 
 // Optional: Close the modal with the ESC key
 document.onkeydown = function(event) {

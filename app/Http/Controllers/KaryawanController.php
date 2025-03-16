@@ -15,23 +15,22 @@ class KaryawanController extends Controller
 {
     public function index()
     {
-        $disposisiData = DB::table('disposisi')
-            ->join('surat', 'disposisi.surat_id', '=', 'surat.id') // Join dengan tabel surat berdasarkan surat_id
-            ->select('disposisi.surat_id', 'surat.perihal') // Pilih surat_id dan perihal dari tabel surat
-            ->selectRaw("
-                MAX(CASE WHEN kepada = 'Sekretariat' THEN disposisi.created_at END) as sekre_created_at,
-                MAX(CASE WHEN kepada = 'Pimpinan' THEN disposisi.updated_at END) as pimpinan_updated_at
-            ")
-            ->groupBy('disposisi.surat_id', 'surat.perihal') // Kelompokkan berdasarkan surat_id dan perihal
+        $disposisiData = Disposisi::with('surat') // Mengambil relasi dengan surat
             ->get()
             ->map(function ($disposisi) {
-                // Ambil waktu dari Sekretariat dan Pimpinan
-                $sekreTime = $disposisi->sekre_created_at ? Carbon::parse($disposisi->sekre_created_at) : null;
-                $pimpinanTime = $disposisi->pimpinan_updated_at ? Carbon::parse($disposisi->pimpinan_updated_at) : null;
+                // Cek jika disposisi memiliki waktu penyelesaian
+                $disposisi->waktu_penyelesaian = 'Belum Selesai';
+                $disposisi->waktu_penyelesaian_dalam_menit = 0;
 
-                // Hitung waktu penyelesaian dalam format bahasa Indonesia
-                if ($sekreTime && $pimpinanTime) {
-                    $difference = $pimpinanTime->diff($sekreTime);
+                // Cek apakah catatan ada atau tidak
+                if ($disposisi->catatan && $disposisi->created_at && $disposisi->updated_at) {
+                    // Menghitung waktu penyelesaian jika ada catatan
+                    $createdTime = Carbon::parse($disposisi->created_at);
+                    $updatedTime = Carbon::parse($disposisi->updated_at);
+
+                    // Hitung perbedaan waktu
+                    $difference = $updatedTime->diff($createdTime);
+
                     $disposisi->waktu_penyelesaian = sprintf(
                         '%d jam %d menit',
                         $difference->h,
@@ -39,31 +38,31 @@ class KaryawanController extends Controller
                     );
                     // Tambahkan waktu penyelesaian dalam menit untuk perhitungan rata-rata
                     $disposisi->waktu_penyelesaian_dalam_menit = ($difference->h * 60) + $difference->i;
-                } else {
-                    $disposisi->waktu_penyelesaian = 'Belum Selesai';
-                    $disposisi->waktu_penyelesaian_dalam_menit = 0;
                 }
+
+                // Mengambil perihal dari surat yang terkait
+                $disposisi->perihal = $disposisi->surat ? $disposisi->surat->perihal : null;
 
                 return $disposisi;
             });
 
-       // Menghitung rata-rata waktu penyelesaian
-            $totalWaktu = $disposisiData->sum('waktu_penyelesaian_dalam_menit');
-            $totalDisposisiSelesai = $disposisiData->where('waktu_penyelesaian_dalam_menit', '>', 0)->count();
+        // Menghitung rata-rata waktu penyelesaian
+        $totalWaktu = $disposisiData->sum('waktu_penyelesaian_dalam_menit');
+        $totalDisposisiSelesai = $disposisiData->where('waktu_penyelesaian_dalam_menit', '>', 0)->count();
 
-            $rataWaktuPenyelesaian = $totalDisposisiSelesai > 0 ? $totalWaktu / $totalDisposisiSelesai : 0;
+        $rataWaktuPenyelesaian = $totalDisposisiSelesai > 0 ? $totalWaktu / $totalDisposisiSelesai : 0;
 
-            // Ubah rata-rata waktu ke dalam format jam dan menit
-            $jam = floor($rataWaktuPenyelesaian / 60);
-            $menit = $rataWaktuPenyelesaian % 60;
-            $rataWaktuPenyelesaianFormat = sprintf('%d jam %d menit', $jam, $menit);
+        // Ubah rata-rata waktu ke dalam format jam dan menit
+        $jam = floor($rataWaktuPenyelesaian / 60);
+        $menit = $rataWaktuPenyelesaian % 60;
+        $rataWaktuPenyelesaianFormat = sprintf('%d jam %d menit', $jam, $menit);
 
-            // Tentukan waktu target dalam menit (misalnya 120 menit = 2 jam)
-            $waktuTarget = 120;
+        // Tentukan waktu target dalam menit (misalnya 120 menit = 2 jam)
+        $waktuTarget = 120;
 
-            // Hitung persentase waktu penyelesaian dibandingkan dengan target
-            $persenPenyelesaian = ($rataWaktuPenyelesaian / $waktuTarget) * 100;
-            $persenPenyelesaianFormat = number_format($persenPenyelesaian, 2) . '%';
+        // Hitung persentase waktu penyelesaian dibandingkan dengan target
+        $persenPenyelesaian = ($rataWaktuPenyelesaian / $waktuTarget) * 100;
+        $persenPenyelesaianFormat = number_format($persenPenyelesaian, 2) . '%';
            // Ambil 5 surat masuk terbaru
            $recentSuratMasuk = Surat::where('status', 'Masuk')
            ->whereIn('status_disposisi', ['Diproses', 'Selesai'])
